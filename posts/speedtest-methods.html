@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>科学测速与带宽监测：延迟、丢包、抖动与真实速度测试方法 - 云梯指南</title>
+  <meta name="description" content="系统介绍网络与代理节点的科学测速方法，解释带宽、吞吐量、延迟、抖动、丢包和负载延迟的区别，并提供基准测试、分时段监测及结果分析流程。">
+  <link rel="canonical" href="https://nodehub168.com/posts/speedtest-methods.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  
+  <!-- BreadcrumbList JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://nodehub168.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "技术知识库",
+        "item": "https://nodehub168.com/categories/knowledge.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "科学测速",
+        "item": "https://nodehub168.com/posts/speedtest-methods.html"
+      }
+    ]
+  }
+  </script>
+
+  <!-- FAQPage JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "单线程测试与多线程测试，哪个结果更真实？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "两者反映的是不同维度的真实表现。单线程测试仅利用单个 TCP 连接进行数据交互（如 M-Lab NDT 规范），由于没有多条并发链路分担丢包重传，它极易暴露出跨境骨干网在丢包与排队拥堵时的真实业务瓶颈；多线程测试则建立多条并发 TCP 管道（如常规 Speedtest），其中某条发生拥堵时其余管道会继续填充带宽，因而最能探测出你本地宽带物理接口的理论上限。日常评估节点，应同时记录并对比这两个参数。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "为什么空闲延迟极佳的节点，一开始下载大文件就卡死？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "这主要涉及“负载延迟”（Loaded Latency）与缓存膨胀（Bufferbloat）技术现象。空闲延迟指的是链路空载时测得的往返响应时间；而负载延迟指的是当你的上行或下行管道处于饱和状态时，数据在路由器、中转网关或落地服务器的硬件缓冲区里发生排队导致的延迟。如果服务商的硬件出口缓冲区过大且没有合理的调度算法，在满载下载时，延迟可能从 20ms 飙升至数百毫秒，导致其他交互业务几乎瘫痪。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "使用 iperf3 测速时，如何避免测试报文被防火墙（GFW）误判拦截？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "由于 iperf3 传输的是无特征的裸 TCP/UDP 字节流，这在流量审计设备看来具有极高的扫描嫌疑，长时间的高速率 UDP 发包（即使用 -u 选项）极易引发运营商端口级别的限速（QoS）或直接阻断。因此，在公网上跑 iperf3 测速时，发送时长应限制在 10s 至 30s 内，测试 UDP 带宽（通过 -b 选项）时，应从低水位逐渐向上推进，切忌盲目设置过高发包速率造成人为的链路级拥塞。"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .post-article {
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .post-article h2 {
+      font-size: 1.6rem;
+      margin: 36px 0 16px;
+      border-left: 4px solid var(--accent-cyan);
+      padding-left: 12px;
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.03) 0%, transparent 100%);
+      padding-top: 6px;
+      padding-bottom: 6px;
+      scroll-margin-top: 100px;
+    }
+    .post-article h3 {
+      font-size: 1.25rem;
+      margin: 28px 0 12px;
+      color: var(--accent-cyan);
+      scroll-margin-top: 100px;
+    }
+    .post-article p {
+      margin-bottom: 20px;
+      color: var(--text-main);
+      text-align: justify;
+    }
+    .post-article ul, .post-article ol {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    .post-article li {
+      margin-bottom: 8px;
+    }
+    .post-article strong {
+      color: var(--accent-cyan);
+    }
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin: 24px 0;
+      border-left: 4px solid var(--accent-purple);
+    }
+    .highlight-box.cyan {
+      border-left-color: var(--accent-cyan);
+    }
+    .highlight-box.red {
+      border-left-color: #ff4d4f;
+      background: rgba(255, 77, 79, 0.03);
+    }
+    
+    /* Table of Contents */
+    .toc-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin: 32px 0;
+    }
+    .toc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .toc-item a {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toc-item a:hover {
+      color: var(--accent-cyan);
+      transform: translateX(4px);
+    }
+    
+    /* Diagram wrapper */
+    .diagram-container {
+      margin: 32px 0;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .diagram-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+    
+    /* FAQ accordion styles */
+    .faq-section {
+      margin-top: 48px;
+    }
+    .faq-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      user-select: none;
+      transition: var(--transition-smooth);
+    }
+    .faq-question:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--accent-cyan);
+    }
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      border-top: 1px solid transparent;
+    }
+    .faq-item.active .faq-answer {
+      padding: 16px 20px;
+      max-height: 500px;
+      border-top-color: var(--border-color);
+    }
+    .faq-icon {
+      transition: transform 0.3s ease;
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+      color: var(--accent-cyan);
+    }
+
+    /* Compare Table */
+    .comp-table-wrapper {
+      margin: 32px 0;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+    }
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      text-align: left;
+    }
+    .comp-table th {
+      background: var(--bg-secondary);
+      color: var(--accent-cyan);
+      padding: 14px 16px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .comp-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+    .comp-table tr:last-child td {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+
+      <button class="menu-toggle" aria-label="切换导航菜单" aria-expanded="false" aria-controls="main-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav">
+        <a href="../index.html" class="nav-link">首页</a>
+        <a href="../reviews/index.html" class="nav-link">机场推荐</a>
+        <a href="../reviews/brands.html" class="nav-link">机场评测</a>
+        <a href="../guides/clash.html" class="nav-link">Clash教程</a>
+        <a href="../guides/shadowrocket.html" class="nav-link">小火箭教程</a>
+        <a href="../guides/v2rayn.html" class="nav-link">V2rayN教程</a>
+        <a href="../categories/knowledge.html" class="nav-link">机场知识库</a>
+        <a href="../faq/index.html" class="nav-link">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 900px;">
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="../categories/knowledge.html" style="color: inherit;">技术知识库</a> 
+        &gt; 
+        <span style="color: var(--accent-cyan); font-weight: 500;">科学测速</span>
+      </nav>
+
+      <!-- H1 Title -->
+      <h1 style="font-size: 2.25rem; margin-bottom: 20px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; line-height: 1.3;">
+        科学测速与带宽监测：延迟、丢包、抖动与真实速度测试方法
+      </h1>
+
+      <article class="post-article">
+        <!-- SVG 1: Speed Test Metrics -->
+        <div class="diagram-container">
+          <div class="diagram-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan);">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="12" y1="12" x2="16" y2="14"/>
+            </svg>
+            网络加速与传输质量核心测速指标仪表看板
+          </div>
+          <svg viewBox="0 0 800 300" width="100%" height="auto" style="background: #080c18; border-radius: 8px; font-family: system-ui, -apple-system, sans-serif;">
+            <defs>
+              <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#00f2fe" />
+                <stop offset="100%" stop-color="#4facfe" />
+              </linearGradient>
+            </defs>
+            
+            <!-- Dial 1: Bandwidth -->
+            <g transform="translate(40, 45)">
+              <rect width="100" height="210" rx="6" fill="#0c1122" stroke="#00f2fe" stroke-width="1" />
+              <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(0, 242, 254, 0.1)" stroke-width="5"/>
+              <circle cx="50" cy="50" r="30" fill="none" stroke="url(#cyanGrad)" stroke-width="5" stroke-dasharray="140, 200" stroke-linecap="round"/>
+              <text x="50" y="54" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">带宽</text>
+              <text x="50" y="125" fill="#f8fafc" font-size="11" text-anchor="middle">理论容量</text>
+              <text x="50" y="145" fill="#94a3b8" font-size="9" text-anchor="middle">链路理论物理上限</text>
+            </g>
+
+            <!-- Dial 2: Throughput -->
+            <g transform="translate(160, 45)">
+              <rect width="100" height="210" rx="6" fill="#0c1122" stroke="#00f2fe" stroke-width="1" />
+              <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(0, 242, 254, 0.1)" stroke-width="5"/>
+              <circle cx="50" cy="50" r="30" fill="none" stroke="url(#cyanGrad)" stroke-width="5" stroke-dasharray="110, 200" stroke-linecap="round"/>
+              <text x="50" y="54" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">吞吐量</text>
+              <text x="50" y="125" fill="#f8fafc" font-size="11" text-anchor="middle">实际速度</text>
+              <text x="50" y="145" fill="#94a3b8" font-size="9" text-anchor="middle">受窗口与丢包限制</text>
+            </g>
+
+            <!-- Dial 3: Latency -->
+            <g transform="translate(280, 45)">
+              <rect width="100" height="210" rx="6" fill="#0c1122" stroke="#00f2fe" stroke-width="1" />
+              <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(0, 242, 254, 0.1)" stroke-width="5"/>
+              <circle cx="50" cy="50" r="30" fill="none" stroke="url(#cyanGrad)" stroke-width="5" stroke-dasharray="80, 200" stroke-linecap="round"/>
+              <text x="50" y="54" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">延迟</text>
+              <text x="50" y="125" fill="#f8fafc" font-size="11" text-anchor="middle">往返时延</text>
+              <text x="50" y="145" fill="#94a3b8" font-size="9" text-anchor="middle">双端往返时间(RTT)</text>
+            </g>
+
+            <!-- Dial 4: Jitter -->
+            <g transform="translate(400, 45)">
+              <rect width="100" height="210" rx="6" fill="#0c1122" stroke="#00f2fe" stroke-width="1" />
+              <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(0, 242, 254, 0.1)" stroke-width="5"/>
+              <circle cx="50" cy="50" r="30" fill="none" stroke="url(#cyanGrad)" stroke-width="5" stroke-dasharray="160, 200" stroke-linecap="round"/>
+              <text x="50" y="54" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">抖动</text>
+              <text x="50" y="125" fill="#f8fafc" font-size="11" text-anchor="middle">延迟偏离</text>
+              <text x="50" y="145" fill="#94a3b8" font-size="9" text-anchor="middle">时延变化差异差异</text>
+            </g>
+
+            <!-- Dial 5: Loss -->
+            <g transform="translate(520, 45)">
+              <rect width="100" height="210" rx="6" fill="#0c1122" stroke="#ff4d4f" stroke-width="1" />
+              <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255, 77, 79, 0.1)" stroke-width="5"/>
+              <circle cx="50" cy="50" r="30" fill="none" stroke="#ff4d4f" stroke-width="5" stroke-dasharray="30, 200" stroke-linecap="round"/>
+              <text x="50" y="54" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">丢包</text>
+              <text x="50" y="125" fill="#f8fafc" font-size="11" text-anchor="middle">报文丢弃</text>
+              <text x="50" y="145" fill="#94a3b8" font-size="9" text-anchor="middle">丢包严重限制TCP速度</text>
+            </g>
+
+            <!-- Dial 6: Loaded Latency -->
+            <g transform="translate(640, 45)">
+              <rect width="100" height="210" rx="6" fill="#0c1122" stroke="#ffa940" stroke-width="1" />
+              <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255, 169, 64, 0.1)" stroke-width="5"/>
+              <circle cx="50" cy="50" r="30" fill="none" stroke="#ffa940" stroke-width="5" stroke-dasharray="120, 200" stroke-linecap="round"/>
+              <text x="50" y="54" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">负载延迟</text>
+              <text x="50" y="125" fill="#f8fafc" font-size="11" text-anchor="middle">排队膨胀</text>
+              <text x="50" y="145" fill="#94a3b8" font-size="9" text-anchor="middle">满载下载下的响应时延</text>
+            </g>
+          </svg>
+        </div>
+
+        <p style="font-size: 1.15rem; color: var(--text-muted); margin-bottom: 24px;">
+          在评估网络连接及代理节点服务时，<strong>“测速”</strong>是一项频繁且被广泛关注的行为。许多用户习惯于在点击“测试”后，直接将最后呈现的数字截图归纳为节点的终极性能。然而，一次短暂的测速，仅仅能够证明你的本地客户端设备在那个特定时间，流经特定路由跃点连接测速服务器时的瞬时表现。
+        </p>
+        <p>
+          科学的测速与带宽监测是一项**基于控制变量法、考虑端到端重传损耗与时变趋势的网络性能审计机制**。只有理解了延迟、抖动、丢包、单双线程以及排队缓冲区膨胀等底层逻辑，才能够真正判断网络和代理节点在晚高峰等极限状态下的真实抗压可用性。
+        </p>
+
+        <!-- Quick Jump Table of Contents -->
+        <div class="toc-container">
+          <div class="toc-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan);">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+            本文目录与快速导航
+          </div>
+          <div class="toc-grid">
+            <div class="toc-item"><a href="#core-metrics">&bull; 一、 核心指标分析：带宽、吞吐量与比特换算</a></div>
+            <div class="toc-item"><a href="#rtt-jitter-loss">&bull; 二、 RTT 延迟、抖动与持续丢包的隐形制约</a></div>
+            <div class="toc-item"><a href="#loaded-latency">&bull; 三、 空闲延迟与排队缓冲造成的负载延迟</a></div>
+            <div class="toc-item"><a href="#stream-threads">&bull; 四、 测速工具差异：单线程与多线程的底层问答</a></div>
+            <div class="toc-item"><a href="#variables-control">&bull; 五、 排除偶发干扰：测速前的控制变量规范</a></div>
+            <div class="toc-item"><a href="#testing-steps">&bull; 六、 代理节点科学测速的三步标准工作流程</a></div>
+            <div class="toc-item"><a href="#split-monitoring">&bull; 七、 分时段追踪：避开单一截图假象的监测</a></div>
+            <div class="toc-item"><a href="#iperf3-cmd">&bull; 八、 使用 iperf3 进行端到端控制测试</a></div>
+            <div class="toc-item"><a href="#bandwidth-vs-speedtest">&bull; 九、 主动测速与被动持续带宽监测的界线</a></div>
+            <div class="toc-item"><a href="#myths-check">&bull; 十、 网络测速的六个经典高频技术误区</a></div>
+          </div>
+        </div>
+
+        <h2 id="core-metrics">一、 核心指标分析：带宽、吞吐量与比特换算</h2>
+        <p>
+          首先，必须区分 **带宽（Bandwidth）** 与 **吞吐量（Throughput）** 的概念。
+        </p>
+        <p>
+          根据 RFC 6349 TCP 吞吐测试框架标准，带宽是物理链路理论上所能承载的最大比特传输速率；而吞吐量则是应用层在排除报文开销、网络丢包以及拥塞机制制约后，最终真正传输成功并确认的数据包大小。
+        </p>
+        <p>
+          在计量单位上，需要严格防范 **比特（bit）** 与 **字节（Byte）** 的概念混淆：
+        </p>
+        <ul>
+          <li><strong>Mbps (Megabits per second)：</strong> 每秒传输的百万比特数，通常是运营商销售宽带和测速软件默认渲染的单位；</li>
+          <li><strong>MB/s (Megabytes per second)：</strong> 每秒传输的百万字节数，是浏览器、游戏和下载工具中展示的文件块速度。</li>
+        </ul>
+        <p>
+          由于 1 字节等于 8 比特，因此当你在测速网站测得 80 Mbps 吞吐时，在理想状态下折合的下载速度大约为 10 MB/s。
+        </p>
+
+        <h2 id="rtt-jitter-loss">二、 RTT 延迟、抖动与持续丢包的隐形制约</h2>
+        <p>
+          除了极限吞吐，延迟、抖动与丢包是网络交互质量的关键指标。
+        </p>
+        <p>
+          延迟（RTT）表示数据从本地发出，经路由转发并被对端响应的往返时延；根据 RFC 3393 规范，时延抖动（Jitter）表示相邻数据包单向延迟的变化方差。高抖动意味着网络信道极不稳定，即使平均延迟很低，也会导致实时语音断续、游戏画面出现规律性“回拉”。
+        </p>
+        <p>
+          根据 RFC 6673 往返丢包率评估，丢包是导致 TCP 吞吐量断崖式下跌的最主要诱因。因为 TCP 认为所有的丢包都代表底层路由拥塞，从而会主动收紧发送窗口。连续的高丢包甚至会迫使 TCP 频繁启动超时重传（RTO），使得哪怕有 1 Gbps 带宽也可能卡成慢速网络。
+        </p>
+
+        <!-- SVG 2: Speed Test Flow -->
+        <div class="diagram-container">
+          <div class="diagram-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan);">
+              <polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            网络及代理节点科学测速与基准判定流程
+          </div>
+          <svg viewBox="0 0 800 240" width="100%" height="auto" style="background: #080c18; border-radius: 8px; font-family: system-ui, -apple-system, sans-serif;">
+            <!-- Flow line -->
+            <path d="M 80,120 L 720,120" stroke="url(#cyanGrad)" stroke-width="3" stroke-dasharray="3,3" stroke-linecap="round" />
+            
+            <!-- Step 1 -->
+            <g transform="translate(80, 120)">
+              <circle cx="0" cy="0" r="14" fill="#0c1122" stroke="#00f2fe" stroke-width="4"/>
+              <circle cx="0" cy="0" r="6" fill="#00f2fe" />
+              <text x="0" y="-25" fill="#f8fafc" font-size="12" font-weight="bold" text-anchor="middle">1. 直连基准测定</text>
+              <text x="0" y="32" fill="#94a3b8" font-size="10" text-anchor="middle">关闭代理测试三次</text>
+              <text x="0" y="46" fill="#64748b" font-size="9" text-anchor="middle">记录空闲/负载延迟与吞吐</text>
+            </g>
+
+            <!-- Step 2 -->
+            <g transform="translate(240, 120)">
+              <circle cx="0" cy="0" r="14" fill="#0c1122" stroke="#00f2fe" stroke-width="4"/>
+              <circle cx="0" cy="0" r="6" fill="#00f2fe" />
+              <text x="0" y="-25" fill="#f8fafc" font-size="12" font-weight="bold" text-anchor="middle">2. 本地控制变量</text>
+              <text x="0" y="32" fill="#94a3b8" font-size="10" text-anchor="middle">关闭多余下载与同步</text>
+              <text x="0" y="46" fill="#64748b" font-size="9" text-anchor="middle">使用网线物理连接，避开WiFi</text>
+            </g>
+
+            <!-- Step 3 -->
+            <g transform="translate(400, 120)">
+              <circle cx="0" cy="0" r="14" fill="#0c1122" stroke="#00f2fe" stroke-width="4"/>
+              <circle cx="0" cy="0" r="6" fill="#00f2fe" />
+              <text x="0" y="-25" fill="#f8fafc" font-size="12" font-weight="bold" text-anchor="middle">3. 目标节点导入</text>
+              <text x="0" y="32" fill="#94a3b8" font-size="10" text-anchor="middle">运行 Clash/sing-box</text>
+              <text x="0" y="46" fill="#64748b" font-size="9" text-anchor="middle">保持相同测速服务器</text>
+            </g>
+
+            <!-- Step 4 -->
+            <g transform="translate(560, 120)">
+              <circle cx="0" cy="0" r="14" fill="#0c1122" stroke="#9b51e0" stroke-width="4"/>
+              <circle cx="0" cy="0" r="6" fill="#9b51e0" />
+              <text x="0" y="-25" fill="#f8fafc" font-size="12" font-weight="bold" text-anchor="middle">4. 单/多线程对比</text>
+              <text x="0" y="32" fill="#94a3b8" font-size="10" text-anchor="middle">分析拥塞限制与丢包</text>
+              <text x="0" y="46" fill="#64748b" font-size="9" text-anchor="middle">检验线路重传效率</text>
+            </g>
+
+            <!-- Step 5 -->
+            <g transform="translate(720, 120)">
+              <circle cx="0" cy="0" r="14" fill="#0c1122" stroke="#ff4d4f" stroke-width="4"/>
+              <circle cx="0" cy="0" r="6" fill="#ff4d4f" />
+              <text x="0" y="-25" fill="#f8fafc" font-size="12" font-weight="bold" text-anchor="middle">5. 动态分时追踪</text>
+              <text x="0" y="32" fill="#94a3b8" font-size="10" text-anchor="middle">在早/中/晚高峰采集</text>
+              <text x="0" y="46" fill="#ff4d4f" font-size="9" text-anchor="middle">绘制长期趋势折线图</text>
+            </g>
+          </svg>
+        </div>
+
+        <h2 id="loaded-latency">三、 空闲延迟与排队缓冲造成的负载延迟</h2>
+        <p>
+          在 Cloudflare 等大型测速技术解析中，**空闲延迟（Idle Latency）** 与 **负载延迟（Loaded Latency）** 被视为两项相互依存但性质完全不同的网络特征。
+        </p>
+        <p>
+          空闲延迟仅代表链路空载、没有任何流量冲突时的物理延迟。而负载延迟则是由于**缓存溢出（Bufferbloat，亦称排队延迟）** 效应决定的。当本地启动满负荷的上传或下载测速时，路由器、中转入口以及落地节点的网络缓冲区如果严重超售排队，数据包的排队等待时间就会急剧拉长。
+        </p>
+        <p>
+          这导致有的节点在“未下载”时延迟只有 30ms，可一旦启动大流量下载，负载延迟瞬间膨胀到 600ms 以上，使得你在下载期间的语音会议和网页交互几乎陷入卡死瘫痪。
+        </p>
+
+        <h2 id="stream-threads">四、 测速工具差异：单线程与多线程的底层问答</h2>
+        <p>
+          为什么相同的节点，在 Fast.com、Speedtest 或 YouTube 详细统计信息里测出的数据差距会很大？这源于底层是使用“单线程”还是“多线程”建立的连接。
+        </p>
+
+        <!-- SVG 3: Single vs Multi -->
+        <div class="diagram-container">
+          <div class="diagram-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan);">
+              <line x1="6" y1="3" x2="6" y2="21"/><line x1="18" y1="3" x2="18" y2="21"/><line x1="12" y1="3" x2="12" y2="21"/>
+            </svg>
+            单线程与多线程 TCP 传输测速在评估节点时的工作原理差异
+          </div>
+          <svg viewBox="0 0 800 300" width="100%" height="auto" style="background: #080c18; border-radius: 8px; font-family: system-ui, -apple-system, sans-serif;">
+            <!-- Left Panel: Single Thread -->
+            <g transform="translate(40, 45)">
+              <rect width="340" height="210" rx="6" fill="#0c1122" stroke="#00f2fe" stroke-width="1.5" />
+              <text x="20" y="30" fill="#00f2fe" font-size="13" font-weight="bold">单线程 TCP 连接 (Single Stream)</text>
+              <line x1="20" y1="42" x2="320" y2="42" stroke="rgba(0, 242, 254, 0.15)" stroke-width="1"/>
+              
+              <!-- Draw 1 pipe -->
+              <rect x="20" y="60" width="300" height="24" rx="4" fill="rgba(0,242,254,0.05)" stroke="#00f2fe" stroke-width="1"/>
+              <text x="170" y="76" fill="#00f2fe" font-size="11" text-anchor="middle">单一 TCP 数据管道</text>
+
+              <text x="20" y="115" fill="#f8fafc" font-size="11" font-weight="bold">• 丢包敏感性极高：</text>
+              <text x="35" y="133" fill="#94a3b8" font-size="10">无任何并发分担，1% 的丢包重传即可使速度暴跌</text>
+
+              <text x="20" y="165" fill="#f8fafc" font-size="11" font-weight="bold">• 业务真实还原：</text>
+              <text x="35" y="183" fill="#94a3b8" font-size="10">高度逼真地还原单文件下载、浏览器首载的实际表现</text>
+            </g>
+
+            <!-- Right Panel: Multi Thread -->
+            <g transform="translate(420, 45)">
+              <rect width="340" height="210" rx="6" fill="#0c1122" stroke="#9b51e0" stroke-width="1.5" />
+              <text x="20" y="30" fill="#9b51e0" font-size="13" font-weight="bold">多线程 TCP 连接 (Multi-Stream)</text>
+              <line x1="20" y1="42" x2="320" y2="42" stroke="rgba(155, 81, 224, 0.15)" stroke-width="1"/>
+              
+              <!-- Draw 4 pipes -->
+              <g transform="translate(20, 52)">
+                <rect x="0" y="0" width="300" height="10" rx="2" fill="rgba(155,81,224,0.05)" stroke="#9b51e0" stroke-width="1"/>
+                <rect x="0" y="14" width="300" height="10" rx="2" fill="rgba(155,81,224,0.05)" stroke="#9b51e0" stroke-width="1"/>
+                <rect x="0" y="28" width="300" height="10" rx="2" fill="rgba(155,81,224,0.05)" stroke="#9b51e0" stroke-width="1"/>
+              </g>
+              <text x="170" y="110" fill="#94a3b8" font-size="10" text-anchor="middle">多路并发 TCP 数据管道</text>
+
+              <text x="20" y="135" fill="#f8fafc" font-size="11" font-weight="bold">• 掩盖丢包特征：</text>
+              <text x="35" y="153" fill="#94a3b8" font-size="10">某个管道发生拥塞降速，其他管道并行抢占剩余容量</text>
+
+              <text x="20" y="175" fill="#f8fafc" font-size="11" font-weight="bold">• 物理极限测试：</text>
+              <text x="35" y="193" fill="#94a3b8" font-size="10">用于压榨并测试你所能租用到的最大链路带宽上限</text>
+            </g>
+          </svg>
+        </div>
+
+        <p>
+          单线程测试仅建立单一 TCP 链路（如 M-Lab 默认 NDT 工具）。在这种无任何并发分担的情况下，链路极其敏感。如果跨境海缆或中转入口存在细微丢包，单线程测速会展现出真实的业务瓶颈。
+        </p>
+        <p>
+          而多线程测试会并行开启多条（通常 4 - 8 条）连接抢占网络信道。这能非常有效地榨干物理线路的总带宽，因而结果往往远比单线程漂亮。日常审计节点，应当同时运行并记录两项指标以作对比。
+        </p>
+
+        <h2 id="variables-control">五、 排除偶发干扰：测速前的控制变量规范</h2>
+        <p>
+          在按下测试按钮前，如果不能有效规范测试环境，其最终得到的结果只能是无效噪声。测速必须建立以下控制变量红线：
+        </p>
+        <ol>
+          <li><strong>阻断物理干扰：</strong> 严禁使用无线 2.4 GHz WiFi 运行测速，因为其同频段干扰和天线衰减本身就先成为了网络瓶颈。在测试千兆宽带上限时必须强制通过超六类网线物理连入路由器千兆口；</li>
+          <li><strong>限制后台大流量任务：</strong> 在测速开始前，彻底杀掉本地正在运行的云盘同步、Steam 自动更新、以及局域网内的多媒体串流；</li>
+          <li><strong>固定远端测速点：</strong> 在 Speedtest 中固定选用距离落地节点最近、且吞吐容量充沛的第三方 IDC 节点（如香港 HKT 或日本 NTT 服务器），避免因为测试点本身的带宽拥塞造成数据失效。</li>
+        </ol>
+
+        <h2 id="testing-steps">六、 代理节点科学测速的三步标准工作流程</h2>
+        <p>
+          网络是动态且充满不确定性的，我们必须采取三步法建立基准与折算率：
+        </p>
+        <h3>第一步：直连基准测定</h3>
+        <p>
+          在完全关闭客户端的情况下，测试三次本地公网直连表现，记录下**本地直连极限下载、空闲延迟以及丢包率**。
+        </p>
+        <h3>第二步：开启节点运行测速</h3>
+        <p>
+          保持测速服务器一致，打开 Clash/sing-box 并切换至目标香港或美国节点。按照相同参数完成三次测试。
+        </p>
+        <h3>第三步：计算节点吞吐保持率</h3>
+        <p>
+          利用以下公式折算节点对物理宽带的承载能力：
+        </p>
+        <div class="highlight-box cyan">
+          <p style="margin: 0; font-weight: bold; text-align: center; font-size: 1.1rem; color: var(--accent-cyan);">
+            节点吞吐保持率 = ( 节点测速结果 ÷ 直连基准结果 ) × 100%
+          </p>
+        </div>
+        <p>
+          如果直连宽带吞吐为 500 Mbps，中转节点测得为 300 Mbps，则其吞吐保持率为 60%。保持率越高，说明中转硬件超售度越低，能更完全地分派链路能力。
+        </p>
+
+        <h2 id="split-monitoring">七、 避开单一截图假象的分时段追踪</h2>
+        <p>
+          一次在凌晨 3 点跑出的千兆满速截图，对于证明商家的品质没有任何技术参考价值。网络波动具有高度的规律性。
+        </p>
+        <p>
+          真正的网络容量测试必须进行**分时段三点采样法**：
+        </p>
+        <ul>
+          <li><strong>早高峰采样段（09:00 - 11:00）：</strong> 测试空闲工作时间段的节点底色速度；</li>
+          <li><strong>午后闲暇段（14:00 - 17:00）：</strong> 观察常规日间负载下的网络表现；</li>
+          <li><strong>晚高峰压测段（20:00 - 23:00）：</strong> **这是最终判定节点品质的分水岭**。此时公网丢包率会成倍上升。能够在此阶段依然保持 80% 以上保持率且负载延迟低于 100ms 的，才可判定为优质中转专线。</li>
+        </ul>
+
+        <!-- SVG 4: Bandwidth Timeline -->
+        <div class="diagram-container">
+          <div class="diagram-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan);">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+            </svg>
+            节点带宽、延迟与丢包率分时段长期监测趋势图
+          </div>
+          <svg viewBox="0 0 800 300" width="100%" height="auto" style="background: #080c18; border-radius: 8px; font-family: system-ui, -apple-system, sans-serif;">
+            <!-- Grid lines -->
+            <line x1="60" y1="50" x2="740" y2="50" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="60" y1="120" x2="740" y2="120" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="60" y1="190" x2="740" y2="190" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="60" y1="250" x2="740" y2="250" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+            
+            <!-- Axis labels -->
+            <text x="50" y="254" fill="#94a3b8" font-size="9" text-anchor="end">时间</text>
+            <text x="60" y="266" fill="#94a3b8" font-size="10" text-anchor="middle">09:00 (上午)</text>
+            <text x="280" y="266" fill="#94a3b8" font-size="10" text-anchor="middle">15:00 (下午)</text>
+            <text x="520" y="266" fill="#94a3b8" font-size="10" text-anchor="middle">21:30 (晚高峰)</text>
+            <text x="740" y="266" fill="#94a3b8" font-size="10" text-anchor="middle">23:00</text>
+
+            <!-- Bandwidth curve -->
+            <path d="M 60,60 L 280,75 L 520,180 L 740,90" fill="none" stroke="#00f2fe" stroke-width="3"/>
+            <circle cx="520" cy="180" r="5" fill="#00f2fe"/>
+            <text x="520" y="170" fill="#00f2fe" font-size="10" font-weight="bold" text-anchor="middle">晚高峰吞吐下滑</text>
+
+            <!-- Loss bars (red) -->
+            <rect x="505" y="195" width="30" height="55" fill="rgba(255,77,79,0.3)" stroke="#ff4d4f" stroke-width="1"/>
+            <text x="520" y="210" fill="#ff4d4f" font-size="9" text-anchor="middle">丢包攀升</text>
+
+            <!-- Jitter line (purple) -->
+            <path d="M 60,210 L 280,215 L 520,95 L 740,200" fill="none" stroke="#9b51e0" stroke-width="2" stroke-dasharray="2,2"/>
+            <text x="520" y="85" fill="#9b51e0" font-size="9" text-anchor="middle">时延抖动加剧</text>
+          </svg>
+        </div>
+
+        <h2 id="iperf3-cmd">八、 使用 iperf3 进行端到端控制测试</h2>
+        <p>
+          如果你购买了海外云主机（VPS）并拥有两端的操作系统管理权限，那么应当弃用容易受网页缓存欺骗的网页工具，改用行业标准吞吐量测量工具 **iperf3** 开展端到端测速。
+        </p>
+        <p>
+          iperf3 采用主动测量的发包模式，能够彻底避开 Web 缓存的欺骗，支持对特定并发连接数与发包速率进行限制。
+        </p>
+        <p>
+          其基本测试命令行规范为：
+        </p>
+        
+        <h3>1. 服务端监听（在境外 VPS 上执行）</h3>
+        <pre><code style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 12px; display: block; border-radius: 4px; color: var(--accent-cyan); font-family: monospace;">iperf3 -s</code></pre>
+        
+        <h3>2. 客户端测试（在本地设备上执行）</h3>
+        <p>建立一条持续 30 秒的单线程 TCP 吞吐测试：</p>
+        <pre><code style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 12px; display: block; border-radius: 4px; color: var(--accent-cyan); font-family: monospace;">iperf3 -c 目标服务器IP -t 30</code></pre>
+        <p>测试多管道并发。启动 4 条并发连接以探测链路理论承载上限：</p>
+        <pre><code style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 12px; display: block; border-radius: 4px; color: var(--accent-cyan); font-family: monospace;">iperf3 -c 目标服务器IP -P 4 -t 30</code></pre>
+        <p>测试反向链路。测试服务器向本地回传的下载流量：</p>
+        <pre><code style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 12px; display: block; border-radius: 4px; color: var(--accent-cyan); font-family: monospace;">iperf3 -c 目标服务器IP -R -t 30</code></pre>
+        <p>进行 UDP 吞吐和丢包分析。发送一条物理速率限制为 50M 的 UDP 封包流：</p>
+        <pre><code style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 12px; display: block; border-radius: 4px; color: var(--accent-cyan); font-family: monospace;">iperf3 -c 目标服务器IP -u -b 50M -t 30</code></pre>
+        
+        <p>
+          在运行 iperf3 时，需要特别关注 UDP 吞吐测试。由于 UDP 没有拥塞退避机制，设置的速率（`-b` 选项）应从 10M 逐步上调测试。一开始就强行发送远超物理带宽极限的 UDP 数据包，会导致路由器发生缓存排队溢出，带来高达 90% 的人为恶意丢包，让测试数据失去参考价值。
+        </p>
+
+        <h2 id="bandwidth-vs-speedtest">九、 主动测速与被动持续带宽监测的界线</h2>
+        <p>
+          网络审计分为**主动测速**与**被动持续带宽监测**两种手段。
+        </p>
+        <p>
+          主动测速通常在 10s 至 30s 的短时间内主动填满宽带，用以抓取当前的最大可用物理带宽。如果为了监控节点质量而每隔一分钟运行一次满带宽主动测速，测速流量本身就会耗尽节点的流量套餐，甚至成为局域网内其他核心业务的干扰源。
+        </p>
+        <p>
+          而被动监测则不产生额外测试流量。它是通过在本地软路由或客户端接口上运行被动守护进程（如 Prometheus 加 Grafana 仪表盘），静默读取网卡接口每分钟流经的累积字节数、以及特定域名的 PING 延迟。只有当监测到“网络流量高且延迟抖动异常攀升”时，才可判定链路存在实质拥堵或服务器硬件瓶颈。
+        </p>
+
+        <h2 id="myths-check">十、 网络测速的六个经典高频技术误区</h2>
+        
+        <h3>误区一：“测速跑满 1000Mbps，看 YouTube 就绝不会卡顿”</h3>
+        <p>
+          <strong>技术事实：</strong> 错误。高带宽测速能代表你访问测速节点很顺畅，但 YouTube 的视频加载会根据客户端与 YouTube 边缘分发服务器（Google Global Cache）之间的 RTT、TCP 窗口接收大小（Window Size）和实时丢包进行动态调整。若落地节点的出口 IP 属于严重超售的共享 IP，遭到谷歌服务限流，视频依然会发生频繁缓冲。
+        </p>
+
+        <h3>误区二：“测速服务器距离我的节点机房越近，测出的速度越真实”</h3>
+        <p>
+          <strong>技术事实：</strong> 错误。将测速服务器和节点服务器选在同一个机房，是在“测试数据中心内网质量”，而非你的真实跨境体验。数据在这个近端链路中几乎是零丢包和 1ms 延迟，能跑出令人惊叹的极速。真实测试应当固定选用你本地物理位置或主要业务目标所在的公共网络测试节点。
+        </p>
+
+        <h3>误区三：“WiFi 测速数据偏低，一定是机场节点又缩水了”</h3>
+        <p>
+          <strong>技术事实：</strong> 错误。在家庭网络中，WiFi 的物理频段干扰（特别是 2.4 GHz 拥堵频段）会导致吞吐速率和抖动参数大打折扣。当测速结果发生滑坡，应立即用网线连入路由器，排除 WiFi 无线层的干扰瓶颈后，再判定是否是中转节点存在故障。
+        </p>
+
+        <h3>误区四：“只要多线程跑得快，单线程低一点没关系，反正是满速的”</h3>
+        <p>
+          <strong>技术事实：</strong> 错误。大多数单文件下载、API 请求和浏览器资源同步本质上均是只开启单一 TCP 连接的“单线程业务”。多线程跑得快只代表链路总容量尚可，但若单线程极慢（如只有几兆），说明网络存在严重的高丢包，你的日常网页加载和文件拉取体验依然会觉得极卡。
+        </p>
+
+        <h3>误区五：“测速数字每天都在变，说明商家一直在悄悄限速”</h3>
+        <p>
+          <strong>技术事实：</strong> 错误。公共互联网的出境骨干路由每时每刻都在发生变化。当发生海缆锚击、跨网结算风控、或者同网段内其他用户发生突发超载时，节点的实际吞吐自然会上下起伏。只要晚高峰的保持率处于合理区间内，均属于正常物理波动。
+        </p>
+
+        <h3>误区六：“测速只要看下载速度，上传速度不需要关注”</h3>
+        <p>
+          <strong>技术事实：</strong> 错误。在 TCP 双向握手中，发送方必须收到接收方的 ACK（确认报文）才能够继续发包。如果节点的上传信道带宽过低或发生了满载拥堵（例如本地在备份云相册），ACK 报文发送受阻，会导致下行 TCP 数据包发送延迟，从而让下载速度断崖式下跌。
+        </p>
+
+        <h2>十一、 总结</h2>
+        <p>
+          科学测速与带宽监测的核心逻辑在于**“基准化对比、控制测试变量、关注延迟抖动丢包在不同负载下的偏离值，并排除单一测速截图假象”**。
+        </p>
+        <p>
+          把多项核心指标综合起来，在晚高峰拥堵时段开展分时段校验，并结合 iperf3 进行端到端基准探针，才能帮助我们摒弃对虚假营销标签的盲信，客观挑选出抗压性最高、丢包率最低的科学加速通道。
+        </p>
+      </article>
+
+      <!-- Related Category Recommendations -->
+      <section style="margin-top: 48px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 32px; border-radius: var(--radius-md);">
+        <h2 style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 20px;">💡 推荐技术科普阅读</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+          <a href="why-high-latency.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--accent-cyan);">
+            节点延迟高与慢速排查 &rarr;
+          </a>
+          <a href="airport-blocked-reasons.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--accent-purple);">
+            节点失效与Timeout故障排查 &rarr;
+          </a>
+          <a href="airport-exit-signs.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--accent-cyan);">
+            观察机场跑路前的征兆 &rarr;
+          </a>
+          <a href="airport-vs-vpn.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--accent-cyan);">
+            机场与传统VPN的区别 &rarr;
+          </a>
+          <a href="domestic-relay.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--text-main);">
+            什么是国内中转与双栈中转 &rarr;
+          </a>
+          <a href="safe-buy-tips.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--text-main);">
+            安全购买与防骗守则 &rarr;
+          </a>
+          <a href="knowledge.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--text-main);">
+            机场与网络加速知识库 &rarr;
+          </a>
+          <a href="shadowsocks-protocol.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--text-main);">
+            Shadowsocks 协议详解 &rarr;
+          </a>
+          <a href="trojan-protocol.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--text-main);">
+            Trojan 协议详解 &rarr;
+          </a>
+          <a href="vmess-vless-protocol.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--text-main);">
+            VMess 与 VLESS 协议解析 &rarr;
+          </a>
+          <a href="warnings.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--text-main);">
+            机场跑路与风险预警 &rarr;
+          </a>
+        </div>
+      </section>
+
+      <!-- Disclaimer Section -->
+      <section style="margin-top: 60px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+        <h2 style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 12px;">📢 免责声明</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+          本站所展示的技术原理解析、配置步骤指导及相关客户端使用指南仅供局域网科学管理、外贸合规商用及网络安全学术研究。本站不销售任何付费机场节点，不对外部网络服务商提供连通性担保。请严格遵守所在国家的相关法律法规，合法合规上网。
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="logo-area" style="margin-bottom: 16px;">
+            <img src="../assets/images/logo.svg" alt="云梯指南 Logo" class="logo-icon" width="32" height="32">
+            <span class="logo-text" style="font-size: 1.25rem;">云梯指南</span>
+          </a>
+          <p>云梯指南是2026年专业的机场推荐与网络加速配置知识库，协助您规避跑路商家，筛选高性价比的科学上网套餐。</p>
+        </div>
+        
+        <div class="footer-col">
+          <h4>核心板块</h4>
+          <ul class="footer-links">
+            <li><a href="../reviews/index.html">机场推荐排行榜</a></li>
+            <li><a href="../reviews/brands.html">机场品牌综合评测</a></li>
+            <li><a href="../guides/index.html">客户端配置教程中心</a></li>
+            <li><a href="warnings.html">跑路风险黑名单</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>快捷导航</h4>
+          <ul class="footer-links">
+            <li><a href="../categories/index.html">全站分类归档</a></li>
+            <li><a href="../topics/index.html">专题分类汇总</a></li>
+            <li><a href="../about.html">关于云梯指南</a></li>
+            <li><a href="../disclaimer.html">网站免责声明</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col footer-disclaimer">
+          <h4>本站声明</h4>
+          <p>本站提供的科学上网教程、网络加速软件配置指南以及节点测速数据仅作为技术学习和合规外贸交流参考。本站不提供、不销售任何付费机场节点，请严格遵守您当地的网络法律法规。</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="copyright">© 2026 云梯指南 (<a href="../index.html" style="color: inherit;">nodehub168.com</a>). All rights reserved.</p>
+        <div class="footer-legal-links">
+          <a href="../about.html">关于本站</a>
+          <a href="../disclaimer.html">免责声明</a>
+          <a href="../sitemap.xml">网站地图</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // FAQ accordion functionality
+    document.querySelectorAll('.faq-question').forEach(item => {
+      item.addEventListener('click', () => {
+        const parent = item.parentElement;
+        const isActive = parent.classList.contains('active');
+        
+        document.querySelectorAll('.faq-item').forEach(el => {
+          el.classList.remove('active');
+          el.querySelector('.faq-answer').style.maxHeight = null;
+        });
+        
+        if (!isActive) {
+          parent.classList.add('active');
+          const answer = parent.querySelector('.faq-answer');
+          answer.style.maxHeight = answer.scrollHeight + 32 + "px";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

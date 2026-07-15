@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>V2rayN 客户端教程：从 .NET 依赖安装、订阅导入、分流规则到 Tun 模式完全接管 Windows 流量 - 云梯指南</title>
+  <meta name="description" content="专为 Windows 用户提供的 V2rayN 客户端使用教程，涵盖 .NET 桌面运行时依赖配置、一键机场订阅分组导入、系统代理与绕过大陆分流路由设置、以及利用内置 sing-box 核心开启虚拟网卡/Tun 模式接管全机网络。">
+  <link rel="canonical" href="https://nodehub168.com/guides/v2rayn.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首页",
+          "item": "https://nodehub168.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "教程指南",
+          "item": "https://nodehub168.com/guides/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "V2rayN教程",
+          "item": "https://nodehub168.com/guides/v2rayn.html"
+        }
+      ]
+    }
+  </script>
+  <style>
+    .guide-article {
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .guide-article h2 {
+      font-size: 1.5rem;
+      margin: 36px 0 16px;
+      border-left: 4px solid var(--accent-cyan);
+      padding-left: 12px;
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.03) 0%, transparent 100%);
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+    .guide-article h3 {
+      font-size: 1.25rem;
+      margin: 28px 0 12px;
+      color: #1e3a8a;
+    }
+    .guide-article p {
+      margin-bottom: 20px;
+      text-align: justify;
+    }
+    .guide-article ul, .guide-article ol {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    .guide-article li {
+      margin-bottom: 8px;
+    }
+    .guide-article strong {
+      color: #1e3a8a;
+    }
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin: 24px 0;
+      border-left: 4px solid var(--accent-purple);
+    }
+    .highlight-box.cyan {
+      border-left-color: var(--accent-cyan);
+    }
+    .toc-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin: 32px 0;
+    }
+    .toc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .toc-item a {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toc-item a:hover {
+      color: #1e3a8a;
+      transform: translateX(4px);
+    }
+    code {
+      font-family: Consolas, Monaco, monospace;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+      <nav class="main-nav" style="display: flex;">
+        <a href="../index.html" class="nav-link">返回首页</a>
+      </nav>
+    </div>
+  </header>
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 850px;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="index.html" style="color: inherit;">教程指南</a> &gt; <span style="color: var(--accent-cyan); font-weight: 500;">V2rayN教程</span>
+      </nav>
+      <article class="guide-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 40px; border-radius: var(--radius-md);">
+        <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
+          V2rayN 客户端教程
+        </h1>
+        
+        <p>
+          在 Windows 平台的科学上网与网络分流生态中，相比于界面华丽但内存占用高企的 Electron 架构工具，<strong>V2rayN</strong> 始终凭借其极致的“轻量化”和“高协议兼容性”占据着重要地位。它是一款基于 C# 开发的原生 Windows 代理客户端。由于没有 Webview 的渲染开销，V2rayN 的内存占用通常只有十几兆，且原生支持 Xray-core、V2ray-core、Sing-box 内核的无缝切换。这使其能够轻松配置最新的 Vless (Reality)、Trojan 以及大吞吐量的 Hysteria 2 协议。
+        </p>
+        <p>
+          然而，许多用户在使用过程中，经常遭遇“双击无响应（缺少.NET依赖）”、“节点导入后全部报错（时钟偏差）”以及“命令行终端不走代理（系统代理局限）”等经典困惑。本教程将由浅入深，从底层依赖安装、订阅添加、规则分流配置，到进阶的虚拟网卡（Tun 模式）接管全系统流量以及故障排障，为您提供详尽上手教程。
+        </p>
+
+        <!-- Table of Contents -->
+        <div class="toc-container">
+          <div class="toc-title">
+            <span>📋</span> 教程目录导航
+          </div>
+          <div class="toc-grid">
+            <div class="toc-item"><a href="#section-1">一、.NET 依赖安装与安全获取</a></div>
+            <div class="toc-item"><a href="#section-2">二、保姆级订阅分组与节点导入</a></div>
+            <div class="toc-item"><a href="#section-3">三、系统代理切换与路由分流配置</a></div>
+            <div class="toc-item"><a href="#section-4">四、Tun 模式完全托管 Windows 流量</a></div>
+            <div class="toc-item"><a href="#section-5">五、精选服务搭配与高频排错 FAQ</a></div>
+          </div>
+        </div>
+
+        <h2 id="section-1">一、第一步：V2rayN 客户端下载与 .NET 依赖配置</h2>
+        <p>
+          作为一个原生 Windows 应用，V2rayN 在运行前必须正确部署微软的运行环境，否则双击程序会彻底无响应或弹窗报错：
+        </p>
+        <ol>
+          <li><strong>依赖环境安装</strong>：在首次打开 V2rayN 前，请务必前往微软官网下载并安装 <strong>.NET Desktop Runtime 6.0</strong>（或更高级的 8.0 系列）。请认准下载“x64 架构”的 Desktop 桌面版本安装包。</li>
+          <li><strong>下载官方正版包</strong>：访问官方 GitHub 仓库（目前由 2dust 团队维护），推荐下载 <code>v2rayN-With-Core.zip</code>。此包已内置了 Xray、V2ray、Sing-box 等主流核心组件，解压即可直接配置运行，不推荐下载无 Core 版本。</li>
+          <li><strong>文件目录结构规范</strong>：下载后请先将其解压至一个固定的本地文件夹（如 <code>D:\Program Files\v2rayN\</code>）。另外，避免将文件夹放在需要系统管理员控制的 <code>C:\Program Files\</code>，防止因 Windows 权限拦截导致配置文件写入失败。</li>
+        </ol>
+
+        <h2 id="section-2">二、保姆级核心实操：订阅分组与节点同步导入</h2>
+        <p>
+          V2rayN 采用“订阅分组”的管理逻辑，可以兼容传统的 v2ray 格式链接、Clash YAML 格式链接以及全新的 Sing-box JSON 链接。我们以高性能专线中转机场为配合演示。
+        </p>
+        <ol>
+          <li><strong>获取机场配置链接</strong>：登录您的机场后台，在用户中心复制对应的 <strong>订阅链接</strong>。</li>
+          <li><strong>在 V2rayN 中新建订阅分组</strong>：
+            <ul>
+              <li>双击解压路径下的 <code>v2rayN.exe</code>，启动后软件会以“蓝色小V”的图标挂载在 Windows 右下角通知栏。双击图标打开主控制台。</li>
+              <li>点击顶部导航栏的 <strong>订阅分组 (Subscription Group)</strong> -> 选择第一项 <strong>订阅分组设置 (Subscription Group Settings)</strong>。</li>
+              <li>在弹出的窗口中，点击左上角的 <strong>添加 (Add)</strong>。</li>
+              <li><strong>填写订阅信息</strong>：
+                <ul>
+                  <li><strong>可选别名 (Remarks)</strong>：填写机场名，如 <code>快狸机场</code>。</li>
+                  <li><strong>可选地址 (Url)</strong>：粘贴刚才复制的机场配置订阅链接。</li>
+                </ul>
+              </li>
+              <li>点击 <strong>确定 (Confirm)</strong>。</li>
+            </ul>
+          </li>
+          <li><strong>同步更新节点</strong>：返回主控制台，点击顶部菜单栏的 <strong>订阅分组</strong> -> 选择 <strong>更新全部订阅 (Update all subscriptions)</strong>。V2rayN 的订阅下载线程会并发拉取云端节点配置并展示在主页面中。</li>
+        </ol>
+
+        <h2 id="section-3">三、系统代理模式与底层路由分流切换</h2>
+        <p>
+          V2rayN 的核心控制非常直观，主要通过控制台底部状态栏的一红一蓝两个参数选项来实现：
+        </p>
+        <ol>
+          <li><strong>系统代理设置（红色选项）</strong>：点击切换模式。
+            <ul>
+              <li><strong>自动配置系统代理 (Set System Proxy - 推荐)</strong>：V2rayN 会向 Windows 注册表中写入代理端口（默认 HTTP 端口为 <code>10809</code>）。此时，全机遵循 IE 代理协议的浏览器请求正式被接管。</li>
+              <li><strong>清除系统代理 (Clear System Proxy)</strong>：关闭系统级代理。</li>
+            </ul>
+          </li>
+          <li><strong>路由分流选择（蓝色选项）</strong>：双击可调整内部的分流规则。
+            <ul>
+              <li><strong>绕过大陆 (Bypass Mainland - 推荐)</strong>：分流规则模式。国区流量直接走直连，不走代理；出海流量（如 ChatGPT）自动通过节点。在此分流下，如需流畅访问 ChatGPT 等严苛风控的 AI 平台，推荐使用 <a href="../reviews/jilianyun.html">极连云</a> 提供的纯净住宅 IP 节点。</li>
+              <li><strong>全局模式 (Global)</strong>：所有出站流量强行通过您选定的特定节点。</li>
+              <li><strong>直连模式 (Direct)</strong>：所有流量直接访问，不经过任何翻墙隧道。</li>
+            </ul>
+          </li>
+          <li><strong>节点激活</strong>：在主界面节点列表中，单击选中某个节点，按下键盘上的 <strong>Enter (回车键)</strong>，或者鼠标右键选择“设为活动服务器”，此时节点卡片变红，代表选定为主力出口。</li>
+        </ol>
+
+        <h2 id="section-4">四、极客进阶：Tun 模式完全接管 Windows 物理流量</h2>
+        <p>
+          V2rayN 默认启动的“系统代理（红色配置）”仅能接管浏览器。对于 Git、PowerShell 终端、Steam 游戏客户端以及 UWP 应用，流量是彻底绕过代理的。为了实现真正的系统级网卡流量完全托管，进阶用户必须开启 <strong>Tun 模式</strong>：
+        </p>
+        <ol>
+          <li>点击 V2rayN 顶部的 <strong>设置 (Settings)</strong> -> 选择 <strong>选项设置 (Option Settings)</strong>。</li>
+          <li>切换到 <strong>Tun 模式设置 (Tun Mode Settings)</strong> 选项卡。</li>
+          <li><strong>核心选择</strong>：建议将 Tun 内核切换为 <strong>sing-box</strong>。</li>
+          <li>回到主界面，点击顶部菜单的 <strong>Tun 模式</strong> 开关，将其修改为 <strong>开启</strong>。</li>
+          <li><strong>网卡激活</strong>：系统会请求 UAC 管理员权限，批准后会在 Windows “网络连接适配器”中虚拟出一块名为 <code>sing-box-wintun</code> 的网卡，此时全机的所有网络流量（包括 TCP/UDP）正式被完全接管。</li>
+        </ol>
+
+        <h2 id="section-5">五、精选服务搭配与高频排错 FAQ</h2>
+        <p>
+          V2rayN 的高协议兼容性需要优质的出海线路作保障：
+        </p>
+        <ul>
+          <li>针对日常追剧、超高吞吐 4K 播放场景，推荐选用全 1.0 倍率、原生支持 Vless 协议的低价高性价比提供商 <a href="../reviews/kuaili.html">快狸机场</a>。</li>
+          <li>若对晚高峰物理延迟与抗抖动有极高要求，可参考接入物理内网隔离专线的 <a href="../reviews/guangnianti.html">光年梯</a> 以及支持不限在线设备数、针对各类跨境 AI 服务进行出口优化住宅 IP 的 <a href="../reviews/jilianyun.html">极连云</a> 深度评测。</li>
+        </ul>
+
+        <div class="highlight-box cyan">
+          <p><strong>💬 V2rayN 常见故障自查 FAQ：</strong></p>
+          <p><strong>Q1: 为什么我的 V2rayN 一启动，系统右下角的通知图标瞬间消失？</strong><br>
+          答：这百分百是因为您没有安装微软的 <strong>.NET Runtime 桌面运行时环境</strong>。前往微软官网下载 Desktop x64 运行时并安装即可。</p>
+          <p><strong>Q2: 为什么测试延迟正常，但就是打不开任何网页？</strong><br>
+          答：首先请核对您的 Windows 系统时间是否与北京时间完全一致（误差超过 60 秒会导致传输协议握手失败）；其次请检查是否有其他代理软件占用了端口，可在控制台底部状态栏手动更改系统代理监听端口。</p>
+        </div>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px;">
+          <a href="../index.html" class="btn btn-primary">返回首页</a>
+          <a href="../reviews/index.html" class="btn btn-outline">查看推荐机场</a>
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container" style="text-align: center; padding: 20px 0;">
+      <p class="copyright">© 2026 云梯指南 (nodehub168.com). All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

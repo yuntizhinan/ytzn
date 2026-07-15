@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>V2rayN 基础配置教程：从单节点扫描导入、剪贴板 URI 解析到系统路由简易切换保姆级指南 - 云梯指南</title>
+  <meta name="description" content="专为 Windows 新手提供的 V2rayN 基础配置使用教程，包含 .NET Desktop 运行时依赖安装规范、剪贴板 URI 导入节点、二维码扫描、系统级代理与绕过大陆分流路由切换以及高频端口占用排错。">
+  <link rel="canonical" href="https://nodehub168.com/guides/v2rayn-basic.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首页",
+          "item": "https://nodehub168.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "V2rayN教程",
+          "item": "https://nodehub168.com/guides/v2rayn.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "V2rayN基础",
+          "item": "https://nodehub168.com/guides/v2rayn-basic.html"
+        }
+      ]
+    }
+  </script>
+  <style>
+    .guide-article {
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .guide-article h2 {
+      font-size: 1.5rem;
+      margin: 36px 0 16px;
+      border-left: 4px solid var(--accent-cyan);
+      padding-left: 12px;
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.03) 0%, transparent 100%);
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+    .guide-article h3 {
+      font-size: 1.25rem;
+      margin: 28px 0 12px;
+      color: #1e3a8a;
+    }
+    .guide-article p {
+      margin-bottom: 20px;
+      text-align: justify;
+    }
+    .guide-article ul, .guide-article ol {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    .guide-article li {
+      margin-bottom: 8px;
+    }
+    .guide-article strong {
+      color: #1e3a8a;
+    }
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin: 24px 0;
+      border-left: 4px solid var(--accent-purple);
+    }
+    .highlight-box.cyan {
+      border-left-color: var(--accent-cyan);
+    }
+    .toc-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin: 32px 0;
+    }
+    .toc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .toc-item a {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toc-item a:hover {
+      color: #1e3a8a;
+      transform: translateX(4px);
+    }
+    code {
+      font-family: Consolas, Monaco, monospace;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+      <nav class="main-nav" style="display: flex;">
+        <a href="../index.html" class="nav-link">返回首页</a>
+      </nav>
+    </div>
+  </header>
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 850px;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="v2rayn.html" style="color: inherit;">V2rayN教程</a> &gt; <span style="color: var(--accent-cyan); font-weight: 500;">V2rayN基础</span>
+      </nav>
+      <article class="guide-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 40px; border-radius: var(--radius-md);">
+        <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
+          V2rayN 基础配置
+        </h1>
+        
+        <p>
+          在 Windows 平台上，如果您正在寻找一款界面质朴、内存占用极低且对各种底层出海加密协议兼容性极佳的代理工具，<strong>V2rayN</strong> 绝对是首选。它虽然没有类似 Clash 的可视化网格卡片布局，但却以最符合 Windows 操作习惯的表格形式，将节点管理、测速监控和系统代理路由直观地呈现在桌面上。
+        </p>
+        <p>
+          为了帮助刚刚接触 Windows 科学上网的新手克服“双击闪退”、“不知道如何导入购买的节点”、“测速有延迟却依然打不开 Google”等常见障碍，本文从零起步，为您提供一份保姆级新手上手指南。
+        </p>
+
+        <!-- Table of Contents -->
+        <div class="toc-container">
+          <div class="toc-title">
+            <span>📋</span> 教程目录导航
+          </div>
+          <div class="toc-grid">
+            <div class="toc-item"><a href="#section-1">一、程序包解压与 .NET 环境准备</a></div>
+            <div class="toc-item"><a href="#section-2">二、三种基础的单节点导入方式</a></div>
+            <div class="toc-item"><a href="#section-3">三、启用默认服务器与真连接延迟测试</a></div>
+            <div class="toc-item"><a href="#section-4">四、系统级代理启用与简易分流路由</a></div>
+            <div class="toc-item"><a href="#section-5">五、端口冲突与时钟偏差排错FAQ</a></div>
+            <div class="toc-item"><a href="#section-6">六、高速节点推荐与高级进阶教程</a></div>
+          </div>
+        </div>
+
+        <h2 id="section-1">一、第一步：程序解压与微软 .NET 环境准备</h2>
+        <p>
+          V2rayN 是一款绿色的免安装软件，但因为它基于微软的 .NET 托管代码开发，其运行需要依赖 Windows 系统底层存在对应的运行库：
+        </p>
+        <ol>
+          <li><strong>安装 .NET Runtime 依赖</strong>：在首次打开 V2rayN 前，请务必在电脑上安装 <strong>.NET Desktop Runtime 6.0</strong>（或更新版本）。请认准下载 <code>x64</code> 的桌面运行库版本。如果不安装此依赖，双击 <code>v2rayN.exe</code> 程序会毫无响应。</li>
+          <li><strong>规范解压目录</strong>：从官方 GitHub（2dust/v2rayN 仓库）下载带 Core 内核的压缩包后，<strong>切勿在压缩包内直接双击打开</strong>。请先将其解压到一个干净的非系统盘路径（例如 <code>D:\v2rayN\</code>）。若直接在压缩包内运行，每次关闭软件后，您导入的订阅节点和自定义配置均会随临时文件的删除而彻底丢失。</li>
+          <li><strong>右键运行权限</strong>：双击 <code>v2rayN.exe</code> 启动。建议右键选择“以管理员身份运行”，这能保证 V2rayN 在向 Windows 系统注册表写入代理配置时拥有完整权限。</li>
+        </ol>
+
+        <h2 id="section-2">二、第二步：三种最基础的节点导入方法</h2>
+        <p>
+          V2rayN 支持直接解析标准的科学上网分享链接，协议包含 VMess, VLess, Trojan, Shadowsocks 等：
+        </p>
+        <h3>方法 1：从剪贴板导入节点分享链接（最常用）</h3>
+        <p>
+          在机场后台或者分享面板中，我们经常能看到形如 <code>vmess://...</code> 或 <code>vless://...</code> 的一长串字符，这被称为分享 URI 链接：
+        </p>
+        <ol>
+          <li>复制这一段 URI 链接到电脑剪贴板。</li>
+          <li>打开 V2rayN 控制台，点击顶部菜单栏的第一项 <strong>服务器 (Servers)</strong> -> 选择 <strong>从剪贴板导入批量URL (Import bulk URL from clipboard)</strong>。</li>
+          <li>软件会自动解析剪贴板内的 URI 格式，将其翻译为具体的代理服务器节点，并直接添加在下方的主列表中。</li>
+        </ol>
+        <h3>方法 2：扫描屏幕上的二维码导入（最直观）</h3>
+        <p>
+          如果您的节点展示为网页上的二维码（如在手机或另一台电脑的屏幕上）：
+        </p>
+        <ol>
+          <li>在浏览器中打开节点的订阅二维码。</li>
+          <li>呼出 V2rayN 控制台，点击顶部菜单的 <strong>服务器</strong> -> 选择 <strong>扫描屏幕上的二维码 (Scan QR Code on screen)</strong>。</li>
+          <li>V2rayN 会暂时冻结屏幕并捕捉正在展示的二维码图像，自动解析并完成节点载入。</li>
+        </ol>
+        <h3>方法 3：手动添加自定义服务器配置</h3>
+        <p>
+          如果您拥有自建的 VPS 服务器，也可以点击 <strong>服务器</strong> 菜单，选择对应的协议类型（如添加 <code>Vmess 服务器</code> 或 <code>Vless 服务器</code>），手动在属性框中填写服务器 IP 地址、端口（Port）、用户 UUID、传输协议以及加密混淆参数。
+        </p>
+
+        <h2 id="section-3">三、第三步：启动连接、节点激活与测速测试</h2>
+        <p>
+          节点导入主列表后，需要指定某个节点作为主力出海出口，并进行基本测速排障：
+        </p>
+        <ol>
+          <li><strong>设为活动服务器</strong>：在节点列表中鼠标双击某个节点，或者单击选中该节点后按下键盘上的 <strong>Enter (回车键)</strong>。此时，该节点卡片前的主图标或文字会变成红色高亮，代表其已被激活为当前代理通道的默认出口。</li>
+          <li><strong>进行真实延迟测速</strong>：选中节点后，按键盘上的 <strong>Ctrl + T</strong>（或右键选择“测试服务器真连接延迟”）。V2rayN 会模拟向特定的网页发送 HTTP 握手请求。如果节点畅通，表格的“真连接延迟”一栏会显示延迟数值。如果显示为 <code>-1</code> 或 <code>Timeout</code>，代表该节点目前不可用。</li>
+        </ol>
+
+        <h2 id="section-4">四、第四步：系统代理模式与简易路由切换</h2>
+        <p>
+          确认测速正常后，我们需要控制电脑流量流向：
+        </p>
+        <ol>
+          <li><strong>设置系统代理</strong>：定位到 Windows 系统右下角任务栏的 V2rayN 图标（蓝色小V），<strong>鼠标右键点击它</strong>，找到 <strong>系统代理 (System Proxy)</strong> 开关：
+            <ul>
+              <li><strong>自动配置系统代理</strong>：开启代理，图标会由蓝色变为 <strong>红色</strong>。此时，Windows 注册表被自动修改，浏览器网络正式接管。</li>
+              <li><strong>清除系统代理</strong>：关闭系统级代理，图标恢复为 <strong>蓝色</strong>。</li>
+            </ul>
+          </li>
+          <li><strong>选择路由模式</strong>：右键点击托盘图标，找到 <strong>路由 (Routing)</strong> 选项，选择您所期望的分流策略：
+            <ul>
+              <li><strong>绕过大陆 (Bypass Mainland - 强烈推荐)</strong>：智能分流。国内软件直连，境外网站走代理。建议搭配高性能机场 <a href="../reviews/kuaili.html">快狸机场</a> 的大带宽节点，或者支持不限在线设备数的 <a href="../reviews/jilianyun.html">极连云</a>。</li>
+              <li><strong>全局 (Global)</strong>：全流量强制走代理节点。</li>
+              <li><strong>直连 (Direct)</strong>：所有流量直连，不走代理。</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h2 id="section-5">五、新手高频卡点与简单排错 FAQ</h2>
+        <div class="highlight-box cyan">
+          <p><strong>⚠️ 新手断流排障 FAQ：</strong></p>
+          <p><strong>Q1: 测速明明有数字，但打开浏览器依然上不了 Google？</strong><br>
+          答：第一步，右键图标确认系统代理是否处于“自动配置系统代理（红图标）”；第二步，确认您的 Windows 系统本地时间是否与标准北京时间精准一致。因为很多加密协议对时间同步要求极严，偏差超过 60 秒会导致服务器直接断开握手连接。</p>
+          <p><strong>Q2: 提示“Listen Socks 127.0.0.1:10808 failed, address already in use”？</strong><br>
+          答：这代表您本地电脑上还有其他客户端占用了 <code>10808</code> 监听端口。可在 V2rayN 的 <code>设置 -> 参数设置 -> 核心设置</code> 中手动将本地 Socks 端口修改为其他任意未被占用的端口。</p>
+        </div>
+
+        <h2 id="section-6">六、配合高质量机场服务推荐</h2>
+        <p>
+          要想体验极佳的网络，好的客户端必须配合稳定快速的后端线路：
+        </p>
+        <ul>
+          <li>针对日常追剧、超高吞吐 4K 播放场景，推荐选用全 1.0 倍率、原生支持 Vless 协议的低价高性价比提供商 <a href="../reviews/kuaili.html">快狸机场</a>。</li>
+          <li>若对晚高峰物理延迟与抗抖动有极高要求，可参考接入物理内网隔离专线的 <a href="../reviews/guangnianti.html">光年梯</a> 以及支持不限在线设备数、针对各类跨境 AI 服务进行出口优化住宅 IP 的 <a href="../reviews/jilianyun.html">极连云</a> 深度评测。</li>
+          <li>若新手完全掌握了本篇教程的所有基础内容，想要探索通过 Wintun 虚拟网卡代理整机所有游戏和命令行流量的玩法，可进一步阅读我们的进阶专题：<a href="v2rayn.html">V2rayN 客户端教程（进阶篇）</a>。</li>
+        </ul>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px;">
+          <a href="../index.html" class="btn btn-primary">返回首页</a>
+          <a href="../reviews/index.html" class="btn btn-outline">查看推荐机场</a>
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container" style="text-align: center; padding: 20px 0;">
+      <p class="copyright">© 2026 云梯指南 (nodehub168.com). All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

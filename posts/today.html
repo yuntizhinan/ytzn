@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>今日更新：最新科学上网资讯与节点优化动态 - 云梯指南</title>
+  <meta name="description" content="汇集本站今日更新的最新机场节点调整、封锁加剧播报以及四大机场优惠券发放信息。">
+  <link rel="canonical" href="https://nodehub168.com/posts/today.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  
+  <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://nodehub168.com/"
+      },      
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "知识库",
+        "item": "https://nodehub168.com/posts/index.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "今日更新",
+        "item": "https://nodehub168.com/posts/today.html"
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .today-header-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      padding: 40px;
+      border-radius: var(--radius-md);
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .today-header-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(155, 81, 224, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    
+    /* Timeline styles */
+    .timeline-container {
+      margin-top: 32px;
+      position: relative;
+      padding-left: 24px;
+      border-left: 2px solid var(--border-color);
+    }
+    
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -33px;
+      top: 6px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg-primary);
+      border: 3px solid var(--accent-cyan);
+      box-shadow: var(--shadow-neon);
+      transition: var(--transition-smooth);
+      z-index: 2;
+    }
+    
+    .timeline-item:hover::before {
+      border-color: var(--accent-purple);
+      box-shadow: var(--shadow-neon-hover);
+    }
+    
+    .timeline-date {
+      font-size: 0.85rem;
+      color: var(--accent-cyan);
+      font-weight: 600;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+    
+    .timeline-content {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      transition: var(--transition-smooth);
+    }
+    
+    .timeline-content:hover {
+      border-color: var(--accent-cyan);
+      transform: translateX(4px);
+    }
+    
+    .timeline-title {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    
+    .timeline-title a {
+      color: var(--text-main);
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+    
+    .timeline-title a:hover {
+      color: var(--accent-cyan);
+    }
+    
+    .timeline-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    
+    .timeline-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(0, 242, 254, 0.1);
+      color: var(--accent-cyan);
+      font-weight: 500;
+      margin-right: 8px;
+    }
+    .timeline-badge.purple {
+      background: rgba(155, 81, 224, 0.1);
+      color: var(--accent-purple);
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+      
+      <button class="menu-toggle" aria-label="切换导航菜单" aria-expanded="false" aria-controls="main-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav">
+        <a href="../index.html" class="nav-link">首页</a>
+        <a href="../reviews/index.html" class="nav-link">机场推荐</a>
+        <a href="../reviews/brands.html" class="nav-link">机场评测</a>
+        <a href="../guides/clash.html" class="nav-link">Clash教程</a>
+        <a href="../guides/shadowrocket.html" class="nav-link">小火箭教程</a>
+        <a href="../guides/v2rayn.html" class="nav-link">V2rayN教程</a>
+        <a href="../categories/knowledge.html" class="nav-link active">机场知识库</a>
+        <a href="../faq/index.html" class="nav-link">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 900px;">
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="index.html" style="color: inherit;">知识库中心</a> &gt; <span style="color: var(--accent-cyan); font-weight: 500;">今日更新</span>
+      </nav>
+
+      <!-- Welcome Card -->
+      <section class="today-header-card">
+        <h1 style="font-size: 2.25rem; margin-bottom: 16px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
+          今日更新资讯
+        </h1>
+        <p style="color: var(--text-main); font-size: 1.1rem; line-height: 1.8; margin-bottom: 16px;">
+          欢迎来到今日更新板块。为了让您更快速地捕获最新上线的干货技术文档，我们在此汇总了本站于今日正式发布或进行了深度重构的优秀网络技术文章。
+        </p>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; margin-bottom: 24px;">
+          今日（2026年7月11日）我们共上线及重写了 4 篇干货技术文档，主要针对企业专线通信（IEPL/IPLC）、网络代理底层协议以及出海风控下的原生 IP 地理定位进行了解密，点击下方列表项直接进入详情页面阅读：
+        </p>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <a href="../index.html" class="btn btn-primary">返回网站首页</a>
+          <a href="index.html" class="btn btn-outline">浏览知识目录</a>
+        </div>
+      </section>
+
+      <!-- Timeline Feed -->
+      <section class="timeline-container">
+        
+        <!-- Timeline Item 1 -->
+        <div class="timeline-item">
+          <div class="timeline-date">2026年7月11日 - 新增发布</div>
+          <div class="timeline-content">
+            <h3 class="timeline-title">
+              <a href="what-is-iepl.html">IEPL 与 IPLC 的区别：网络层级、接口类型、带宽与应用场景解析</a>
+            </h3>
+            <p class="timeline-desc">
+              系统对比两大国际企业级网络连接服务：IEPL（以太网专线）和传统 IPLC（物理电路专线）。从 OSI 网络模型层级、客户物理接口类型、带宽动态调整灵活性以及两端容灾和多点互联等多个商业维度，提供详尽科普与技术对比。
+            </p>
+            <div>
+              <span class="timeline-badge">IEPL专线</span>
+              <span class="timeline-badge">IPLC专线</span>
+              <span class="timeline-badge purple">架构差异</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Item 2 -->
+        <div class="timeline-item">
+          <div class="timeline-date">2026年7月11日 - 新增发布</div>
+          <div class="timeline-content">
+            <h3 class="timeline-title">
+              <a href="what-is-iplc.html">什么是 IPLC 专线？揭秘机场网络中最昂贵的高速线路</a>
+            </h3>
+            <p class="timeline-desc">
+              全面解密“国际私有租用电路（IPLC）”这一顶尖网络中转技术。通俗分析它是如何通过时分复用（TDM）在 SDH/WDM 传输网中分配专属物理时隙，并解释为什么真正的企业专线能物理上避开公网的 GFW 边界检测以达成 0 丢包。
+            </p>
+            <div>
+              <span class="timeline-badge">IPLC电路</span>
+              <span class="timeline-badge">物理层透明</span>
+              <span class="timeline-badge purple">防封锁</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Item 3 -->
+        <div class="timeline-item">
+          <div class="timeline-date">2026年7月11日 - 深度改版</div>
+          <div class="timeline-content">
+            <h3 class="timeline-title">
+              <a href="what-is-native-ip.html">什么是原生 IP 节点？与广播 IP、住宅 IP和机房 IP的区别</a>
+            </h3>
+            <p class="timeline-desc">
+              流媒体看剧与出海必备的 IP 属性指南。讲解原生 IP 在 WHOIS 注册地理位置、起源自治系统（ASN 号）声明、实际物理出网路由以及主流第三方 GeoIP 地理定位库结果完全一致的特征，指导用户如何多步骤交叉鉴别“真原生”。
+            </p>
+            <div>
+              <span class="timeline-badge">原生住宅IP</span>
+              <span class="timeline-badge">地理定位</span>
+              <span class="timeline-badge purple">风控防封</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Item 4 -->
+        <div class="timeline-item">
+          <div class="timeline-date">2026年7月11日 - 架构重构</div>
+          <div class="timeline-content">
+            <h3 class="timeline-title">
+              <a href="index.html">科学上网与网络加速技术知识库中心目录整理</a>
+            </h3>
+            <p class="timeline-desc">
+              全站文章索引目录正式完成改版上线！将知识库中关于专线中转技术、科学上网防封协议机制、新手防骗安全黑名单以及测速与高延迟故障排查等 14 篇核心干货文章进行了系统化分类和链接整理，方便读者快速索引检索。
+            </p>
+            <div>
+              <span class="timeline-badge">全站目录</span>
+              <span class="timeline-badge">索引导航</span>
+              <span class="timeline-badge purple">正式上线</span>
+            </div>
+          </div>
+        </div>
+        
+      </section>
+
+      <!-- Disclaimer Section -->
+      <section style="margin-top: 60px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+        <h2 style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 12px;">📢 免责声明</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+          本站所推荐的加速器机场评测数据及配置教程，仅限用于合规外贸商务、学术科研、技术开发等正规用途。本网站不对任何机场商家的服务质量、资金安全做任何担保，不参与任何节点销售。请遵守国家法律法规，健康上网。
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="logo-area" style="margin-bottom: 16px;">
+            <img src="../assets/images/logo.svg" alt="云梯指南 Logo" class="logo-icon" width="32" height="32">
+            <span class="logo-text" style="font-size: 1.25rem;">云梯指南</span>
+          </a>
+          <p>云梯指南是2026年专业的机场推荐与网络加速配置知识库，协助您规避跑路商家，筛选高性价比的科学上网套餐。</p>
+        </div>
+        
+        <div class="footer-col">
+          <h4>核心板块</h4>
+          <ul class="footer-links">
+            <li><a href="../reviews/index.html">机场推荐排行榜</a></li>
+            <li><a href="../reviews/brands.html">机场品牌综合评测</a></li>
+            <li><a href="../guides/index.html">客户端配置教程中心</a></li>
+            <li><a href="warnings.html">跑路风险黑名单</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>快捷导航</h4>
+          <ul class="footer-links">
+            <li><a href="../categories/index.html">全站分类归档</a></li>
+            <li><a href="../topics/index.html">专题分类汇总</a></li>
+            <li><a href="../about.html">关于云梯指南</a></li>
+            <li><a href="../disclaimer.html">网站免责声明</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col footer-disclaimer">
+          <h4>本站声明</h4>
+          <p>本站提供的科学上网教程、网络加速软件配置指南以及节点测速数据仅作为技术学习 and 合规外贸交流参考。本站不提供、不销售任何付费机场节点，请严格遵守您当地的网络法律法规。</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="copyright">© 2026 云梯指南 (<a href="../index.html" style="color: inherit;">nodehub168.com</a>). All rights reserved.</p>
+        <div class="footer-legal-links">
+          <a href="../about.html">关于本站</a>
+          <a href="../disclaimer.html">免责声明</a>
+          <a href="../sitemap.xml">网站地图</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

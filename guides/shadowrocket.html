@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Shadowrocket 客户端教程：苹果 iOS 手机一键订阅、防污染配置与证书信任保姆级指南 - 云梯指南</title>
+  <meta name="description" content="讲解iOS国民级代理工具Shadowrocket（小火箭）的配置教程，包含安全下载避坑、一键机场配置导入、三代全局路由模式切换、HTTPS解密根证书信任以及DNS劫持优化。">
+  <link rel="canonical" href="https://nodehub168.com/guides/shadowrocket.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首页",
+          "item": "https://nodehub168.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "教程指南",
+          "item": "https://nodehub168.com/guides/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "小火箭教程",
+          "item": "https://nodehub168.com/guides/shadowrocket.html"
+        }
+      ]
+    }
+  </script>
+  <style>
+    .guide-article {
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .guide-article h2 {
+      font-size: 1.5rem;
+      margin: 36px 0 16px;
+      border-left: 4px solid var(--accent-cyan);
+      padding-left: 12px;
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.03) 0%, transparent 100%);
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+    .guide-article h3 {
+      font-size: 1.25rem;
+      margin: 28px 0 12px;
+      color: #1e3a8a;
+    }
+    .guide-article p {
+      margin-bottom: 20px;
+      text-align: justify;
+    }
+    .guide-article ul, .guide-article ol {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    .guide-article li {
+      margin-bottom: 8px;
+    }
+    .guide-article strong {
+      color: #1e3a8a;
+    }
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin: 24px 0;
+      border-left: 4px solid var(--accent-purple);
+    }
+    .highlight-box.cyan {
+      border-left-color: var(--accent-cyan);
+    }
+    .toc-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin: 32px 0;
+    }
+    .toc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .toc-item a {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toc-item a:hover {
+      color: #1e3a8a;
+      transform: translateX(4px);
+    }
+    code {
+      font-family: Consolas, Monaco, monospace;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+      <nav class="main-nav" style="display: flex;">
+        <a href="../index.html" class="nav-link">返回首页</a>
+      </nav>
+    </div>
+  </header>
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 850px;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="index.html" style="color: inherit;">教程指南</a> &gt; <span style="color: var(--accent-cyan); font-weight: 500;">小火箭教程</span>
+      </nav>
+      <article class="guide-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 40px; border-radius: var(--radius-md);">
+        <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
+          Shadowrocket 客户端教程
+        </h1>
+        
+        <p>
+          在苹果 iOS 生态下，<strong>Shadowrocket</strong>（因其黄色的图标，在科学上网界常被称为“<strong>小火箭</strong>”）绝对是无可争议的“国民级”代理客户端。虽然它是一款付费工具，但凭借低至 2.99 美元的良心定价、极简的交互界面、极低的运行耗电、以及对主流协议（Shadowsocks, Trojan, VMess, Vless, Hysteria 2, TUIC 等）的无缝全兼容，成为了每个苹果手机用户出海的首选伴侣。
+        </p>
+        <p>
+          然而，许多用户在使用小火箭时，经常陷入“误下山寨虚假软件”、“未在 iOS 系统层开启证书完全信任导致网页打不开”、“国内软件也被代理导致卡顿”等误区。本教程将由浅入深，从避坑安装、一键配置同步、模式智能选择，到高级的 HTTPS 解密与防劫持 DNS 优化，为您提供详尽指南。
+        </p>
+
+        <!-- Table of Contents -->
+        <div class="toc-container">
+          <div class="toc-title">
+            <span>📋</span> 教程目录导航
+          </div>
+          <div class="toc-grid">
+            <div class="toc-item"><a href="#section-1">一、防骗防山寨与安全下载渠道</a></div>
+            <div class="toc-item"><a href="#section-2">二、机场订阅节点导入核心实操</a></div>
+            <div class="toc-item"><a href="#section-3">三(")-三代全局路由代理模式解析</a></div>
+            <div class="toc-item"><a href="#section-4">四、HTTPS解密与高级规则重写</a></div>
+            <div class="toc-item"><a href="#section-5">五、本地 DNS 劫持防护与调优</a></div>
+            <div class="toc-item"><a href="#section-6">六、优秀机场搭配与常见问题自查</a></div>
+          </div>
+        </div>
+
+        <h2 id="section-1">一、防骗避坑：Shadowrocket 客户端的正确获取</h2>
+        <p>
+          由于苹果商店的监管政策，小火箭在中国大陆区的 App Store 是搜索不到的。在获取过程中，有以下两个核心痛点需要规避：
+        </p>
+        <ol>
+          <li><strong>警惕山寨假冒应用</strong>：在大陆区 App Store 搜索 <code>Shadowrocket</code>，会跳出大量名字极度相似、甚至图标相似的虚假付费套壳软件（如各种“小火箭VPN”、“Shadowrocket Proxy”等）。这些山寨软件通常不仅无法导入您的订阅，还存在高额的订阅陷阱与账号安全泄露高危风险。</li>
+          <li><strong>正确下载流程</strong>：
+            <ul>
+              <li>准备一个非中国大陆地区的 Apple ID（推荐美区或港区，可在苹果官网自行注册）。</li>
+              <li>打开 App Store，退出当前国区账号，登录您的海外 Apple ID。</li>
+              <li>搜索唯一的官方应用 <code>Shadowrocket</code>（认准开发者为 <code>Shadow Launch Technology Limited</code>，图标为黄色小火箭）。</li>
+              <li>小火箭售价为 2.99 美元。您可以购买对应地区的苹果 Gift Card（礼品卡）充值到余额中进行购买下载。</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h2 id="section-2">二、保姆级核心实操：机场节点导入</h2>
+        <p>
+          小火箭的节点导入非常人性化，支持二维码扫描、一键云链接同步以及手动订阅写入三种模式。我们以高性能中转专线机场为配合演示。
+        </p>
+        <h3>1. 自动一键导入（最推荐）</h3>
+        <ol>
+          <li>用 Safari 浏览器登录您的机场后台，例如以原生住宅 IP 和 Vless 协议著称的 <a href="../reviews/kuaili.html">快狸机场</a>。</li>
+          <li>在首页的用户中心，找到“一键导入订阅”模块，点击“导入到 Shadowrocket / 小火箭”按钮。</li>
+          <li>浏览器会自动弹窗提示“是否在 Shadowrocket 中打开此链接？”，点击 <strong>打开</strong>。</li>
+          <li>客户端会自动拉起并完成节点数据的拉取，列表中会瞬间载入该机场的香港、日本、美国等核心加速节点。</li>
+        </ol>
+        <h3>2. 扫码或手动添加</h3>
+        <p>
+          如果您在电脑端登录机场后台，也可以直接使用小火箭扫码：
+        </p>
+        <ol>
+          <li>打开 Shadowrocket，点击主界面左上角的<strong>扫描二维码图标</strong>，对准网页上的小火箭订阅二维码进行扫描。</li>
+          <li>或者，点击右上角的 <strong>+ (添加)</strong> 按钮，将类型（Type）切换为 <strong>Subscribe (订阅)</strong>。</li>
+          <li>在 <strong>URL 栏</strong>中粘贴从机场后台复制的“Shadowrocket/小火箭订阅链接”。在备注（Remarks）栏填写如 <code>快狸机场</code>。</li>
+          <li>点击右上角的 <strong>保存 (Save)</strong>。小火箭会自动同步节点。</li>
+          <li><strong>开启启动更新</strong>：建议点击小火箭底部的 <code>设置 (Settings)</code> -&gt; <code>订阅 (Subscribe)</code>，开启 <code>打开时更新 (Update on Launch)</code>，确保您本地的节点状态永远与机场服务端保持同步。</li>
+        </ol>
+
+        <h2 id="section-3">三、三大代理路由模式详解</h2>
+        <p>
+          在小火箭主界面上方，有 <strong>全局路由 (Global Routing)</strong> 的选项，这是决定流量如何分流的中央处理器。点击可切换以下三种模式：
+        </p>
+        <ul>
+          <li><strong>配置 (Config - 强烈推荐)</strong>：智能分流模式。小火箭会依据本地挂载的 <code>.conf</code> 规则规则包，对每一个网络请求进行智能筛选。对于百度、微信、支付宝等国内应用直接走直连，不消耗机场流量且网速极快；对于 Google、Twitter、ChatGPT 则自动通过代理节点发送。如果您在使用 ChatGPT 时频繁遇到 IP 受限，可在配置模式下，利用规则集将 OpenAI 的访问强行绑定在纯净住宅 IP 上（具体的住宅 IP 解锁思路，也可参考支持多端大带宽的 <a href="../reviews/jilianyun.html">极连云</a>）。</li>
+          <li><strong>代理 (Proxy)</strong>：相当于其他客户端的“全局模式”。所有出站的 TCP/UDP 流量都会强行经由您选定的特定节点发送。适用于规则库中未包含的偏门境外服务。</li>
+          <li><strong>直连 (Direct)</strong>：关闭小火箭的所有代理链路，手机流量不经过任何加密通道，相当于直接访问。</li>
+        </ul>
+
+        <h2 id="section-4">四、极客优化：HTTPS 解密（MITM）与高级规则覆盖</h2>
+        <p>
+          为了实现精准的去网页内嵌广告、重写重定向以及脚本同步，小火箭也支持 <strong>MITM（中间人解密）</strong>。如果您开启了高级过滤去广告规则，必须配合进行如下 CA 证书配置：
+        </p>
+        <ol>
+          <li><strong>生成并下载证书</strong>：在小火箭底部点击 <code>配置 (Configuration)</code> -&gt; 选择当前处于激活状态的配置文件 -&gt; 点击 <code>编辑配置 (Edit Config)</code> -&gt; 进入 <code>HTTPS 解密 (Mitm)</code>。开启 Mitm 开关，并点击 <code>生成新的 CA 证书 (Generate CA Certificate)</code>。随后点击 <code>安装证书 (Install Certificate)</code>，下载描述文件。</li>
+          <li><strong>安装描述文件</strong>：返回 iOS 手机系统的 <code>设置</code> -&gt; <code>已下载描述文件</code> -&gt; 点击右上角安装并确认。</li>
+          <li><strong>证书安全信任</strong>：依次进入手机系统 <code>设置</code> -&gt; <code>通用</code> -&gt; <code>关于本机</code> -&gt; 向下拉进入 <code>证书信任设置</code>。找到刚刚下载的 <code>Shadowrocket CA</code> 证书，<strong>打开其右侧的开关，使其处于绿色完全信任状态</strong>。</li>
+          <li><strong>添加解密主机名</strong>：返回小火箭 HTTPS 解密页面，在主机名（Hostnames）列表中添加您需要解密的域名，点击保存即可。</li>
+        </ol>
+
+        <h2 id="section-5">五、网络质量优化：本地 DNS 劫持防范</h2>
+        <p>
+          iOS 系统在复杂的蜂窝网络和 WiFi 切换中，很容易发生本地域名劫持，导致网页加载“卡死”。
+        </p>
+        <ul>
+          <li><strong>添加 System DNS</strong>：在小火箭的 <code>设置</code> -&gt; <code>DNS</code> 面板中，国内首选添加阿里公共 DNS (<code>223.5.5.5</code>)，以实现国内常规寻址闪电返回。</li>
+          <li><strong>引入 DOH/DOT 安全解析</strong>：在 DNS 列表中添加 <code>https://1.1.1.1/dns-query</code>，当遇到海外网络请求时，小火箭会绕过运营商的劫持服务器，直接采用 HTTPS 加密向 Cloudflare 安全 DNS 查询目标 IP，从根本上解决运营商污染。</li>
+        </ul>
+
+        <h2 id="section-6">六、优秀机场搭配与常见问题自查</h2>
+        <p>
+          配置好小火箭后，一条高速稳定的线路至关重要：
+        </p>
+        <ul>
+          <li>针对日常追剧、大文件大带宽传输需求，推荐搭配使用全 1.0 倍率、全线原生 Vless 协议的 <a href="../reviews/kuaili.html">快狸机场</a>。</li>
+          <li>若对晚高峰物理延迟与抗抖动有绝对要求，可参考物理内网专线的 <a href="../reviews/guangnianti.html">光年梯</a> 或针对 AI 住宅 IP 出口优化的 <a href="../reviews/jilianyun.html">极连云</a> 深度评测。</li>
+        </ul>
+
+        <div class="highlight-box cyan">
+          <p><strong>💬 常见故障自查 FAQ：</strong></p>
+          <p><strong>Q1: 为什么开启连接后，手机完全上不了网？</strong><br>
+          答：首次启动小火箭连接开关时，系统会弹出 <code>VPN Configurations</code> 写入弹窗。您必须点击 <code>Allow</code>（允许）并输入锁屏密码。如果误点了，请前往手机 <code>设置 -> 通用 -> VPN</code> 手动激活。</p>
+          <p><strong>Q2: 为什么节点测速显示数值，但就是打不开 Google？</strong><br>
+          答：请在小火箭主页面长按该节点进行“连接测试”。请注意：点击节点测试出来的“Ping (毫秒)”仅代表物理网关的延迟，不代表代理节点已经连通。如果出现连通率低，请首先核对手机系统时间，偏差超过 60 秒将导致安全密钥验证失败直接断开连接。</p>
+        </div>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px;">
+          <a href="../index.html" class="btn btn-primary">返回首页</a>
+          <a href="../reviews/index.html" class="btn btn-outline">查看推荐机场</a>
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container" style="text-align: center; padding: 20px 0;">
+      <p class="copyright">© 2026 云梯指南 (nodehub168.com). All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

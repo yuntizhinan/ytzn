@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>2026 Clash 客户端配置与使用指南 - 云梯指南</title>
+  <meta name="description" content="全面解析Clash客户端的下载安装、订阅链接导入、规则模式切换以及高级Tun模式配置方法。">
+  <link rel="canonical" href="https://nodehub168.com/guides/clash.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首页",
+          "item": "https://nodehub168.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "教程指南",
+          "item": "https://nodehub168.com/guides/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Clash教程",
+          "item": "https://nodehub168.com/guides/clash.html"
+        }
+      ]
+    }
+  </script>
+  <style>
+    .guide-article {
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .guide-article h2 {
+      font-size: 1.5rem;
+      margin: 32px 0 16px;
+      border-left: 4px solid var(--accent-cyan);
+      padding-left: 12px;
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.03) 0%, transparent 100%);
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+    .guide-article h3 {
+      font-size: 1.2rem;
+      margin: 24px 0 12px;
+      color: #1e3a8a;
+    }
+    .guide-article p {
+      margin-bottom: 18px;
+    }
+    .guide-article ul, .guide-article ol {
+      margin-bottom: 20px;
+      padding-left: 20px;
+    }
+    .guide-article li {
+      margin-bottom: 8px;
+    }
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      margin: 24px 0;
+      border-left: 4px solid var(--accent-purple);
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+      <nav class="main-nav" style="display: flex;">
+        <a href="../index.html" class="nav-link">返回首页</a>
+      </nav>
+    </div>
+  </header>
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 800px;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="index.html" style="color: inherit;">教程指南</a> &gt; <span style="color: var(--accent-cyan); font-weight: 500;">Clash教程</span>
+      </nav>
+      <article class="guide-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 40px; border-radius: var(--radius-md);">
+        <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
+          Clash 客户端使用指南
+        </h1>
+        
+        <p>
+          在当前的科学上网生态中，<strong>Clash</strong> 凭借其强大的多协议支持（Shadowsocks、Trojan、Vmess、Vless 等）以及基于 YAML 规则的灵活分流机制，已经成为广大极客和重度互联网用户的首选客户端。无论是日常办公、观看海外 4K 流媒体，还是调用 ChatGPT 等 AI 工具，配置合理的 Clash 都能为您提供无感且极速的上网体验。本指南将为您详细介绍 Clash 客户端的核心配置与使用方法。
+        </p>
+
+        <h2>一、客户端的下载与选择</h2>
+        <p>
+          进入 2026 年，由于原版 Clash 内核及部分客户端相继停止维护，目前社区最主流且持续更新的客户端推荐如下：
+        </p>
+        <ul>
+          <li><strong>Windows / macOS 平台</strong>：强烈推荐使用 <strong>Clash Verge Rev</strong>。它基于 Tauri 框架开发，内存占用极低，且完美支持最新的 Clash Meta 内核。</li>
+          <li><strong>Android 平台</strong>：推荐使用 <strong>Clash Meta for Android (CMFA)</strong> 或 <strong>v2rayNG</strong> 作为替代。</li>
+          <li><strong>iOS 平台</strong>：推荐使用 <strong>Stash</strong>（被誉为 iOS 上的 Clash Verge）或 <strong>Shadowrocket</strong> (小火箭)。</li>
+        </ul>
+
+        <h2>二、核心步骤：订阅导入与更新</h2>
+        <p>
+          配置 Clash 的核心在于将机场提供的订阅链接同步至客户端中：
+        </p>
+        <ol>
+          <li><strong>获取订阅链接</strong>：登录您的机场后台，点击“快捷导入”或“复制订阅地址”，选择复制 <strong>Clash 格式订阅</strong>。</li>
+          <li><strong>导入客户端</strong>：打开 Clash Verge 客户端，点击左侧菜单栏的 <strong>Profiles (订阅)</strong> 选项。</li>
+          <li><strong>下载配置</strong>：在顶部输入框中粘贴刚刚复制的机场订阅链接，点击 <strong>Import (导入)</strong>。下载成功后，双击新出现的配置文件以激活它。</li>
+          <li><strong>定期更新</strong>：为了确保节点列表和策略规则的有效性，建议每周在 Profiles 页面右键点击配置，选择 <strong>Refresh (刷新)</strong> 来同步最新数据。</li>
+        </ol>
+
+        <h2>三、代理模式的合理切换</h2>
+        <p>
+          Clash 提供了三种主要的代理分流模式，建议根据日常场景进行切换：
+        </p>
+        <ul>
+          <li><strong>Rule (规则模式 - 强烈推荐)</strong>：根据配置文件中的分流规则（如 GEOIP 或自定义白名单）智能识别。国内流量（如百度、淘宝）走直连，国外受限流量（如 Google、Netflix）走代理。这能最大化节省机场流量并避免国内访问变慢。</li>
+          <li><strong>Global (全局模式)</strong>：所有网络流量强行通过代理节点发送。适用于规则不完善或特定需要修改全站 IP 属性的测试场景。</li>
+          <li><strong>Direct (直连模式)</strong>：关闭代理网络，所有流量直接访问，不经过任何机场节点。</li>
+        </ul>
+
+        <h2>四、高级功能与常见问题自查</h2>
+        <div class="highlight-box">
+          <p><strong>💡 实用技巧与常见排障：</strong></p>
+          <p><strong>1. Tun 模式的妙用</strong>：对于许多不遵循系统代理设置的软件（如特定跨国联机游戏、UWP 应用或 Terminal 命令行工具），可以在 Clash 设置中开启 <strong>Tun Mode</strong>，这会在本地创建虚拟网卡进行网卡级接管。</p>
+          <p><strong>2. 节点超时（Timeout）故障</strong>：若节点全部爆红，首先请确认您本地计算机的系统时间与标准北京时间是否完全一致（偏差超过 1 分钟会导致代理握手验证失败）。其次，可以检查是否开启了系统代理开关（System Proxy）。</p>
+        </div>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px;">
+          <a href="../index.html" class="btn btn-primary">返回首页</a>
+          <a href="../reviews/index.html" class="btn btn-outline">查看推荐机场</a>
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container" style="text-align: center; padding: 20px 0;">
+      <p class="copyright">© 2026 云梯指南 (nodehub168.com). All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

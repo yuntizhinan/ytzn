@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>小火箭高级规则配置：自定义分流策略、MITM 脚本注入与策略组自愈高阶指南 - 云梯指南</title>
+  <meta name="description" content="讲解如何配置iOS小火箭（Shadowrocket）的高级规则，包括规则类型匹配、Module模块机制、MITM中间人解密根证书信任、URL-Test策略组故障自愈调优以及DOH安全DNS解析。">
+  <link rel="canonical" href="https://nodehub168.com/guides/shadowrocket-advanced.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首页",
+          "item": "https://nodehub168.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "小火箭教程",
+          "item": "https://nodehub168.com/guides/shadowrocket.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "小火箭进阶",
+          "item": "https://nodehub168.com/guides/shadowrocket-advanced.html"
+        }
+      ]
+    }
+  </script>
+  <style>
+    .guide-article {
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .guide-article h2 {
+      font-size: 1.5rem;
+      margin: 36px 0 16px;
+      border-left: 4px solid var(--accent-cyan);
+      padding-left: 12px;
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.03) 0%, transparent 100%);
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+    .guide-article h3 {
+      font-size: 1.25rem;
+      margin: 28px 0 12px;
+      color: #1e3a8a;
+    }
+    .guide-article p {
+      margin-bottom: 20px;
+      text-align: justify;
+    }
+    .guide-article ul, .guide-article ol {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    .guide-article li {
+      margin-bottom: 8px;
+    }
+    .guide-article strong {
+      color: #1e3a8a;
+    }
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin: 24px 0;
+      border-left: 4px solid var(--accent-purple);
+    }
+    .highlight-box.cyan {
+      border-left-color: var(--accent-cyan);
+    }
+    .toc-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin: 32px 0;
+    }
+    .toc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .toc-item a {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toc-item a:hover {
+      color: #1e3a8a;
+      transform: translateX(4px);
+    }
+    code {
+      font-family: Consolas, Monaco, monospace;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+      <nav class="main-nav" style="display: flex;">
+        <a href="../index.html" class="nav-link">返回首页</a>
+      </nav>
+    </div>
+  </header>
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 850px;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="shadowrocket.html" style="color: inherit;">小火箭教程</a> &gt; <span style="color: var(--accent-cyan); font-weight: 500;">小火箭进阶</span>
+      </nav>
+      <article class="guide-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 40px; border-radius: var(--radius-md);">
+        <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
+          小火箭高级规则配置
+        </h1>
+        
+        <p>
+          在苹果 iOS 生态中，<strong>Shadowrocket（小火箭）</strong> 之所以被公认为最强大的网络代理工具之一，并不仅仅因为其直观的“一键导入订阅”界面，更在于其底层极其完善的 <code>.conf</code> 规则配置文件、灵活的模块系统（Modules）、HTTPS 中间人解密（Mitm）以及 JavaScript 脚本引擎（Scripting）。通过合理编写高级规则，小火箭不仅能自动识别规则分流，更能实现强力去除网页广告、解锁付费限制、提取网页 Cookie 乃至全自动后台签到等强大操作。
+        </p>
+        <p>
+          然而，许多用户面对这套庞杂的“极客系统”时，经常遇到“自定义规则不生效”、“开启 Mitm 导致 HTTPS 链接异常断流”或“策略组测速频繁报错”等高频故障。本教程将由浅入深，从底层规则语法、模块挂载、Mitm 根证书配置、策略组故障自愈调优，到 DOH 加密 DNS 覆盖，为您提供高级配置教程。
+        </p>
+
+        <!-- Table of Contents -->
+        <div class="toc-container">
+          <div class="toc-title">
+            <span>📋</span> 教程目录导航
+          </div>
+          <div class="toc-grid">
+            <div class="toc-item"><a href="#section-1">一、核心分流匹配语法解析</a></div>
+            <div class="toc-item"><a href="#section-2">二、Module (模块) 一键配置</a></div>
+            <div class="toc-item"><a href="#section-3">三、MITM与本地CA证书完全信任</a></div>
+            <div class="toc-item"><a href="#section-4">四、URL-Test策略组自愈调优</a></div>
+            <div class="toc-item"><a href="#section-5">五、DNS 劫持防范与安全DOH寻址</a></div>
+            <div class="toc-item"><a href="#section-6">六、推荐出海线路与连接排障</a></div>
+          </div>
+        </div>
+
+        <h2 id="section-1">一、小火箭规则引擎：核心语法与分类解析</h2>
+        <p>
+          小火箭的流量分流取决于配置文件中 <code>[Rule]</code> 字段下的规则链。每一条规则都由 <code>类型, 匹配内容, 动作, [参数]</code> 四部分组成：
+        </p>
+        <ul>
+          <li><strong>DOMAIN-SUFFIX (域名后缀匹配)</strong>：
+            <ul>
+              <li>语法：<code>DOMAIN-SUFFIX,google.com,PROXY</code></li>
+              <li>原理解析：当遇到以 <code>google.com</code> 结尾的请求（如 <code>mail.google.com</code>）时，强制通过代理路由。</li>
+            </ul>
+          </li>
+          <li><strong>DOMAIN-KEYWORD (域名关键词匹配)</strong>：
+            <ul>
+              <li>语法：<code>DOMAIN-KEYWORD,github,PROXY</code></li>
+              <li>原理解析：只要域名中包含字符 <code>github</code>（如 <code>githubusercontent.com</code>），就执行代理。</li>
+            </ul>
+          </li>
+          <li><strong>IP-CIDR / IP-CIDR6 (无类别域间路由 IP 匹配)</strong>：
+            <ul>
+              <li>语法：<code>IP-CIDR,192.168.0.0/16,DIRECT,no-resolve</code></li>
+              <li>原理解析：匹配特定的 IP 范围段，例如局域网 IP 一律直连。</li>
+              <li><code>no-resolve</code> 选项的作用：带上此参数后，小火箭在遇到域名时，不会立即对该域名进行本地物理 DNS 解析以获取 IP 进行匹配，而是优先通过其他规则。这能杜绝因 DNS 解析导致的延迟抖动。</li>
+            </ul>
+          </li>
+          <li><strong>GEOIP (地理位置 IP 库匹配)</strong>：
+            <ul>
+              <li>语法：<code>GEOIP,CN,DIRECT</code></li>
+              <li>原理解析：小火箭会查询本地 IP 数据库。若解析出的目标 IP 归属地为中国大陆，则一律直连。这对于流畅使用国内软件至关重要。</li>
+            </ul>
+          </li>
+          <li><strong>USER-AGENT (用户代理标识匹配)</strong>：
+            <ul>
+              <li>语法：<code>USER-AGENT,TikTok*,PROXY</code></li>
+              <li>原理解析：根据发起请求的客户端程序进程的 UA 标识进行分流，常用于短视频软件绕过区域限制。</li>
+            </ul>
+          </li>
+          <li><strong>FINAL (默认终选规则)</strong>：
+            <ul>
+              <li>语法：<code>FINAL,DIRECT</code></li>
+              <li>原理解析：所有未被上述规则捕获的剩余网络流量，一律走直连（或代理）。</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h2 id="section-2">二、小火箭 Module (模块) 机制：一键扩展分流与去广告</h2>
+        <p>
+          手动在配置文件中添加数千条规则非常低效，为此小火箭引入了 <strong>Module (模块)</strong> 机制。模块类似于打包好的功能插件，里面聚合了特定服务的分流规则、Rewrite 重写、Mitm 主机名声明甚至是 JS 脚本。
+        </p>
+        <ol>
+          <li>进入小火箭底部导航栏的 <strong>配置 (Configuration)</strong>。</li>
+          <li>点击第一项 <strong>模块 (Modules)</strong>，然后点击右上角 <strong>+</strong> 按钮。</li>
+          <li>在输入框中粘贴社区公共维护的模块 URL。例如：
+            <ul>
+              <li>去广告模块：引入过滤主流视频与资讯网页悬浮广告的模块。</li>
+              <li>免拔卡解锁模块：解除特定软件国区限制（如 TikTok 解锁模块）。</li>
+            </ul>
+          </li>
+          <li>点击下载并确认。在模块列表中点击勾选启用，配置即可瞬间生效，合并进当前的运行文件中。</li>
+        </ol>
+
+        <h2 id="section-3">三、高阶基石：MITM 与本地 CA 根证书深度配置</h2>
+        <p>
+          绝大多数现代互联网封包均通过 HTTPS 进行了高强加密。要想对网络流量进行去广告重写或运行 JS 签到脚本，必须在 iOS 系统内打通 <strong>Mitm（中间人解密）</strong> 权限。
+        </p>
+        <p>
+          请按照以下三个步骤，一步不漏地完成 CA 根证书的系统信任：
+        </p>
+        <h3>第一步：在小火箭内生成 CA 证书</h3>
+        <ol>
+          <li>点击底部导航栏的 <code>配置</code> -&gt; 选择您正在激活的配置文件 -&gt; 点击 <code>编辑配置 (Edit Config)</code>。</li>
+          <li>找到并点击进入 <code>HTTPS 解密 (Mitm)</code>。</li>
+          <li>打开 <code>Mitm 开关</code>，并点击 <code>生成新的 CA 证书 (Generate CA Certificate)</code>。</li>
+          <li>证书计算生成后，点击 <code>安装证书 (Install Certificate)</code>，系统会弹出描述文件下载提示，点击 <strong>允许</strong>。</li>
+        </ol>
+        <h3>第二步：安装配置描述文件到 iOS 系统</h3>
+        <ol>
+          <li>打开 iPhone 手机系统的 <code>设置</code>。</li>
+          <li>在顶部会看到 <strong>已下载描述文件 (Profile Downloaded)</strong>，点击进入。</li>
+          <li>点击右上角 <strong>安装 (Install)</strong>，输入您的解锁密码并确认安装。</li>
+        </ol>
+        <h3>第三步：在 iOS 系统底层激活“完全信任”</h3>
+        <ol>
+          <li>依次进入手机系统 <code>设置</code> -&gt; <code>通用 (General)</code> -&gt; <code>关于本机 (About)</code>。</li>
+          <li>划动到最底部，进入 <strong>证书信任设置 (Certificate Trust Settings)</strong>。</li>
+          <li>找到刚安装的 <code>Shadowrocket CA</code> 根证书项目，<strong>打开其右侧的绿色信任开关</strong>，并在弹出的警告中确认信任。</li>
+        </ol>
+        <p>
+          完成上述步骤后，小火箭即可解密您在 Mitm 列表中配置好的 Hostname 流量，将广告过滤拦截，或利用 JS 脚本劫持特定功能。
+        </p>
+
+        <h2 id="section-4">四、策略组 (Policy Groups) 深度调优：实现故障自愈</h2>
+        <p>
+          高级用户一般会拥有多个机场订阅或节点（例如搭配拥有 Vless 协议特性的 <a href="../reviews/kuaili.html">快狸机场</a> 与专线极速的 <a href="../reviews/jilianyun.html">极连云</a>）。如何在节点发生异常时让小火箭实现自动切换？这需要建立 <strong>策略组 (Policy Group)</strong> 的自愈机制：
+        </p>
+        <ol>
+          <li>点击 <code>配置</code> -&gt; <code>编辑配置</code> -&gt; <code>策略组</code> -&gt; <code>添加</code>。</li>
+          <li><strong>填写策略参数</strong>：
+            <ul>
+              <li><strong>类型 (Type)</strong>：选择 <code>url-test</code> 组。</li>
+              <li><strong>测速链接 (URL)</strong>：填入纯净的 HTTP 心跳检测地址，如 <code>http://cp.cloudflare.com/generate_204</code>。</li>
+              <li><strong>测速间隔 (Interval)</strong>：建议填写 <code>600</code>（单位为秒，即每 10 分钟自动在后台测速一次）。</li>
+              <li><strong>容差值 (Tolerance)</strong>：建议填写 <code>50</code>（毫秒，当新节点延迟比当前节点低 50ms 以上时才切换，防止频繁重连造成断流）。</li>
+            </ul>
+          </li>
+          <li><strong>节点绑定</strong>：将您的主力机场订阅全部勾选进此策略组中。小火箭会在后台持续检测节点心跳，一旦当前选用的节点超时爆红，会自动无感秒级切换到另一个可用的低延迟节点，实现自动自愈。</li>
+        </ol>
+
+        <h2 id="section-5">五、DNS 防污染与 DOH 安全寻址</h2>
+        <p>
+          iOS 本地的 DNS 解析极易受到宽带运营商的劫持与缓存投毒，为了保障分流规则模式下的正确匹配，建议对本地 DNS 进行强制加固：
+        </p>
+        <ol>
+          <li>点击 <code>配置</code> -&gt; <code>编辑配置</code> -&gt; <code>DNS</code> 模块。</li>
+          <li><strong>Nameserver 模块</strong>：配置腾讯公共 DNS (<code>119.29.29.29</code>) 和阿里公共 DNS (<code>223.5.5.5</code>)，实现国内直连域名在毫秒级内完成 IP 解析。</li>
+          <li><strong>Fallback 安全 DOH 模块</strong>：在列表中添加 <code>https://dns.cloudflare.com/dns-query</code>，强制要求小火箭遇到海外域名时，通过加密 HTTPS 信道向境外安全 DNS 进行并发寻址，彻底截断本地域名污染。</li>
+        </ol>
+
+        <h2 id="section-6">六、优秀出海线路与连接排障</h2>
+        <p>
+          配置完美的高级规则，依旧需要底层配合一条足够强韧的物理链路：
+        </p>
+        <ul>
+          <li>针对大码率流媒体播放与日常办公场景，推荐接入采用全 Vless 住宅 IP 协议架构的 <a href="../reviews/kuaili.html">快狸机场</a>。</li>
+          <li>如果在跨境办公中对连接稳定性有刚性诉求，可优先考量配备内网 IPLC 隔离物理专线的 <a href="../reviews/guangnianti.html">光年梯</a> 以及支持不限制并发设备数的 <a href="../reviews/jilianyun.html">极连云</a> 深度评测。</li>
+          <li>若在日常使用中遇到特定网页或 App 界面报错，可第一步排查系统根证书信任开关是否打开，第二步利用小火箭的 <strong>连接监控面板 (Connections)</strong> 进行域名嗅探与 IP 解析自查，绝大多数规则冲突均可在此处快速排除。</li>
+        </ul>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px;">
+          <a href="../index.html" class="btn btn-primary">返回首页</a>
+          <a href="../reviews/index.html" class="btn btn-outline">查看推荐机场</a>
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container" style="text-align: center; padding: 20px 0;">
+      <p class="copyright">© 2026 云梯指南 (nodehub168.com). All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

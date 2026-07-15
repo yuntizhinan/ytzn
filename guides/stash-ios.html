@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Stash 客户端配置教程：Clash iOS 原生订阅导入、MITM证书激活与分流优化深度指南 - 云梯指南</title>
+  <meta name="description" content="讲解如何在苹果 iOS 系统上安装配置 Stash 客户端，包含美区 App Store 购买防坑提示、直接导入 Clash YAML 订阅步骤、HTTPS 解密 CA 根证书双重信任、流量嗅探与安全 DOH 调优。">
+  <link rel="canonical" href="https://nodehub168.com/guides/stash-ios.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首页",
+          "item": "https://nodehub168.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "教程指南",
+          "item": "https://nodehub168.com/guides/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Stash教程",
+          "item": "https://nodehub168.com/guides/stash-ios.html"
+        }
+      ]
+    }
+  </script>
+  <style>
+    .guide-article {
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .guide-article h2 {
+      font-size: 1.5rem;
+      margin: 36px 0 16px;
+      border-left: 4px solid var(--accent-cyan);
+      padding-left: 12px;
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.03) 0%, transparent 100%);
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+    .guide-article h3 {
+      font-size: 1.25rem;
+      margin: 28px 0 12px;
+      color: #1e3a8a;
+    }
+    .guide-article p {
+      margin-bottom: 20px;
+      text-align: justify;
+    }
+    .guide-article ul, .guide-article ol {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    .guide-article li {
+      margin-bottom: 8px;
+    }
+    .guide-article strong {
+      color: #1e3a8a;
+    }
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin: 24px 0;
+      border-left: 4px solid var(--accent-purple);
+    }
+    .highlight-box.cyan {
+      border-left-color: var(--accent-cyan);
+    }
+    .toc-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin: 32px 0;
+    }
+    .toc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .toc-item a {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toc-item a:hover {
+      color: #1e3a8a;
+      transform: translateX(4px);
+    }
+    code {
+      font-family: Consolas, Monaco, monospace;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+      <nav class="main-nav" style="display: flex;">
+        <a href="../index.html" class="nav-link">返回首页</a>
+      </nav>
+    </div>
+  </header>
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 850px;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="index.html" style="color: inherit;">教程指南</a> &gt; <span style="color: var(--accent-cyan); font-weight: 500;">Stash教程</span>
+      </nav>
+      <article class="guide-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 40px; border-radius: var(--radius-md);">
+        <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
+          Stash 客户端配置教程
+        </h1>
+        
+        <p>
+          在苹果 iOS 系统的科学上网生态中，大部分用户熟知 Shadowrocket（小火箭）的易用性。然而，对于习惯了在 Windows 或 Mac 端使用 Clash Verge、Clash for Windows 规则分流的用户而言，寻找一款在 iOS 端能够 <strong>直接无缝读取 Clash YAML 配置文件</strong> 的客户端是绝对的刚需。这就是 <strong>Stash</strong>。
+        </p>
+        <p>
+          Stash 被官方定位为“Clash for iOS”的最佳物理适配工具。它不仅在原生层面完整兼容 Clash 的所有配置文件语法、规则组（Rule Providers）和策略组（Policy Groups），更在此基础上引入了更符合 iOS 触控习惯的可视化操作控制台、本地 HTTPS 解密（Mitm）、JavaScript 脚本重写以及本地加密 DOH 分流模块。本教程将由浅入深，从安全购买下载、Clash 订阅同步导入、分流模式管理，到核心的根证书系统级完全信任、Override（覆盖重写）模块以及本地域名防劫持调优，为您提供详尽配置指南。
+        </p>
+
+        <!-- Table of Contents -->
+        <div class="toc-container">
+          <div class="toc-title">
+            <span>📋</span> 教程目录导航
+          </div>
+          <div class="toc-grid">
+            <div class="toc-item"><a href="#section-1">一、Stash 客户端的安全获取与防坑</a></div>
+            <div class="toc-item"><a href="#section-2">二、保姆级Clash YAML一键导入步骤</a></div>
+            <div class="toc-item"><a href="#section-3">三、代理运行模式与可视化控制面板</a></div>
+            <div class="toc-item"><a href="#section-4">四、MITM中间人根证书系统完全信任</a></div>
+            <div class="toc-item"><a href="#section-5">五、DNS 覆盖调优与流量嗅探功能</a></div>
+            <div class="toc-item"><a href="#section-6">六、高质量线路选择与常见断流排错</a></div>
+          </div>
+        </div>
+
+        <h2 id="section-1">一、Stash 客户端的安全获取与防坑指南</h2>
+        <p>
+          Stash 是一款付费的 iOS 网络代理扩展工具，由于监管政策原因，已在国区 App Store 下架，请按照如下流程下载正版：
+        </p>
+        <ol>
+          <li><strong>准备非中国大陆区的 Apple ID</strong>：推荐使用自己注册的美区或港区 ID，在 App Store 退出国区账号后登录。</li>
+          <li><strong>下载正版</strong>：在 App Store 搜索 <code>Stash</code>（认准带淡绿色折纸立体图标，开发者为 <code>Stash Networks Limited</code>）。软件官方售价为 3.99 美元。</li>
+          <li><strong>充值与防骗</strong>：购买海外苹果 Gift Card（礼品卡）充值到余额中进行购买。请勿购买来路不明的共享账号，防止导致应用闪退、无法更新，或因共享账号锁死导致手机被远程锁定。</li>
+        </ol>
+
+        <h2 id="section-2">二、保姆级配置实战：Clash YAML 订阅导入</h2>
+        <p>
+          Stash 的核心优势在于它不需要繁琐的“订阅转换”。市面上几乎所有的优质机场服务商（如以大带宽住宅 IP 著称的 <a href="../reviews/kuaili.html">快狸机场</a> 与支持企业专线 IPLC 的 <a href="../reviews/jilianyun.html">极连云</a>）提供给您的 <strong>Clash YAML 订阅链接</strong>，在 Stash 中都可以直接导入使用：
+        </p>
+        <ol>
+          <li><strong>获取机场订阅</strong>：登录您的科学上网服务后台，找到一键订阅，复制 <strong>Clash 订阅链接</strong>。</li>
+          <li><strong>在 Stash 中新建配置</strong>：
+            <ul>
+              <li>打开 Stash，点击底部菜单栏的 <strong>配置 (Profiles)</strong>。</li>
+              <li>点击右上角的 <strong>+ (新建)</strong> 按钮。</li>
+              <li>在新建配置菜单中选择 <strong>从 URL 下载 (Download from URL)</strong>。</li>
+              <li><strong>参数配置</strong>：
+                <ul>
+                  <li><strong>URL 栏</strong>：直接粘贴刚才复制的 Clash 订阅地址。</li>
+                  <li><strong>名称 (Name)</strong>：重命名为识别性强的标识，如 <code>快狸机场</code>。</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>点击右上角的 <strong>下载 (Download)</strong>。Stash 内置的 YAML 解析引擎会自动拉取并编译订阅文件，生成对应的策略组与节点卡片。</li>
+          <li><strong>激活配置</strong>：在配置列表中，轻触选中这块新导入的配置卡片，使其左侧泛出淡绿色圆点，代表已激活启用。</li>
+        </ol>
+
+        <h2 id="section-3">三、代理模式切换与可视化控制台</h2>
+        <p>
+          回到 Stash 的 <strong>首页 (Dashboard)</strong>，点击右上角的 <strong>启动 (Start)</strong> 开关。系统首次会弹出“Stash 想要添加 VPN 配置”的警告。点击 <strong>允许 (Allow)</strong> 并提供 Touch ID 或手机锁屏密码进行管理员授权。
+        </p>
+        <p>
+          在主界面上方，您可以轻松切换以下三种运行模式：
+        </p>
+        <ul>
+          <li><strong>规则分流 (Rule)</strong>：智能分流模式。国区流量直接直连，不走代理；出海流量则分流至对应节点。如果某些特定服务（如 OpenAI）需要特定的落地 IP，可以利用规则将流量映射至特定原生住宅 IP 节点下（具体的专线与 AI 出口解锁思路，也可参考不限在线设备数的 <a href="../reviews/jilianyun.html">极连云</a>）。</li>
+          <li><strong>全局代理 (Global)</strong>：强制所有出站流量强行通过您选定的特定节点，常用于临时调试。</li>
+          <li><strong>直接连接 (Direct)</strong>：关闭代理网络，直接用本地物理链路连接，相当于直连。</li>
+        </ul>
+
+        <h2 id="section-4">四、极客进阶：MITM 中间人解密与本地根证书信任</h2>
+        <p>
+          为了实现类似 Surge 的脚本重写、网页内嵌广告强力过滤拦截等高级功能，Stash 必须被授权能够对特定 HTTPS 流量进行本地解密（MitM）。如果开启了去广告模块却未激活根证书，系统会弹出严重的 HTTPS 访问异常警告。
+        </p>
+        <p>
+          请按照以下三个步骤，一步不落地完成 CA 根证书的系统级完全信任：
+        </p>
+        <h3>第一步：本地生成根证书</h3>
+        <ol>
+          <li>在 Stash 底部点击进入 <strong>设置 (Settings)</strong>，向下滑动找到 <strong>HTTPS 解密 (MitM)</strong>。</li>
+          <li>打开 <code>HTTPS 解密</code> 开关，并点击 <code>生成 CA 证书 (Generate CA Certificate)</code>。</li>
+          <li>根证书在手机本地安全生成后，点击 <code>安装证书 (Install Certificate)</code>。系统会自动唤醒 Safari 浏览器并下载描述文件，在弹窗中点击 <strong>允许</strong>。</li>
+        </ol>
+        <h3>第二步：安装配置描述文件到 iOS 系统</h3>
+        <ol>
+          <li>打开 iPhone 手机系统的 <code>设置</code>。</li>
+          <li>在最上方会多出一个 <strong>已下载描述文件 (Profile Downloaded)</strong> 选项，点击进入。</li>
+          <li>点击右上角 <strong>安装 (Install)</strong>，输入锁屏密码并确认。</li>
+        </ol>
+        <h3>第三步：激活系统级“完全信任根证书”</h3>
+        <ol>
+          <li>依次进入系统 <code>设置</code> -&gt; <code>通用 (General)</code> -&gt; <code>关于本机 (About)</code>。</li>
+          <li>向下滑动至底部，进入 <strong>证书信任设置 (Certificate Trust Settings)</strong>。</li>
+          <li>在“针对根证书启用完全信任”列表中，找到刚刚安装的 <code>Stash CA</code> 证书，<strong>打开其右侧的绿色信任开关</strong>，并在弹出的警告中确认信任。</li>
+        </ol>
+        <p>
+          此时，HTTPS 解密通道已经彻底打通。配合 Stash 底部的 <strong>覆盖 (Override)</strong> 机制，您可以一键导入去广告、免抜卡解锁特定应用等模块，无缝载入。
+        </p>
+
+        <h2 id="section-5">五(")-DNS 覆盖调优与流量嗅探功能</h2>
+        <p>
+          iOS 系统在移动网络与 WiFi 切换时极易发生本地域名解析污染，这会导致即便连接了节点，网页依旧卡死。
+        </p>
+        <ol>
+          <li><strong>DNS 覆盖设置</strong>：在 Stash <code>设置 -> DNS</code> 面板下开启 <code>DNS 覆盖</code> 选项。配置国内主解析组为腾讯公共 DNS (<code>119.29.29.29</code>) 与阿里公共 DNS (<code>223.5.5.5</code>)。</li>
+          <li><strong>安全 DOH Fallback 设置</strong>：境外则配置 Fallback 组使用安全加密的 DOH <code>https://1.1.1.1/dns-query</code>，绕过运营商污染。</li>
+          <li><strong>开启 Sniffing (域名嗅探)</strong>：在 DNS 页面确保开启了 <code>域名嗅探</code> 开关。当客户端发起连接时，Stash 能够嗅探数据流中的 SNI 域名匹配正确的路由规则，杜绝了本地域名污染造成的解析错误。</li>
+        </ol>
+
+        <h2 id="section-6">六、高质量线路选择与常见断流排错</h2>
+        <p>
+          Stash 的流畅运行需要优质的出海物理线路作保障：
+        </p>
+        <ul>
+          <li>针对日常追剧、超高吞吐 4K 播放场景，推荐选用全 1.0 倍率、原生支持 Vless 协议的低价高性价比提供商 <a href="../reviews/kuaili.html">快狸机场</a>。</li>
+          <li>若对晚高峰物理延迟与抗抖动有极高要求，可参考接入物理内网隔离专线的 <a href="../reviews/guangnianti.html">光年梯</a> 以及支持不限在线设备数、针对各类跨境 AI 服务进行出口优化住宅 IP 的 <a href="../reviews/jilianyun.html">极连云</a> 深度评测。</li>
+        </ul>
+
+        <div class="highlight-box cyan">
+          <p><strong>⚠️ Stash 连上后显示 Error 或无网自查：</strong></p>
+          <p>若开启连接后显示异常，第一步请首先核对您的本地手机系统时间是否与标准北京时间一致。第二步，可以进入 Stash 底部的 <strong>连接 (Connections)</strong> 面板，实时监控每一个 TCP/UDP 请求的解析路径，准确定位排障。</p>
+        </div>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px;">
+          <a href="../index.html" class="btn btn-primary">返回首页</a>
+          <a href="../reviews/index.html" class="btn btn-outline">查看推荐机场</a>
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container" style="text-align: center; padding: 20px 0;">
+      <p class="copyright">© 2026 云梯指南 (nodehub168.com). All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

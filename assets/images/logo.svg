@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <!-- Cyber Gradient Cyan to Purple -->
+    <linearGradient id="cyberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe" />
+      <stop offset="100%" stop-color="#9b51e0" />
+    </linearGradient>
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Outer glowing ring -->
+  <circle cx="60" cy="60" r="50" fill="none" stroke="url(#cyberGrad)" stroke-width="2.5" stroke-dasharray="10 5" opacity="0.6" />
+
+  <!-- Cloud Base -->
+  <path d="M 40,75 
+           A 15,15 0 0,1 45,45 
+           A 22,22 0 0,1 80,48 
+           A 15,15 0 0,1 85,75 
+           Z" 
+        fill="none" 
+        stroke="url(#cyberGrad)" 
+        stroke-width="4.5" 
+        stroke-linejoin="round" 
+        stroke-linecap="round" 
+        filter="url(#neonGlow)" />
+
+  <!-- Ladder/Steps (Ascending through the cloud) -->
+  <g stroke="url(#cyberGrad)" stroke-width="4" stroke-linecap="round" filter="url(#neonGlow)">
+    <!-- Ladder Rails -->
+    <line x1="50" y1="85" x2="50" y2="40" stroke-width="3" opacity="0.8" />
+    <line x1="70" y1="85" x2="70" y2="40" stroke-width="3" opacity="0.8" />
+    
+    <!-- Ladder Rungs -->
+    <line x1="50" y1="75" x2="70" y2="75" />
+    <line x1="50" y1="62" x2="70" y2="62" />
+    <line x1="50" y1="49" x2="70" y2="49" />
+    
+    <!-- Ascending Arrow at the top -->
+    <path d="M 52,32 L 60,24 L 68,32" fill="none" stroke-width="4.5" />
+  </g>
+</svg>

@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>双栈技术介绍：IPv4、IPv6工作原理、优势与检测方法 - 云梯指南</title>
+  <meta name="description" content="详细介绍节点双栈技术的工作原理，解释IPv4与IPv6入口、出口、DNS解析和地址选择机制，并分析双栈节点的优势、限制、安全风险及检测方法。">
+  <link rel="canonical" href="https://nodehub168.com/posts/dual-stack-ip.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  
+  <!-- BreadcrumbList JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://nodehub168.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "技术知识库",
+        "item": "https://nodehub168.com/categories/knowledge.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "双栈节点",
+        "item": "https://nodehub168.com/posts/dual-stack-ip.html"
+      }
+    ]
+  }
+  </script>
+
+  <!-- FAQPage JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "如何简单判断一个代理节点是否同时支持 IPv4 和 IPv6 访问？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "可以在连接代理节点后，分别访问 IPv4-only 和 IPv6-only 的 IP 归属地检测网站（例如 ipw.cn 或 test-ipv6.com）。如果系统能同时成功获取到代理节点出的 IPv4 公网地址与 IPv6 公网地址，并且没有提示超时，说明该节点同时支持两种协议的出口代理。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "为什么在开启了双栈代理后，部分网站（如 ChatGPT、Netflix）反而比以前更容易触发风控或打不开？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "这多由 IPv6 出口流量泄漏或出口 IP 信誉度低引起。相较于成熟的公网 IPv4，很多机房服务商租用的 IPv6 地址段尚未经过充分清洗，易被 WAF 防火墙标记为数据中心或僵尸网络。如果客户端没有配置好 IPv6 接管，部分数据包可能直接暴露了本地用户的真实 IPv6 地址，导致地理风控限制。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Happy Eyeballs（快乐眼球）机制在双栈节点中起到什么作用？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Happy Eyeballs（RFC 8305）是一种用于双栈网络中的智能选路算法。当客户端发起对双栈域名的连接请求时，它会近乎并行地向该域名的 IPv4 和 IPv6 地址发送握手请求。哪条链路最先成功建立连接，后续数据就会走哪条链路。这能有效避免因为单侧协议栈（如 IPv6 故障）长时间挂起重试造成的连接超时与卡顿。"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .post-article {
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .post-article h2 {
+      font-size: 1.6rem;
+      margin: 36px 0 16px;
+      border-left: 4px solid var(--accent-cyan);
+      padding-left: 12px;
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.03) 0%, transparent 100%);
+      padding-top: 6px;
+      padding-bottom: 6px;
+      scroll-margin-top: 100px;
+    }
+    .post-article h3 {
+      font-size: 1.25rem;
+      margin: 28px 0 12px;
+      color: var(--accent-cyan);
+      scroll-margin-top: 100px;
+    }
+    .post-article p {
+      margin-bottom: 20px;
+      color: var(--text-main);
+      text-align: justify;
+    }
+    .post-article ul, .post-article ol {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    .post-article li {
+      margin-bottom: 8px;
+    }
+    .post-article strong {
+      color: var(--accent-cyan);
+    }
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin: 24px 0;
+      border-left: 4px solid var(--accent-purple);
+    }
+    .highlight-box.cyan {
+      border-left-color: var(--accent-cyan);
+    }
+    
+    /* Table of Contents */
+    .toc-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin: 32px 0;
+    }
+    .toc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .toc-item a {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toc-item a:hover {
+      color: var(--accent-cyan);
+      transform: translateX(4px);
+    }
+    
+    /* Diagram wrapper */
+    .diagram-container {
+      margin: 32px 0;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .diagram-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+    
+    /* FAQ accordion styles */
+    .faq-section {
+      margin-top: 48px;
+    }
+    .faq-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      user-select: none;
+      transition: var(--transition-smooth);
+    }
+    .faq-question:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--accent-cyan);
+    }
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      border-top: 1px solid transparent;
+    }
+    .faq-item.active .faq-answer {
+      padding: 16px 20px;
+      max-height: 500px;
+      border-top-color: var(--border-color);
+    }
+    .faq-icon {
+      transition: transform 0.3s ease;
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+      color: var(--accent-cyan);
+    }
+    
+    /* Code block */
+    pre {
+      background: #020408;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9rem;
+      color: #e2e8f0;
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+
+      <button class="menu-toggle" aria-label="切换导航菜单" aria-expanded="false" aria-controls="main-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav">
+        <a href="../index.html" class="nav-link">首页</a>
+        <a href="../reviews/index.html" class="nav-link">机场推荐</a>
+        <a href="../reviews/brands.html" class="nav-link">机场评测</a>
+        <a href="../guides/clash.html" class="nav-link">Clash教程</a>
+        <a href="../guides/shadowrocket.html" class="nav-link">小火箭教程</a>
+        <a href="../guides/v2rayn.html" class="nav-link">V2rayN教程</a>
+        <a href="../categories/knowledge.html" class="nav-link">机场知识库</a>
+        <a href="../faq/index.html" class="nav-link">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 900px;">
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="../categories/knowledge.html" style="color: inherit;">技术知识库</a> 
+        &gt; 
+        <span style="color: var(--accent-cyan); font-weight: 500;">双栈节点</span>
+      </nav>
+
+      <!-- H1 Title -->
+      <h1 style="font-size: 2.25rem; margin-bottom: 20px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; line-height: 1.3;">
+        节点双栈技术介绍：IPv4、IPv6工作原理、优势与检测方法
+      </h1>
+
+      <article class="post-article">
+        <!-- SVG 1: Working Principle Cover -->
+        <div class="diagram-container">
+          <div class="diagram-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan);">
+              <rect x="2" y="2" width="20" height="20" rx="4"/>
+              <path d="M6 12h12M12 6v12"/>
+            </svg>
+            IPv4与IPv6双栈节点工作原理示意图
+          </div>
+          <svg viewBox="0 0 800 320" width="100%" height="auto" style="background: #080c18; border-radius: 8px; font-family: sans-serif;">
+            <defs>
+              <linearGradient id="gradIPv4" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#00f2fe" />
+                <stop offset="100%" stop-color="#9b51e0" />
+              </linearGradient>
+              <linearGradient id="gradIPv6" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#9b51e0" />
+                <stop offset="100%" stop-color="#ff4d4f" />
+              </linearGradient>
+              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <g stroke="rgba(255,255,255,0.01)" stroke-width="1">
+              <path d="M 0,40 L 800,40 M 0,80 L 800,80 M 0,120 L 800,120 M 0,160 L 800,160 M 0,200 L 800,200 M 0,240 L 800,240 M 0,280 L 800,280" />
+              <path d="M 100,0 L 100,320 M 200,0 L 200,320 M 300,0 L 300,320 M 400,0 L 400,320 M 500,0 L 500,320 M 600,0 L 600,320 M 700,0 L 700,320" />
+            </g>
+            <g transform="translate(100, 160)">
+              <rect x="-60" y="-45" width="120" height="90" rx="6" fill="#0c1122" stroke="#00f2fe" stroke-width="2" />
+              <text x="0" y="-15" fill="#00f2fe" font-size="13" font-weight="bold" text-anchor="middle">用户客户端</text>
+              <text x="0" y="5" fill="#f8fafc" font-size="11" text-anchor="middle">IPv4 / IPv6</text>
+              <text x="0" y="22" fill="#94a3b8" font-size="9" text-anchor="middle">双栈本地环境</text>
+              <circle cx="0" cy="0" r="4" fill="#00f2fe" opacity="0.3">
+                <animate attributeName="r" values="3;8;3" dur="2s" repeatCount="indefinite" />
+              </circle>
+            </g>
+            <g transform="translate(400, 160)">
+              <rect x="-80" y="-60" width="160" height="120" rx="8" fill="#0c1122" stroke="#9b51e0" stroke-width="2.5" filter="url(#glow)" />
+              <text x="0" y="-35" fill="#9b51e0" font-size="14" font-weight="bold" text-anchor="middle">双栈代理节点</text>
+              <rect x="-60" y="-15" width="120" height="18" rx="3" fill="rgba(0, 242, 254, 0.08)" stroke="rgba(0, 242, 254, 0.2)" />
+              <text x="-50" y="-2" fill="#00f2fe" font-size="10" text-anchor="start">IPv4 Entry/Exit</text>
+              <circle cx="50" cy="-6" r="4" fill="#00f2fe" />
+              <rect x="-60" y="10" width="120" height="18" rx="3" fill="rgba(255, 77, 79, 0.08)" stroke="rgba(255, 77, 79, 0.2)" />
+              <text x="-50" y="23" fill="#ff4d4f" font-size="10" text-anchor="start">IPv6 Entry/Exit</text>
+              <circle cx="50" cy="19" r="4" fill="#ff4d4f" />
+              <text x="0" y="48" fill="#94a3b8" font-size="10" text-anchor="middle">同时解包与转发</text>
+            </g>
+            <g transform="translate(700, 90)">
+              <rect x="-60" y="-30" width="120" height="60" rx="6" fill="#0c1122" stroke="#00f2fe" stroke-width="1.5" />
+              <text x="0" y="-5" fill="#00f2fe" font-size="12" font-weight="bold" text-anchor="middle">IPv4 目标网站</text>
+              <text x="0" y="15" fill="#94a3b8" font-size="10" text-anchor="middle">eg. Google, GitHub</text>
+            </g>
+            <g transform="translate(700, 230)">
+              <rect x="-60" y="-30" width="120" height="60" rx="6" fill="#0c1122" stroke="#ff4d4f" stroke-width="1.5" />
+              <text x="0" y="-5" fill="#ff4d4f" font-size="12" font-weight="bold" text-anchor="middle">IPv6 目标网站</text>
+              <text x="0" y="15" fill="#94a3b8" font-size="10" text-anchor="middle">eg. 原生IPv6服务</text>
+            </g>
+            <path d="M 160,140 Q 280,100 320,130" fill="none" stroke="url(#gradIPv4)" stroke-width="2.5" />
+            <path d="M 160,140 Q 280,100 320,130" fill="none" stroke="#00f2fe" stroke-width="2.5" stroke-dasharray="8 12">
+              <animate attributeName="stroke-dashoffset" values="100;0" dur="3s" repeatCount="indefinite" />
+            </path>
+            <text x="240" y="105" fill="#00f2fe" font-size="10" text-anchor="middle">IPv4 隧道入口</text>
+            <path d="M 160,180 Q 280,220 320,190" fill="none" stroke="url(#gradIPv6)" stroke-width="2.5" />
+            <path d="M 160,180 Q 280,220 320,190" fill="none" stroke="#ff4d4f" stroke-width="2.5" stroke-dasharray="8 12">
+              <animate attributeName="stroke-dashoffset" values="0;100" dur="3s" repeatCount="indefinite" />
+            </path>
+            <text x="240" y="218" fill="#ff4d4f" font-size="10" text-anchor="middle">IPv6 隧道入口</text>
+            <path d="M 480,140 Q 560,90 640,90" fill="none" stroke="#00f2fe" stroke-width="2" stroke-dasharray="5 5" />
+            <text x="560" y="95" fill="#00f2fe" font-size="9" text-anchor="middle">A 记录解析</text>
+            <path d="M 480,180 Q 560,230 640,230" fill="none" stroke="#ff4d4f" stroke-width="2" stroke-dasharray="5 5" />
+            <text x="560" y="215" fill="#ff4d4f" font-size="9" text-anchor="middle">AAAA 记录解析</text>
+            <text x="400" y="295" fill="#94a3b8" font-size="12" font-weight="bold" text-anchor="middle">双栈节点运作机制：端到端独立握手，按协议自动分配最优路径</text>
+          </svg>
+        </div>
+
+        <p style="font-size: 1.15rem; color: var(--text-muted); margin-bottom: 24px;">
+          随着全球 IPv6（网际协议第 6 版）部署的迅速普及，越来越多的优质中转机场、跨国节点和云服务器（VPS）开始在商品参数中标注<strong>“IPv4/IPv6 双栈支持”</strong>。对于科学上网用户来说，不少人常将“双栈”粗暴地等同于“网速翻倍”或“多拿一个代理 IP”，这其实是一个广泛的技术误区。
+        </p>
+        <p>
+          从计算机网络工程角度解析，“双栈（Dual-Stack）”是指网卡设备及操作系统网络栈中，<strong>同时运行并激活了完整的 IPv4 与 IPv6 协议能力</strong>。根据目标地址的域名解析记录、本地运营商物理网关可用性以及应用程序自身的最佳匹配算法，系统能自主灵活地在两种协议族之间挑选最适合的机制进行出站连接。互联网工程任务组在 <a href="https://www.rfc-editor.org/info/rfc4213/?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer" class="rfc-link">RFC 4213</a> 规范中，将双栈技术定义为过渡到 IPv6 的基石机制。
+        </p>
+        <p>
+          在商业机场应用场景中，由于不同技术商定义的口径各异，如何精准判断双栈的纯度与连通质量，需要对节点的网络接入拓扑进行细致摸排。
+        </p>
+
+        <!-- Quick Jump Table of Contents -->
+        <div class="toc-container">
+          <div class="toc-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan);">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+            本文目录与快速导航
+          </div>
+          <div class="toc-grid">
+            <div class="toc-item"><a href="#difference-v4-v6">&bull; 一、IPv4 与 IPv6 有何本质区别</a></div>
+            <div class="toc-item"><a href="#what-is-dual-stack">&bull; 二、什么是真正的双栈节点</a></div>
+            <div class="toc-item"><a href="#address-selection-strategy">&bull; 三、双栈节点如何选择协议栈</a></div>
+            <div class="toc-item"><a href="#dual-stack-advantages">&bull; 四、双栈节点带来的核心优势</a></div>
+            <div class="toc-item"><a href="#speed-myths">&bull; 五、双栈技术并不等于速度翻倍</a></div>
+            <div class="toc-item"><a href="#transition-technologies">&bull; 六、双栈、NAT64、DS-Lite 辨析</a></div>
+            <div class="toc-item"><a href="#common-issues">&bull; 七、双栈代理中的疑难故障</a></div>
+            <div class="toc-item"><a href="#testing-methods">&bull; 八、如何自检双栈节点连通性</a></div>
+          </div>
+        </div>
+
+        <h2 id="difference-v4-v6">一、IPv4 与 IPv6 有何本质区别</h2>
+        <p>
+          IPv4 地址空间由 32 位（4 字节）二进制数构成，理论上仅能提供约 42.9 亿个唯一 IP。常见的表达格式为点分十进制，如：
+        </p>
+        <pre><code>192.0.2.10</code></pre>
+        <p>
+          而 IPv6 地址空间被扩充至惊人的 128 位（16 字节），地址总数高达 3.4&times;10<sup>38</sup> 个。其常用格式为冒号十六进制，且支持双冒号简写：
+        </p>
+        <pre><code>2001:db8:1234::10</code></pre>
+        <p>
+          由互联网标准化组织 IETF 在 <a href="https://www.rfc-editor.org/info/rfc8200/?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer" class="rfc-link">RFC 8200</a> 中规范的 IPv6 协议，绝非是给旧版 IPv4 凑数的补丁。它重构了报文头，取消了传统的广播机制，改用邻居发现协议（NDP）实现更低延迟的内网交换，同时天生内置了对 IPSec 加密网络协议的硬性支持。
+        </p>
+        <p>
+          因为二者的二进制编码协议头完全不同，路由器无法在没有中间转换机制的前提下进行混编转换。双栈则是现存最稳妥、最少产生协议开销的过渡方案：在软件中保留独立的两套通讯协议栈，根据上游数据流的特征各自为政，互不干扰。
+        </p>
+
+        <h2 id="what-is-dual-stack">二、什么是真正的双栈节点</h2>
+        <p>
+          在使用代理工具上网时，一次完整的请求传输至少要划分为两个独立的物理交互阶段：
+        </p>
+        <pre><code>阶段 1：用户本地设备 &rarr; 代理节点 (中转入口)
+阶段 2：代理节点 (落地出口) &rarr; 目标网站 (如 Google/Netflix)</code></pre>
+        <p>
+          因此，评估一个机场节点的双栈纯度，需要将“入口”和“出口”拆解分析：
+        </p>
+
+        <!-- SVG 2: Ingress and Egress Structure -->
+        <div class="diagram-container">
+          <div class="diagram-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan);">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm14 10v-2a4 4 0 0 0-3-3.87m-4-12a4 4 0 0 1 0 7.75"/>
+            </svg>
+            双栈节点入口与出口结构示意图
+          </div>
+          <svg viewBox="0 0 800 240" width="100%" height="auto" style="background: #080c18; border-radius: 8px; font-family: sans-serif;">
+            <g transform="translate(30, 20)">
+              <rect x="0" y="0" width="220" height="200" rx="6" fill="#0c1122" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+              <text x="110" y="30" fill="#00f2fe" font-size="14" font-weight="bold" text-anchor="middle">双栈入口 (Ingress)</text>
+              <g transform="translate(20, 60)">
+                <rect x="0" y="0" width="180" height="50" rx="4" fill="rgba(0, 242, 254, 0.04)" stroke="#00f2fe" stroke-width="1" />
+                <text x="15" y="20" fill="#f8fafc" font-size="11" font-weight="bold">IPv4 接入入口 (A 记录)</text>
+                <text x="15" y="38" fill="#94a3b8" font-size="9">服务仅支持 IPv4 的本地宽带用户</text>
+              </g>
+              <g transform="translate(20, 125)">
+                <rect x="0" y="0" width="180" height="50" rx="4" fill="rgba(255, 77, 79, 0.04)" stroke="#ff4d4f" stroke-width="1" />
+                <text x="15" y="20" fill="#f8fafc" font-size="11" font-weight="bold">IPv6 接入入口 (AAAA 记录)</text>
+                <text x="15" y="38" fill="#94a3b8" font-size="9">供已开通 IPv6 的本地家庭网络直连</text>
+              </g>
+            </g>
+            <g transform="translate(265, 100)">
+              <path d="M 5,20 L 45,20 M 35,10 L 45,20 L 35,30" fill="none" stroke="#9b51e0" stroke-width="4" stroke-linecap="round" />
+              <text x="25" y="0" fill="#9b51e0" font-size="12" font-weight="bold" text-anchor="middle">中转接入</text>
+            </g>
+            <g transform="translate(325, 20)">
+              <rect x="0" y="0" width="150" height="200" rx="6" fill="#0c1122" stroke="#9b51e0" stroke-width="1.5" />
+              <text x="75" y="30" fill="#9b51e0" font-size="14" font-weight="bold" text-anchor="middle">中继代理服务器</text>
+              <g transform="translate(25, 60)">
+                <rect x="0" y="0" width="100" height="20" rx="2" fill="#080c18" stroke="rgba(255,255,255,0.1)" />
+                <circle cx="15" cy="10" r="3" fill="#00f2fe" />
+                <circle cx="85" cy="10" r="2" fill="#52c41a" />
+                <rect x="0" y="30" width="100" height="20" rx="2" fill="#080c18" stroke="rgba(255,255,255,0.1)" />
+                <circle cx="15" cy="40" r="3" fill="#ff4d4f" />
+                <circle cx="85" cy="40" r="2" fill="#52c41a" />
+                <rect x="0" y="60" width="100" height="20" rx="2" fill="#080c18" stroke="rgba(255,255,255,0.1)" />
+                <circle cx="15" cy="70" r="3" fill="#9b51e0" />
+                <circle cx="85" cy="70" r="2" fill="#52c41a" />
+              </g>
+              <text x="75" y="180" fill="#94a3b8" font-size="10" text-anchor="middle">协议栈内核双路并行</text>
+            </g>
+            <g transform="translate(490, 100)">
+              <path d="M 5,20 L 45,20 M 35,10 L 45,20 L 35,30" fill="none" stroke="#9b51e0" stroke-width="4" stroke-linecap="round" />
+              <text x="25" y="0" fill="#9b51e0" font-size="12" font-weight="bold" text-anchor="middle">出站分流</text>
+            </g>
+            <g transform="translate(550, 20)">
+              <rect x="0" y="0" width="220" height="200" rx="6" fill="#0c1122" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+              <text x="110" y="30" fill="#ff4d4f" font-size="14" font-weight="bold" text-anchor="middle">双栈出口 (Egress)</text>
+              <g transform="translate(20, 60)">
+                <rect x="0" y="0" width="180" height="50" rx="4" fill="rgba(0, 242, 254, 0.04)" stroke="#00f2fe" stroke-width="1" />
+                <text x="15" y="20" fill="#f8fafc" font-size="11" font-weight="bold">IPv4 出口通道 (IPv4 Out)</text>
+                <text x="15" y="38" fill="#94a3b8" font-size="9">请求传统只有 IPv4 的外部网站</text>
+              </g>
+              <g transform="translate(20, 125)">
+                <rect x="0" y="0" width="180" height="50" rx="4" fill="rgba(255, 77, 79, 0.04)" stroke="#ff4d4f" stroke-width="1" />
+                <text x="15" y="20" fill="#f8fafc" font-size="11" font-weight="bold">IPv6 出口通道 (IPv6 Out)</text>
+                <text x="15" y="38" fill="#94a3b8" font-size="9">直接承接原生 IPv6 服务站的请求</text>
+              </g>
+            </g>
+          </svg>
+        </div>
+
+        <h3 id="stack-ingress">1. 双栈入口 (Dual-Stack Ingress)</h3>
+        <p>
+          指代理服务器的中转入口节点（在没有中转的直连环境下，则指代理落地机本身）公网网卡同时分配了 IPv4 与 IPv6 的地址。这意味着无论是纯 IPv4 宽带的用户，还是已经拥有公网 IPv6 地址的校园网/光纤用户，均可免协议转换直连上该节点。
+        </p>
+        <p>
+          为了支撑双栈接入，机场服务商通常需要在该节点的 DNS 映射中同时配置：
+        </p>
+        <ul>
+          <li><strong>A 记录</strong>：解析出国内中转入口的公网 IPv4 地址；</li>
+          <li><strong>AAAA 记录</strong>：解析出中转入口的公网 IPv6 地址（由 <a href="https://www.rfc-editor.org/rfc/rfc3596.txt?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer" class="rfc-link">RFC 3596</a> 规范定义）。</li>
+        </ul>
+
+        <h3 id="stack-egress">2. 双栈出口 (Dual-Stack Egress)</h3>
+        <p>
+          指代理服务器访问目标站点时，所用的网关路由同时支持 IPv4 和 IPv6 两种协议。若目标站点只解析出 A 记录（如部分传统的个人博客），节点就切换 IPv4 出口；若目标站点支持 IPv6 并带有 AAAA 记录，节点则顺滑走 IPv6 出口，规避了因为中间 NAT 映射造成的速度与安全开销。
+        </p>
+
+        <h3 id="complete-stack">3. 完整双栈节点</h3>
+        <p>
+          一个没有任何缩水的纯正双栈节点，必须同时配备<strong>双栈入口和双栈出口</strong>，拥有独立的路由调优与完整的防火墙安全过滤机制，且本地代理软件（如 Clash 核心）必须能同时接管设备上产生的 IPv4 与 IPv6 通信数据流。
+        </p>
+
+        <h2 id="address-selection-strategy">三、双栈节点如何选择协议栈</h2>
+        <p>
+          当客户端发起连接请求，且 DNS 返回了该节点域名的 IPv4 候选 IP 与 IPv6 候选 IP 后，选择何种协议栈的依据取决于一套科学的地址选择策略。
+        </p>
+        <p>
+          在底层协议层面，由 IETF 颁布的 <a href="https://www.rfc-editor.org/info/rfc6724/?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer" class="rfc-link">RFC 6724</a> 规则库定义了源地址与目标地址选择机制，基于地址前缀、范围、亲和度等规则为操作系统在连接池里进行权重排序。
+        </p>
+
+        <!-- SVG 3: Happy Eyeballs selection flowchart -->
+        <div class="diagram-container">
+          <div class="diagram-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan);">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            双栈节点 DNS 解析与地址选择流程
+          </div>
+          <svg viewBox="0 0 800 160" width="100%" height="auto" style="background: #080c18; border-radius: 8px; font-family: sans-serif;">
+            <defs>
+              <linearGradient id="gradFlowLine" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#00f2fe" />
+                <stop offset="100%" stop-color="#9b51e0" />
+              </linearGradient>
+            </defs>
+            <line x1="60" y1="70" x2="740" y2="70" stroke="url(#gradFlowLine)" stroke-width="3" stroke-dasharray="6 6" />
+            
+            <g transform="translate(80, 70)">
+              <circle cx="0" cy="0" r="22" fill="#0c1122" stroke="#00f2fe" stroke-width="2" />
+              <text x="0" y="4" fill="#00f2fe" font-size="11" font-weight="bold" text-anchor="middle">解析</text>
+              <text x="0" y="45" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">1. DNS 域名解析</text>
+              <text x="0" y="58" fill="#94a3b8" font-size="9" text-anchor="middle">获取 A 与 AAAA 记录</text>
+            </g>
+            <g transform="translate(240, 70)">
+              <circle cx="0" cy="0" r="22" fill="#0c1122" stroke="#00f2fe" stroke-width="2" />
+              <text x="0" y="4" fill="#00f2fe" font-size="11" font-weight="bold" text-anchor="middle">排定</text>
+              <text x="0" y="45" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">2. 地址候选排序</text>
+              <text x="0" y="58" fill="#94a3b8" font-size="9" text-anchor="middle">RFC 6724 规则决策</text>
+            </g>
+            <g transform="translate(400, 70)">
+              <circle cx="0" cy="0" r="22" fill="#0c1122" stroke="#9b51e0" stroke-width="2" />
+              <text x="0" y="4" fill="#9b51e0" font-size="11" font-weight="bold" text-anchor="middle">双路</text>
+              <text x="0" y="45" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">3. 快乐眼球并发</text>
+              <text x="0" y="58" fill="#94a3b8" font-size="9" text-anchor="middle">双路同时握手 (RFC 8305)</text>
+            </g>
+            <g transform="translate(560, 70)">
+              <circle cx="0" cy="0" r="22" fill="#0c1122" stroke="#9b51e0" stroke-width="2" />
+              <text x="0" y="4" fill="#9b51e0" font-size="11" font-weight="bold" text-anchor="middle">选路</text>
+              <text x="0" y="45" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">4. 最快连接响应</text>
+              <text x="0" y="58" fill="#94a3b8" font-size="9" text-anchor="middle">毫秒级锁定高速链路</text>
+            </g>
+            <g transform="translate(720, 70)">
+              <circle cx="0" cy="0" r="22" fill="#0c1122" stroke="#ff4d4f" stroke-width="2" />
+              <text x="0" y="4" fill="#ff4d4f" font-size="11" font-weight="bold" text-anchor="middle">回退</text>
+              <text x="0" y="45" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">5. 故障无感切路</text>
+              <text x="0" y="58" fill="#94a3b8" font-size="9" text-anchor="middle">单路超时时自动容灾</text>
+            </g>
+          </svg>
+        </div>
+
+        <p>
+          在现代操作系统及浏览器应用中，为了防止由于其中一条协议栈物理故障（例如本地 IPv6 骨干网临时阻断）导致的长达数秒的“白屏等待连接超时”问题，普遍引入了 <strong>Happy Eyeballs（快乐眼球）算法</strong>（参考最新修订的 <a href="https://www.rfc-editor.org/rfc/rfc8305.html?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer" class="rfc-link">RFC 8305</a> 协议）。
+        </p>
+        <p>
+          该算法的工作机制为：客户端在尝试握手时，会相隔极其微小的间隔时间（通常为 150-250ms）并行向代理节点（或目标网站）的 IPv4 和 IPv6 地址发起连接请求。哪一条链路首先返回 TCP SYN-ACK 握手包，系统就立刻将后续的数据包绑定到此链路上，未胜出的连接则被悄无声息地关闭。
+        </p>
+
+        <h2 id="dual-stack-advantages">四、双栈节点带来的核心优势</h2>
+        
+        <h3 id="advantage-compat">1. 提高网络兼容范围</h3>
+        <p>
+          很多学校宿舍网、教育网、公立科研机构网络均提供免费且不限流的 IPv6 接口。而传统的国内代理中转机大部分仅支持 IPv4 接入。使用双栈代理中转节点的 IPv6 入口，可以帮助此类特定用户规避 IPv4 计费网络，实现无感代理出海。
+        </p>
+
+        <h3 id="advantage-path">2. 提供更多可选路由路径</h3>
+        <p>
+          在遇到跨境骨干网发生突发性故障或特定光缆由于晚高峰超载而高丢包时，因为运营商对 IPv4 和 IPv6 流量所划分的出境网关与物理光纤通道各异，双栈节点实质上提供了一条“物理备用通道”，提高了出海访问的鲁棒性（参考 <a href="https://www.rfc-editor.org/info/rfc9386?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer" class="rfc-link">RFC 9386: IPv6 Deployment Status</a>）。
+        </p>
+
+        <h3 id="advantage-native">3. 无痕解锁纯 IPv6 网站</h3>
+        <p>
+          诸如国际大学学术数据库、某些科研协作论坛等开始实施纯 IPv6 出站限制。双栈节点能直接用原生 IPv6 对其握手，消除了通过 IPv4-only 代理所带来的访问屏障。
+        </p>
+
+        <h2 id="speed-myths">五、双栈技术并不等于速度翻倍</h2>
+        <p>
+          <strong>“既然多了一条路，双栈是不是应该比单栈快一倍？”这完全是一个以偏概全的商业话术。</strong>
+        </p>
+        <p>
+          一个中转节点对你电脑的握手延迟和最终的吞吐带宽，取决于服务器物理带宽上限、中转网络线路的 QoS 降级率以及本地运营商的出口承载。
+        </p>
+        <p>
+          在许多跨国 VPS 及边缘节点中，由于海外服务器上游机房对 IPv6 出口带宽资源分配不足、或者中转入口节点的 IPv6 出海链路缺乏优化，导致 IPv6 物理路由在公网上严重绕道。例如：直连 IPv4 只有 30ms 延迟，而双栈下的 IPv6 却绕路欧美兜了一圈，延迟飚高到 350ms，并且存在高丢包（参考 <a href="https://www.rfc-editor.org/info/rfc6555/?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer" class="rfc-link">RFC 6555</a> 快乐眼球的痛点描述）。
+        </p>
+        <p>
+          如果代理客户端没有合理启用 Happy Eyeballs 并行算法，而是根据系统默认首选的慢速 IPv6 强行握手，网络访问反而会退化得极其卡顿。
+        </p>
+
+        <h2 id="transition-technologies">六、双栈、NAT64、DS-Lite 辨析</h2>
+        <p>
+          在选择节点或查看机场配置时，还会见到 NAT64、DNS64 等缩写，它们与真正的原生双栈在技术实现上有显著区别：
+        </p>
+        <div class="highlight-box">
+          <p style="font-weight: 600; margin-bottom: 8px;">🔄 过渡期技术对比矩阵：</p>
+          <ul>
+            <li><strong>原生双栈 (Native Dual-Stack)</strong>：服务器同时分配了全球唯一的公网 IPv4 地址与公网 IPv6 地址。两条协议链路完全对等且为独立握手。</li>
+            <li><strong>NAT64</strong>：设备仅拥有 IPv6 公网地址，通过中间过渡服务商的 NAT64 路由网关，将 IPv6 包转换为 IPv4 格式，以便访问只配置了 IPv4 的老旧服务器（参考 <a href="https://www.rfc-editor.org/rfc/rfc6146.html?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer" class="rfc-link">RFC 6146: Stateful NAT64</a> 与 <a href="https://www.rfc-editor.org/info/rfc6147/?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer" class="rfc-link">RFC 6147: DNS64</a> 规范）。</li>
+            <li><strong>DS-Lite (Dual-Stack Lite)</strong>：在纯 IPv6 的物理宽带链路上，利用隧道封装（IPv4-in-IPv6）将用户的 IPv4 私网包打包转发给运营商网关进行集中式 CGN NAT 转换。这并不是服务器硬件上的原生双栈（参考 <a href="https://www.rfc-editor.org/info/rfc6333/?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer" class="rfc-link">RFC 6333</a>）。</li>
+          </ul>
+        </div>
+
+        <h2 id="common-issues">七、双栈代理中的疑难故障</h2>
+        
+        <h3 id="issue-dns">1. IPv6 入口无法连接</h3>
+        <p>
+          大多是因为机场服务商在后台配置的 DNS 域名 AAAA 记录绑定的公网 IP 失效，或者中转机上的防火墙安全策略未对 IPv6 地址放行该服务端口。
+        </p>
+
+        <h3 id="issue-leak">2. 严重的安全泄露风险（IPv6 流量泄漏）</h3>
+        <p>
+          <strong>这是双栈代理中最致命的漏洞。</strong>如果用户的本地电脑具有公网 IPv6 地址，而本地启动的代理软件（如未开 TUN 模式的旧 Clash 核心）仅接管了系统的 IPv4 路由规则，那么所有原本走 IPv6 路由的目标站点（如部分支持 IPv6 的大型论坛）的访问数据，都会完全绕过代理软件的加密加密通道，直接通过本地物理网口明文直连出海。这不仅使得机场的异地翻墙规则彻底失效，更将本地用户的真实地理位置 IP 暴露无遗。为了保障安全，请使用带有安全保护的 TUN 接管机制（参考 <a href="https://www.rfc-editor.org/info/rfc9099/?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer" class="rfc-link">RFC 9099: IPv6 Operational Security Considerations</a>）。
+        </p>
+
+        <h2 id="testing-methods">八、如何自检双栈节点连通性</h2>
+        <p>
+          要验证一个代理节点是否拥有真实的双栈连通能力，推荐采用以下全套测试流：
+        </p>
+
+        <!-- SVG 4: Dual-stack diagnostic flowchart -->
+        <div class="diagram-container">
+          <div class="diagram-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan);">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            双栈节点 IPv4 与 IPv6 检测步骤
+          </div>
+          <svg viewBox="0 0 800 120" width="100%" height="auto" style="background: #080c18; border-radius: 8px; font-family: sans-serif;">
+            <line x1="50" y1="50" x2="750" y2="50" stroke="rgba(255, 255, 255, 0.08)" stroke-width="4" stroke-dasharray="10 10" />
+            <g transform="translate(50, 50)">
+              <circle cx="0" cy="0" r="18" fill="#0c1122" stroke="#00f2fe" stroke-width="2" />
+              <text x="0" y="4" fill="#00f2fe" font-size="10" font-weight="bold" text-anchor="middle">DNS</text>
+              <text x="0" y="38" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">1. 检查 DNS 记录</text>
+              <text x="0" y="50" fill="#94a3b8" font-size="8" text-anchor="middle">nslookup -type=AAAA</text>
+            </g>
+            <g transform="translate(190, 50)">
+              <circle cx="0" cy="0" r="18" fill="#0c1122" stroke="#00f2fe" stroke-width="2" />
+              <text x="0" y="4" fill="#00f2fe" font-size="10" font-weight="bold" text-anchor="middle">IPv4</text>
+              <text x="0" y="38" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">2. 测 IPv4 入口</text>
+              <text x="0" y="50" fill="#94a3b8" font-size="8" text-anchor="middle">ping -4 节点域名</text>
+            </g>
+            <g transform="translate(330, 50)">
+              <circle cx="0" cy="0" r="18" fill="#0c1122" stroke="#00f2fe" stroke-width="2" />
+              <text x="0" y="4" fill="#00f2fe" font-size="10" font-weight="bold" text-anchor="middle">IPv6</text>
+              <text x="0" y="38" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">3. 测 IPv6 入口</text>
+              <text x="0" y="50" fill="#94a3b8" font-size="8" text-anchor="middle">ping -6 节点域名</text>
+            </g>
+            <g transform="translate(470, 50)">
+              <circle cx="0" cy="0" r="18" fill="#0c1122" stroke="#9b51e0" stroke-width="2" />
+              <text x="0" y="4" fill="#9b51e0" font-size="10" font-weight="bold" text-anchor="middle">V4出</text>
+              <text x="0" y="38" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">4. 测 IPv4 出口</text>
+              <text x="0" y="50" fill="#94a3b8" font-size="8" text-anchor="middle">查看节点出网 IPv4</text>
+            </g>
+            <g transform="translate(610, 50)">
+              <circle cx="0" cy="0" r="18" fill="#0c1122" stroke="#9b51e0" stroke-width="2" />
+              <text x="0" y="4" fill="#9b51e0" font-size="10" font-weight="bold" text-anchor="middle">V6出</text>
+              <text x="0" y="38" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">5. 测 IPv6 出口</text>
+              <text x="0" y="50" fill="#94a3b8" font-size="8" text-anchor="middle">查看节点出网 IPv6</text>
+            </g>
+            <g transform="translate(750, 50)">
+              <circle cx="0" cy="0" r="18" fill="#0c1122" stroke="#ff4d4f" stroke-width="2" />
+              <text x="0" y="4" fill="#ff4d4f" font-size="10" font-weight="bold" text-anchor="middle">评测</text>
+              <text x="0" y="38" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">6. 路由质量对比</text>
+              <text x="0" y="50" fill="#94a3b8" font-size="8" text-anchor="middle">测量延迟/丢包与吞吐</text>
+            </g>
+          </svg>
+        </div>
+
+        <h3 id="check-dns">第一步：自检 DNS 解析是否配齐</h3>
+        <p>
+          在操作系统命令行中使用命令行工具查询机场给出的订阅节点域名。
+        </p>
+        <p>
+          在 Windows 命令提示符 (CMD) 中运行：
+        </p>
+        <pre><code>nslookup -type=A 节点订阅域名.com
+nslookup -type=AAAA 节点订阅域名.com</code></pre>
+        <p>
+          在 macOS / Linux 终端运行：
+        </p>
+        <pre><code>dig A 节点订阅域名.com
+dig AAAA 节点订阅域名.com</code></pre>
+        <p>
+          如果两条解析命令能够同时返回独立的公网 IPv4 地址与 IPv6 地址，说明中转入口端的双栈 DNS 宣告配置正确。
+        </p>
+
+        <h3 id="check-ingress">第二步：核验入口连通性</h3>
+        <p>
+          在操作系统中分别指定协议族 Ping 该域名：
+        </p>
+        <pre><code>ping -4 节点订阅域名.com
+ping -6 节点订阅域名.com</code></pre>
+        <p>
+          若两路 Ping 测试皆能收到回复，且延迟在正常区间，说明你所处的物理网络到该中转入口的两路干线连通率完全正常。
+        </p>
+
+        <h3 id="check-egress">第三步：验证代理出口的归属地</h3>
+        <p>
+          启动代理客户端并成功启用 TUN 虚拟网卡模式。
+        </p>
+        <p>
+          不要仅查看单一的 IP 检测网页。请使用支持 IPv4-only 和 IPv6-only 两个探测域名的归属地自检工具（例如打开 <code style="color: var(--accent-cyan);">ipw.cn</code> 或者 <code style="color: var(--accent-cyan);">test-ipv6.com</code>）。
+        </p>
+        <p>
+          如果检测结果中能够同时获取并正确显示代理落地机所在国家的 IPv4 地址与 IPv6 地址，说明代理节点的出站双栈分流服务运行无误。
+        </p>
+
+        <h2 id="summary">总结</h2>
+        <p>
+          节点双栈技术的核心并不是为了单纯的网速突破，而是旨在提供更为广阔的网络资源兼容度、规避本地计费宽带以及在遭遇干线故障时能提供无缝容灾的第二路由路径。
+        </p>
+        <p>
+          要享受优质的双栈网络体验，需要服务商对双栈中转入口进行持续的路由调优，且用户端需彻底杜绝 IPv6 流量泄露的安全风险。利用漏斗式的连通性核验流，便可在繁多的机场节点中迅速筛查出真正高效、安全的原生双栈节点。
+        </p>
+      </article>
+
+      <!-- FAQ Section -->
+      <section class="faq-section">
+        <h2 style="font-size: 1.6rem; color: var(--text-main); margin-bottom: 24px; border-left: 4px solid var(--accent-cyan); padding-left: 12px;">
+          🙋 常见问题 FAQ
+        </h2>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>如何简单判断一个代理节点是否同时支持 IPv4 和 IPv6 访问？</span>
+            <span class="faq-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            可以在连接代理节点后，分别访问 IPv4-only 和 IPv6-only 的 IP 归属地检测网站（例如 ipw.cn 或 test-ipv6.com）。如果系统能同时成功获取到代理节点出的 IPv4 公网地址与 IPv6 公网地址，并且没有提示超时，说明该节点同时支持两种协议的出口代理。
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>为什么在开启了双栈代理后，部分网站（如 ChatGPT、Netflix）反而比以前更容易触发风控或打不开？</span>
+            <span class="faq-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            这多由 IPv6 出口流量泄漏或出口 IP 信誉度低引起。相较于成熟的公网 IPv4，很多机房服务商租用的 IPv6 地址段尚未经过充分清洗，易被 WAF 防火墙标记为数据中心或僵尸网络。如果客户端没有配置好 IPv6 接管，部分数据包可能直接暴露了本地用户的真实 IPv6 地址，导致地理风控限制。
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Happy Eyeballs（快乐眼球）机制在双栈节点中起到什么作用？</span>
+            <span class="faq-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            Happy Eyeballs（RFC 8305）是一种用于双栈网络中的智能选路算法。当客户端发起对双栈域名的连接请求时，它会近乎并行地向该域名的 IPv4 和 IPv6 地址发送握手请求。哪条链路最先成功建立连接，后续数据就会走哪条链路。这能有效避免因为单侧协议栈（如 IPv6 故障）长时间挂起重试造成的连接超时与卡顿。
+          </div>
+        </div>
+      </section>
+
+      <!-- Related Category Recommendations -->
+      <section style="margin-top: 48px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 32px; border-radius: var(--radius-md);">
+        <h2 style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 20px;">💡 推荐技术科普阅读</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+          <a href="airport-blocked-reasons.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--accent-cyan);">
+            节点失效与超时故障排查 &rarr;
+          </a>
+          <a href="why-high-latency.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--accent-purple);">
+            节点高延迟与慢速排查 &rarr;
+          </a>
+          <a href="domestic-relay.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--text-main);">
+            什么是国内中转与双栈中转 &rarr;
+          </a>
+        </div>
+      </section>
+
+      <!-- Disclaimer Section -->
+      <section style="margin-top: 60px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+        <h2 style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 12px;">📢 免责声明</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+          本站所展示的技术原理解析、配置步骤指导及相关客户端使用指南仅供局域网科学管理、外贸合规商用及网络安全学术研究。本站不销售任何付费机场节点，不对外部网络服务商提供连通性担保。请严格遵守所在国家的相关法律法规，合法合规上网。
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="logo-area" style="margin-bottom: 16px;">
+            <img src="../assets/images/logo.svg" alt="云梯指南 Logo" class="logo-icon" width="32" height="32">
+            <span class="logo-text" style="font-size: 1.25rem;">云梯指南</span>
+          </a>
+          <p>云梯指南是2026年专业的机场推荐与网络加速配置知识库，协助您规避跑路商家，筛选高性价比的科学上网套餐。</p>
+        </div>
+        
+        <div class="footer-col">
+          <h4>核心板块</h4>
+          <ul class="footer-links">
+            <li><a href="../reviews/index.html">机场推荐排行榜</a></li>
+            <li><a href="../reviews/brands.html">机场品牌综合评测</a></li>
+            <li><a href="../guides/index.html">客户端配置教程中心</a></li>
+            <li><a href="warnings.html">跑路风险黑名单</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>快捷导航</h4>
+          <ul class="footer-links">
+            <li><a href="../categories/index.html">全站分类归档</a></li>
+            <li><a href="../topics/index.html">专题分类汇总</a></li>
+            <li><a href="../about.html">关于云梯指南</a></li>
+            <li><a href="../disclaimer.html">网站免责声明</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col footer-disclaimer">
+          <h4>本站声明</h4>
+          <p>本站提供的科学上网教程、网络加速软件配置指南以及节点测速数据仅作为技术学习 and 合规外贸交流参考。本站不提供、不销售任何付费机场节点，请严格遵守您当地的网络法律法规。</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="copyright">© 2026 云梯指南 (<a href="../index.html" style="color: inherit;">nodehub168.com</a>). All rights reserved.</p>
+        <div class="footer-legal-links">
+          <a href="../about.html">关于本站</a>
+          <a href="../disclaimer.html">免责声明</a>
+          <a href="../sitemap.xml">网站地图</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/js/main.js"></script>
+  <script>
+    document.querySelectorAll('.faq-question').forEach(item => {
+      item.addEventListener('click', () => {
+        const parent = item.parentElement;
+        const isActive = parent.classList.contains('active');
+        
+        document.querySelectorAll('.faq-item').forEach(el => {
+          el.classList.remove('active');
+          el.querySelector('.faq-answer').style.maxHeight = null;
+        });
+        
+        if (!isActive) {
+          parent.classList.add('active');
+          const answer = parent.querySelector('.faq-answer');
+          answer.style.maxHeight = answer.scrollHeight + 32 + "px";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>节点连接超时 (Timeout) 的原因与完美解决办法 - 云梯指南</title>
+  <meta name="description" content="遇到Clash、小火箭或v2rayN节点全部超时红字？深度解析系统时间不同步、DNS泄露、TCP阻断及套餐超限引发超时的排查路径与修复步骤。">
+  <link rel="canonical" href="https://nodehub168.com/faq/timeout.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://nodehub168.com/"
+      },      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "故障排查",
+        "item": "https://nodehub168.com/faq/troubleshooting.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "超时解决",
+        "item": "https://nodehub168.com/faq/timeout.html"
+      }
+    ]
+  }
+  </script>
+  <style>
+    .post-article {
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .post-article h2 {
+      font-size: 1.6rem;
+      margin: 36px 0 16px;
+      border-left: 4px solid var(--accent-cyan);
+      padding-left: 12px;
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.03) 0%, transparent 100%);
+      padding-top: 6px;
+      padding-bottom: 6px;
+      scroll-margin-top: 100px;
+    }
+    .post-article h3 {
+      font-size: 1.25rem;
+      margin: 28px 0 12px;
+      color: var(--accent-cyan);
+      scroll-margin-top: 100px;
+    }
+    .post-article p {
+      margin-bottom: 20px;
+      color: var(--text-main);
+      text-align: justify;
+    }
+    .post-article ul, .post-article ol {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    .post-article li {
+      margin-bottom: 8px;
+    }
+    .post-article strong {
+      color: var(--accent-cyan);
+    }
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin: 24px 0;
+      border-left: 4px solid var(--accent-purple);
+    }
+    .highlight-box.cyan {
+      border-left-color: var(--accent-cyan);
+    }
+    .post-article a {
+      color: #1e3a8a;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: var(--transition-smooth);
+    }
+    .post-article a:hover {
+      color: var(--accent-purple);
+    }
+    
+    /* Table of Contents */
+    .toc-container {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin: 32px 0;
+    }
+    .toc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .toc-item a {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .toc-item a:hover {
+      color: var(--accent-cyan);
+      transform: translateX(4px);
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+      <nav class="main-nav" style="display: flex;">
+        <a href="../index.html" class="nav-link">返回首页</a>
+      </nav>
+    </div>
+  </header>
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 800px;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="troubleshooting.html" style="color: inherit;">故障排查</a> &gt; <span style="color: var(--accent-cyan); font-weight: 500;">超时解决</span>
+      </nav>
+      
+      <article class="post-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 40px; border-radius: var(--radius-md);">
+        <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
+          解决节点连接超时
+        </h1>
+        
+        <p>
+          在使用代理网络时，最让用户感到绝望的画面莫过于：打开客户端进行测速，节点列表中跳出一整片触目的红色 `Timeout`（连接超时/测试超时）字样。
+        </p>
+        <p>
+          从计算机网络层面来看，“连接超时”意味着客户端发起的握手请求（TCP SYN）在预设的时间阈值内（通常为 2000ms - 5000ms），未能收到目标服务器的确认应答（SYN-ACK）。导致这条数据通路被完全拦截的原因多种多样，可能是由于你本地的系统时间出现了微小的物理偏差，可能是因为运营商 DNS 劫持，也可能是服务商的 IP 被防火墙彻底拉黑。本文将结合网络协议栈握手机制、系统时间同步原理及链路封锁的实操经验，为您系统性地整理出这套 2200 字的 **节点连接超时完美修复与自救指南**。
+        </p>
+
+        <!-- Table of Contents -->
+        <div class="toc-container">
+          <div class="toc-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+            &nbsp;本文目录导航
+          </div>
+          <div class="toc-grid">
+            <div class="toc-item">
+              <a href="#step1">1. 触发节点超时的六大核心原因</a>
+            </div>
+            <div class="toc-item">
+              <a href="#step2">2. 解决节点超时故障的手动修复步骤</a>
+            </div>
+            <div class="toc-item">
+              <a href="#step3">3. 深入日志：排查内核报错代码</a>
+            </div>
+            <div class="toc-item">
+              <a href="#step4">4. 总结与排障逻辑树</a>
+            </div>
+          </div>
+        </div>
+
+        <h2 id="step1">一、 触发节点超时的六大核心原因</h2>
+        <p>
+          当您的软件中显示大面积超时红字时，通常可以归纳为以下几大底层诱因：
+        </p>
+        <ul>
+          <li><strong>原因 1：本地系统时间偏差（隐形杀手）：</strong> 
+            VMess、VLESS、Trojan 等现代传输协议，以及 Shadowsocks 的 AEAD 加密算法，在握手阶段需要使用时间戳（Timestamp）进行加密。如果您的电脑或手机的系统时间与格林威治标准时间（UTC）的误差**超过 90 秒**，服务器为了防范重放攻击（Replay Attack），会直接丢弃该连接请求而不给任何回应，直接在客户端呈现 Timeout。
+          </li>
+          <li><strong>原因 2：节点域名解析失败（DNS 劫持）：</strong> 
+            如果您的订阅配置文件里的节点地址使用的是域名（如 `jp1.node.com`），而在测速时，本地的宽带 DNS 无法将其解析为正确的境外 IP，连接请求无处发送，就会导致直接超时。
+          </li>
+          <li><strong>原因 3：节点 IP 或端口被 GFW 封锁拦截：</strong> 
+            敏感时期，防火墙（GFW）会通过主动探测将代理服务器的公网 IP 列入黑洞封锁，或者阻断该特定端口的 TCP 握手，导致流量无法流出境内，具体封锁机制可以参阅 <a href="../posts/airport-blocked-reasons.html">机场节点被封锁解析</a>。
+          </li>
+          <li><strong>原因 4：本地防火墙或安全软件入站拦截：</strong> 
+            许多代理软件在运行时需要监听本地的 7890 或 10809 端口。如果本地的 Windows Defender 防火墙规则未正确配置，阻断了端口流量，就会引发超时报错。您可以查阅 <a href="system-proxy-issue.html">系统代理故障排查手册</a> 与 <a href="proxy-sharing.html">局域网代理共享设置</a> 开启入站端口权限。
+          </li>
+          <li><strong>原因 5：账户欠费或套餐流量耗尽：</strong> 
+            机场计费面板会在您的套餐到期或 <a href="traffic-exhausted.html">流量扣光</a> 时，自动在后端节点切断你的连接凭证（UUID/密码），服务器直接拒绝握手，客户端表现为大面积超时。
+          </li>
+          <li><strong>原因 6：中转链路晚高峰严重丢包：</strong> 
+            当骨干网出现物理性拥堵时，数据的丢包率极高。频繁的重传会导致握手在限定时间内无法完成，触发超时，可参考 <a href="../posts/why-high-latency.html">延迟与丢包排查</a> 与 <a href="../posts/domestic-relay.html">国内中转专线机制</a>。
+          </li>
+        </ul>
+
+        <h2 id="step2">二、 解决节点超时故障的手动修复步骤</h2>
+        <p>
+          遇到节点连接超时，请按照以下由易到难的步骤手动诊断并修复：
+        </p>
+        <ol>
+          <li><strong>第一步：校准并强制同步系统时间（首要检查）：</strong> 
+            在 Windows 系统中，右键右下角的时间，选择“调整日期/时间”，确保开启了“自动设置时间”，并点击“立即同步”。在 macOS 或智能手机上，进入系统设置，开启“自动设置时间与时区”。同步完成后，彻底重启代理软件再试。
+          </li>
+          <li><strong>第二步：强制更新订阅获取最新可用 IP：</strong> 
+            机场会不定期更换被墙的落地节点 IP。如果您太久没有更新配置，保存的仍是已被墙的失效 IP。请点击“更新订阅”。若更新订阅本身也报错失败，请参考 <a href="subscription-fail.html">订阅更新失败自救方案</a> 进行借道更新。
+          </li>
+          <li><strong>第三步：排除本地路由器及网关配置异常：</strong> 
+            尝试重启您的家用路由器，排除因路由器缓存溢出或双重 NAT 导致的本地网络假死。对于在路由器层面配置了智能分流的用户，请重点核对网关和 DNS 指向，可参考 <a href="router-config.html">路由器代理网关配置自救</a> 和 <a href="../topics/router-openwrt.html">路由器 OpenWrt 系统固件设置</a>。
+          </li>
+          <li><strong>第四步：切换测速目标网址排除本地污染：</strong> 
+            默认的测速网址 `google.com` 可能会因为临时 DNS 劫持导致测速假超时。在 Clash Verge 等软件的“全局设置”中，将延迟测试 URL 修改为国内也能正常解析的备用测速源，例如 `http://cp.cloudflare.com/generate_204`。
+          </li>
+        </ol>
+
+        <h2 id="step3">三、 深入日志：排查内核报错代码</h2>
+        <p>
+          想要精准定位超时故障，最科学的方法是查看客户端的后台日志（Logs）。以下为几种经典的错误提示及其含义：
+        </p>
+        <ul>
+          <li><strong>`context deadline exceeded`（上下文期限已过）：</strong> 
+            这代表连接请求发送出去了，但在时限内没有任何回应。通常是由于节点 IP 已经被墙、或者本地系统时间不同步。请执行第一步和第二步。
+          </li>
+          <li><strong>`connection refused`（连接被拒绝）：</strong> 
+            服务器直接回绝了连接。说明 IP 通畅，但端口未开启，或者是您的账户已被机场系统封禁（如流量超额、到期、或者触发了审计规则）。
+          </li>
+          <li><strong>`handshake failed`（握手失败）：</strong> 
+            通常是本地配置的密码、UUID 与服务器端不匹配，或者是节点协议版本不兼容。请更新订阅。
+          </li>
+        </ul>
+        <p>
+          在排障中，如果使用的是 v2rayN，可以查看我们的 <a href="../topics/v2rayn-troubleshooting.html">v2rayN 调试流程</a>；若是 iOS 用户，可查阅 <a href="../guides/shadowrocket.html">小火箭配置大合集</a> 或 <a href="../guides/loon-guide.html">Loon 客户端指南</a> 观察控制台日志。
+        </p>
+
+        <h2 id="step4">四、 总结与排障逻辑树</h2>
+        <p>
+          当您面对大面积节点超时标红时，请牢记以下极简自救逻辑树：
+          <br>
+          <strong>强制同步系统时间 → 退出系统代理尝试强制更新订阅 → 检查账户流量及到期状态 → 查看日志判断报错类型 → 依然全红则执行 <a href="all-nodes-down.html">节点全挂紧急自救</a> 并切换 <a href="../categories/stable-airport.html">备份稳定机场</a>。</strong>
+        </p>
+        <p>
+          掌握这套针对时延与握手协议的系统化修复技巧，能帮您在网络波动或配置错乱时迅速找回流畅的冲浪体验。
+        </p>
+        
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px; border-top: 1px solid var(--border-color); padding-top: 24px;">
+          <a href="../index.html" class="btn btn-primary" style="text-decoration: none; color: white;">返回首页</a>
+          <a href="../reviews/index.html" class="btn btn-outline" style="text-decoration: none; color: inherit;">查看推荐机场</a>
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container" style="text-align: center; padding: 20px 0;">
+      <p class="copyright">© 2026 云梯指南 (nodehub168.com). All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

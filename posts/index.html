@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>科学上网与网络加速技术知识库中心 - 云梯指南</title>
+  <meta name="description" content="云梯指南官方网络技术知识库中心。为您系统整理并提供关于IPLC/IEPL物理专线原理、常见网络代理协议机制、新手购买防割黑名单以及网络测速与故障排查的深度科普文章。">
+  <link rel="canonical" href="https://nodehub168.com/posts/index.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  
+  <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://nodehub168.com/"
+      },      
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "知识库中心",
+        "item": "https://nodehub168.com/posts/index.html"
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .kb-header-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      padding: 40px;
+      border-radius: var(--radius-md);
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .kb-header-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    
+    /* Directory Category Cards */
+    .kb-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    
+    .kb-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 30px;
+      transition: var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .kb-card:hover {
+      border-color: var(--accent-cyan);
+      box-shadow: var(--shadow-neon);
+      transform: translateY(-3px);
+    }
+    
+    .kb-card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 20px;
+      border-left: 4px solid var(--accent-purple);
+      padding-left: 12px;
+      line-height: 1.2;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .kb-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      flex-grow: 1;
+    }
+    
+    .kb-list-item {
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    
+    .kb-list-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .kb-bullet {
+      color: var(--accent-cyan);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      user-select: none;
+    }
+    
+    .kb-list-item a {
+      color: var(--text-main);
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+      line-height: 1.5;
+    }
+    
+    .kb-list-item a:hover {
+      color: var(--accent-cyan);
+      padding-left: 4px;
+    }
+    
+    .kb-card-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 16px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 12px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+      
+      <button class="menu-toggle" aria-label="切换导航菜单" aria-expanded="false" aria-controls="main-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav">
+        <a href="../index.html" class="nav-link">首页</a>
+        <a href="../reviews/index.html" class="nav-link">机场推荐</a>
+        <a href="../reviews/brands.html" class="nav-link">机场评测</a>
+        <a href="../guides/clash.html" class="nav-link">Clash教程</a>
+        <a href="../guides/shadowrocket.html" class="nav-link">小火箭教程</a>
+        <a href="../guides/v2rayn.html" class="nav-link">V2rayN教程</a>
+        <a href="../categories/knowledge.html" class="nav-link active">机场知识库</a>
+        <a href="../faq/index.html" class="nav-link">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 900px;">
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <span style="color: var(--accent-cyan); font-weight: 500;">知识库中心</span>
+      </nav>
+
+      <!-- Welcome Card -->
+      <section class="kb-header-card">
+        <h1 style="font-size: 2.25rem; margin-bottom: 16px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
+          科学上网知识库中心
+        </h1>
+        <p style="color: var(--text-main); font-size: 1.1rem; line-height: 1.8; margin-bottom: 16px;">
+          欢迎来到云梯指南的技术库中心。本专栏旨在通过系统性的技术科普、客观的实测指标以及实用的避坑技巧，帮助您彻底解决网络使用痛点。
+        </p>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; margin-bottom: 24px;">
+          网络加速并非简单的“拿来即用”，理解底层的中转架构和代理协议能帮您在大面积断网或拥堵时快速排查问题，并挑选出最具有性价比的加速套餐。请点击下方各分类目录，阅读我们为您整理的干货文章：
+        </p>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <a href="../index.html" class="btn btn-primary">返回网站首页</a>
+          <a href="../categories/knowledge.html" class="btn btn-outline">查看分类知识库</a>
+        </div>
+      </section>
+
+      <!-- KB Category Grid -->
+      <section class="kb-grid">
+        
+        <!-- Category 1: 专线与中转技术 -->
+        <div class="kb-card">
+          <h2 class="kb-card-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-cyan);"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+            <span>专线与中转技术</span>
+          </h2>
+          <ul class="kb-list">
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="what-is-iplc.html">什么是 IPLC 专线？揭秘机场网络中最昂贵的高速线路</a>
+            </li>
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="what-is-iepl.html">IEPL 与 IPLC 的区别：网络层级、接口类型、带宽与应用场景解析</a>
+            </li>
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="domestic-relay.html">国内中转线路（Relay）技术原理、运作方式与网络作用</a>
+            </li>
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="what-is-native-ip.html">什么是原生 IP 节点？与广播 IP、住宅 IP和机房 IP的区别</a>
+            </li>
+          </ul>
+          <p class="kb-card-desc">针对商业级别专有光缆（IPLC/IEPL）、公网中转以及出口端 IP 属性（原生与广播）的深度原理解析，了解其高可用特性的底层支撑。</p>
+        </div>
+
+        <!-- Category 2: 代理协议解密 -->
+        <div class="kb-card">
+          <h2 class="kb-card-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-cyan);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>主流代理协议解密</span>
+          </h2>
+          <ul class="kb-list">
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="airport-vs-vpn.html">为什么机场节点比传统 VPN 加速服务更好用？核心机制对比</a>
+            </li>
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="shadowsocks-protocol.html">Shadowsocks (SS) 协议优缺点及在 2026 年的适用性</a>
+            </li>
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="trojan-protocol.html">Trojan 协议如何伪装成正常 HTTPS 流量原理解析</a>
+            </li>
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="vmess-vless-protocol.html">V2Ray 核心 Vmess 协议与轻量级 Vless 协议对比</a>
+            </li>
+          </ul>
+          <p class="kb-card-desc">对比传统加密 VPN 与现代分流代理，解密 Shadowsocks 基础加密、Trojan 混淆伪装以及 Vmess/Vless（REALITY）的核心架构逻辑。</p>
+        </div>
+
+        <!-- Category 3: 选购指南与防割避坑 -->
+        <div class="kb-card">
+          <h2 class="kb-card-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-cyan);"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <span>选购指南与防割避坑</span>
+          </h2>
+          <ul class="kb-list">
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="warnings.html">跑路商家风险黑名单：如何避坑低价月抛割韭菜机场</a>
+            </li>
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="airport-exit-signs.html">机场跑路的六大前兆特征：教你如何提前察觉并挽回损失</a>
+            </li>
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="safe-buy-tips.html">新手安全购买科学上网节点避坑防骗指南</a>
+            </li>
+          </ul>
+          <p class="kb-card-desc">帮助用户规避行业中的恶意割韭菜行为，整理高危跑路商家黑名单，剖析网络服务商即将关站的异常前兆，制定合理的节点采购策略。</p>
+        </div>
+
+        <!-- Category 4: 性能排查与测速 -->
+        <div class="kb-card">
+          <h2 class="kb-card-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-cyan);"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>性能排查与测速</span>
+          </h2>
+          <ul class="kb-list">
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="why-high-latency.html">节点高延迟与慢速排查：丢包、本地链路与客户端问题解析</a>
+            </li>
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="airport-blocked-reasons.html">为什么机场网络节点会被屏蔽封锁？深度原理解析</a>
+            </li>
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="speedtest-methods.html">机场网络测速的科学方法、排坑准则与常见测速误区</a>
+            </li>
+          </ul>
+          <p class="kb-card-desc">提供针对高延迟、高丢包、科学上网断线超时的排查思路与检测方法，纠正客户端单线程/多线程测速的认知误区，合理定位网速瓶颈。</p>
+        </div>
+        
+      </section>
+
+      <!-- Disclaimer Section -->
+      <section style="margin-top: 60px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+        <h2 style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 12px;">📢 免责声明</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+          本站所推荐的加速器机场评测数据及配置教程，仅限用于合规外贸商务、学术科研、技术开发等正规用途。本网站不对任何机场商家的服务质量、资金安全做任何担保，不参与任何节点销售。请遵守国家法律法规，合法合规上网。
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="logo-area" style="margin-bottom: 16px;">
+            <img src="../assets/images/logo.svg" alt="云梯指南 Logo" class="logo-icon" width="32" height="32">
+            <span class="logo-text" style="font-size: 1.25rem;">云梯指南</span>
+          </a>
+          <p>云梯指南是2026年专业的机场推荐与网络加速配置知识库，协助您规避跑路商家，筛选高性价比的科学上网套餐。</p>
+        </div>
+        
+        <div class="footer-col">
+          <h4>核心板块</h4>
+          <ul class="footer-links">
+            <li><a href="../reviews/index.html">机场推荐排行榜</a></li>
+            <li><a href="../reviews/brands.html">机场品牌综合评测</a></li>
+            <li><a href="../guides/index.html">客户端配置教程中心</a></li>
+            <li><a href="warnings.html">跑路风险黑名单</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>快捷导航</h4>
+          <ul class="footer-links">
+            <li><a href="../categories/index.html">全站分类归档</a></li>
+            <li><a href="../topics/index.html">专题分类汇总</a></li>
+            <li><a href="../about.html">关于云梯指南</a></li>
+            <li><a href="../disclaimer.html">网站免责声明</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col footer-disclaimer">
+          <h4>本站声明</h4>
+          <p>本站提供的科学上网教程、网络加速软件配置指南以及节点测速数据仅作为技术学习 and 合规外贸交流参考。本站不提供、不销售任何付费机场节点，请严格遵守您当地的网络法律法规。</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="copyright">© 2026 云梯指南 (<a href="../index.html" style="color: inherit;">nodehub168.com</a>). All rights reserved.</p>
+        <div class="footer-legal-links">
+          <a href="../about.html">关于本站</a>
+          <a href="../disclaimer.html">免责声明</a>
+          <a href="../sitemap.xml">网站地图</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

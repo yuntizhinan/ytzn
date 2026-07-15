@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>从零开始的 Clash Verge Rev 客户端新手安装与配置图文保姆级教程 - 云梯指南</title>
+  <meta name="description" content="2026年最新Clash Verge Rev客户端配置教程。提供详细的内核切换、订阅配置导入、Tun模式启用、DNS污染防泄漏，以及Merge脚本编写手册。">
+  <link rel="canonical" href="https://nodehub168.com/topics/clash-verge-rev.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  
+  <!-- BreadcrumbList JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://nodehub168.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "专题汇总",
+        "item": "https://nodehub168.com/topics/index.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Clash Verge Rev教程",
+        "item": "https://nodehub168.com/topics/clash-verge-rev.html"
+      }
+    ]
+  }
+  </script>
+
+  <!-- FAQPage JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Clash Verge Rev 开启 Tun 模式失败提示 'Start Tun Error' 怎么解决？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "首先需要确保安装了系统虚拟网卡服务（Service Mode）。进入 Clash Verge Rev 的 'Settings'（设置），找到 'Service Mode'，点击右侧的 'Manage'，在弹出的窗口中点击 'Install'。安装完毕并显示绿色状态后，重启客户端，再点击开启 'Tun Mode' 即可成功。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "为什么开启 Clash Verge 后国内很多常用软件（如微信、网易云）无法连网？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "这是因为代理客户端开启了 Tun 模式但分流规则不完善，导致本地回环或国内软件数据被错误代理。建议在 'Rules'（分流模式）下运行，并在配置文件的 Merge 脚本中加入国内直连规则域名，或者开启 System Proxy 时选择 Bypass 绕过国内常用 IP。"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .topic-article {
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .topic-article h2 {
+      font-size: 1.6rem;
+      margin: 36px 0 16px;
+      border-left: 4px solid var(--accent-cyan);
+      padding-left: 12px;
+    }
+    .topic-article p {
+      margin-bottom: 20px;
+      color: var(--text-main);
+      text-align: justify;
+    }
+    .topic-article ul {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    .topic-article li {
+      margin-bottom: 8px;
+    }
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin: 24px 0;
+    }
+    
+    .faq-section {
+      margin-top: 48px;
+    }
+    .faq-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      user-select: none;
+      transition: var(--transition-smooth);
+    }
+    .faq-question:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--accent-cyan);
+    }
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      border-top: 1px solid transparent;
+    }
+    .faq-item.active .faq-answer {
+      padding: 16px 20px;
+      max-height: 500px;
+      border-top-color: var(--border-color);
+    }
+    .faq-icon {
+      transition: transform 0.3s ease;
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+      color: var(--accent-cyan);
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+
+      <button class="menu-toggle" aria-label="切换导航菜单" aria-expanded="false" aria-controls="main-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav">
+        <a href="../index.html" class="nav-link">首页</a>
+        <a href="../reviews/index.html" class="nav-link">机场推荐</a>
+        <a href="../reviews/brands.html" class="nav-link">机场评测</a>
+        <a href="../guides/clash.html" class="nav-link">Clash教程</a>
+        <a href="../guides/shadowrocket.html" class="nav-link">小火箭教程</a>
+        <a href="../guides/v2rayn.html" class="nav-link">V2rayN教程</a>
+        <a href="../categories/knowledge.html" class="nav-link">机场知识库</a>
+        <a href="../faq/index.html" class="nav-link">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 900px;">
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="index.html" style="color: inherit;">专题汇总</a> 
+        &gt; 
+        <span style="color: var(--accent-cyan); font-weight: 500;">Clash Verge Rev教程</span>
+      </nav>
+
+      <!-- H1 -->
+      <h1 style="font-size: 2.25rem; margin-bottom: 20px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
+        从零开始的 Clash Verge Rev 客户端新手安装与配置图文保姆级教程
+      </h1>
+
+      <article class="topic-article">
+        <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 30px;">
+          随着经典代理工具 Clash for Windows (CFW) 的停更，基于新一代开源核心 Mihomo（原 Clash Meta 内核）的客户端——**Clash Verge Rev**，已经成为目前 Windows、macOS 和 Linux 系统平台下最强大、运行效率最高的科学上网客户端。它不仅支持最新的 Hysteria 2、Vless-Reality 等前沿传输协议，还拥有全新的 UI 界面与更低的系统内存占用。本专题将手把手带您从零开始，完整搞定其下载、配置导入、分流过滤与高级 Merge 脚本的应用。
+        </p>
+
+        <h2>一、 什么是 Clash Verge Rev？</h2>
+        <p>
+          Clash Verge Rev 是基于 Tauri 开发的代理工具图形客户端，其核心功能相比传统 CFW 有了质的跨越：
+        </p>
+        <ul>
+          <li><strong>Mihomo 顶级内核：</strong> 默认搭载开源社区最活跃的 Meta 核心，完美支持 VMess, VLess (Reality), Trojan, Shadowrocket 专属节点以及下一代超高速 UDP 协议 Hysteria 2。</li>
+          <li><strong>内存消耗极低：</strong> CFW 采用 Electron 框架，运行内存常年占用 200MB 以上；而 Verge Rev 采用 Tauri 编写，日常后台挂载内存占用仅有 30MB-50MB，大幅减少了硬件资源消耗。</li>
+          <li><strong>内置更加现代化的高级控制：</strong> 方便的一键开启 Tun 网卡模式、开机自启、直观的 Merge 配置文件修改功能，极大降低了新手进阶难度。</li>
+        </ul>
+
+        <h2>二、 软件下载与核心系统服务安装</h2>
+        <p>
+          在开始使用前，需完成核心网络服务的部署，这也是很多新手卡关的地方：
+        </p>
+        <p>
+          首先，访问官方正规的 GitHub Release 页面或第三方经过安全签名的可信分发渠道下载对应的安装包（Windows 选择 `.msi` 或绿色版 `.7z`，Mac 选择 `.dmg`）。
+        </p>
+        <p>
+          安装完毕后打开客户端，第一步必须配置 <strong>Service Mode（系统网卡服务）</strong>。这是为了能够开启全局 Tun 虚拟网卡代理，用以接管本地游戏协议或命令行终端。点击客户端左侧的 **Settings**，找到 **Service Mode**，点击其右侧的 **Manage**，并在弹出的窗口中选择 **Install**。当指示灯从黄色变为绿色，并显示 `Active` 时，系统底层网卡接管服务即搭建完毕。
+        </p>
+
+        <div class="highlight-box">
+          <p style="font-weight: 600; color: var(--accent-cyan); margin-bottom: 10px;">📌 核心概念提醒：</p>
+          <p style="font-size: 0.95rem; margin-bottom: 0;">Service Mode 安装成功是开启 Tun Mode（Tun 虚拟网卡模式）的硬性前提。如果 Service Mode 安装报错，请右键选择“以管理员身份运行”客户端再次尝试。</p>
+        </div>
+
+        <h2>三、 导入节点订阅与基础运行配置</h2>
+        <p>
+          配置订阅和启动代理的流程如下：
+        </p>
+        <p>
+          1. <strong>获取订阅链接：</strong> 在你选购的 <a href="../categories/airport-ranking.html">2026年优质高速机场</a> 用户后台，复制对应的 Clash 订阅链接（YAML 格式）。
+        </p>
+        <p>
+          2. <strong>导入配置文件：</strong> 在 Verge Rev 左侧栏点击 **Profiles**（配置），在顶部的输入框中粘贴刚刚复制的订阅 URL，随后点击右侧的 **Download**。下载完毕后，单击选定刚刚生成的卡片以激活该配置文件。
+        </p>
+        <p>
+          3. <strong>选择运行模式：</strong> 点击左侧的 **Proxies**（代理），在顶部选择运行模式。推荐选择 **Rule（分流规则模式）**，系统会根据订阅内置的 IP 和域名规则，对国内常用应用执行直连，海外业务执行代理。若需要代理接管非浏览器应用（如 Telegram 软件本身、Steam 游戏联机），则需开启左侧的 **Tun Mode**（Tun 模式）。如果是低延迟节点配置需求，具体可参考专题：<a href="gaming-accelerator.html">极低延迟游戏专用节点选择</a>。
+        </p>
+
+        <h2>四、 高级 Merge 配置文件合并与脚本过滤教程</h2>
+        <p>
+          在 Verge Rev 中，不再通过 CFW 的 Mixin 来定制配置，而是采用全新的 **Merge（合并配置）** 或 **Script（扩展脚本）** 来统一接管：
+        </p>
+        <p>
+          若想为 AI 平台配置专门的原生 IP 节点组，可点击 **Profiles**，点击 **New**，类型选择 **Merge**。在新生成的 Merge 配置文件卡片上右键选择 **Edit**。输入如下格式的 YAML 规则，用于将特定大模型流量强行分流至支持解锁的专属节点组，如 <a href="ai-tools-access.html">ChatGPT/Claude防封号配置专题</a> 所述：
+        </p>
+        <pre style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 4px; overflow-x: auto; font-family: monospace; font-size: 0.9rem; border: 1px solid var(--border-color); color: var(--accent-cyan); margin-bottom: 20px;">
+prepend-rules:
+  - DOMAIN-SUFFIX,openai.com,🤖 AI专用
+  - DOMAIN-SUFFIX,chatgpt.com,🤖 AI专用
+  - DOMAIN-SUFFIX,claude.ai,🤖 AI专用
+  - DOMAIN-SUFFIX,anthropic.com,🤖 AI专用
+        </pre>
+        <p>
+          保存后，回到 Profiles 列表，右键点击 Merge 配置并选择 **Enable**。这样在你的主订阅更新时，分流规则依然会被自动合并，无需每次手动修改，完美实现配置的模块化与热更新。对于流媒体影音的分流解锁，可根据 <a href="streaming-media.html">Netflix/Disney+流媒体解锁</a> 方案配置对应的 Merge 分流组。
+        </p>
+      </article>
+
+      <!-- Related Recommendations -->
+      <section style="margin-top: 48px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 32px; border-radius: var(--radius-md);">
+        <h2 style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 20px;">💡 相关分类推荐</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+          <a href="../categories/clash-guide.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--accent-cyan);">
+            全平台Clash配置教程 &rarr;
+          </a>
+          <a href="sing-box-guide.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--accent-purple);">
+            下一代Sing-Box教程 &rarr;
+          </a>
+          <a href="../categories/vpn-tools.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--text-main);">
+            客户端教程中心 &rarr;
+          </a>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="faq-section">
+        <h2 style="font-size: 1.6rem; color: var(--text-main); margin-bottom: 24px; border-left: 4px solid var(--accent-cyan); padding-left: 12px;">
+          🙋 常见问题 FAQ
+        </h2>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Clash Verge Rev 开启 Tun 模式失败提示 'Start Tun Error' 怎么解决？</span>
+            <span class="faq-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            首先需要确保安装了系统虚拟网卡服务（Service Mode）。进入 Clash Verge Rev 的 'Settings'（设置），找到 'Service Mode'，点击右侧的 'Manage'，在弹出的窗口中点击 'Install'。安装完毕并显示绿色状态后，重启客户端，再点击开启 'Tun Mode' 即可成功。
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>为什么开启 Clash Verge 后国内很多常用软件（如微信、网易云）无法连网？</span>
+            <span class="faq-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            这是因为代理客户端开启了 Tun 模式但分流规则不完善，导致本地回环或国内软件数据被错误代理。建议在 'Rules'（分流模式）下运行，并在配置文件的 Merge 脚本中加入国内直连规则域名，或者开启 System Proxy 时选择 Bypass 绕过国内常用 IP。
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>如何实现在 Clash Verge 中对节点自动按照延迟进行排序选择？</span>
+            <span class="faq-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            在 'Profiles' 中下载订阅后，大多数优质机场会提供名为 'URLTest' 或 '自动选择' 的策略组。代理核心会每隔一定时间自动向特定的测速服务器发送握手包，并自动挑选出延迟最低的那个节点接管当前流量，从而达到无感秒级防故障断流的效果。
+          </div>
+        </div>
+      </section>
+
+      <!-- Disclaimer Section -->
+      <section style="margin-top: 60px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+        <h2 style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 12px;">📢 免责声明</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+          本站展示的代理客户端下载指南、配置规则及高级Merge脚本仅用于外贸合规、企业网管部署及网络传输技术学术交流自用。本站不销售、不提供任何代理节点服务器，不对第三方的稳定性担保。请遵守所在国家和地区的相关网络法纪，合法使用网络。
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="logo-area" style="margin-bottom: 16px;">
+            <img src="../assets/images/logo.svg" alt="云梯指南 Logo" class="logo-icon" width="32" height="32">
+            <span class="logo-text" style="font-size: 1.25rem;">云梯指南</span>
+          </a>
+          <p>云梯指南是2026年专业的机场推荐与网络加速配置知识库，协助您规避跑路商家，筛选高性价比的科学上网套餐。</p>
+        </div>
+        
+        <div class="footer-col">
+          <h4>核心板块</h4>
+          <ul class="footer-links">
+            <li><a href="../reviews/index.html">机场推荐排行榜</a></li>
+            <li><a href="../reviews/brands.html">机场品牌综合评测</a></li>
+            <li><a href="../guides/index.html">客户端配置教程中心</a></li>
+            <li><a href="../posts/warnings.html">跑路风险黑名单</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>快捷导航</h4>
+          <ul class="footer-links">
+            <li><a href="../categories/index.html">全站分类归档</a></li>
+            <li><a href="index.html">专题分类汇总</a></li>
+            <li><a href="../about.html">关于云梯指南</a></li>
+            <li><a href="../disclaimer.html">网站免责声明</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col footer-disclaimer">
+          <h4>本站声明</h4>
+          <p>本站提供的科学上网教程、网络加速软件配置指南以及节点测速数据仅作为技术学习 and 合规外贸交流参考。本站不提供、不销售任何付费机场节点，请严格遵守您当地的网络法律法规。</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="copyright">© 2026 云梯指南 (<a href="../index.html" style="color: inherit;">nodehub168.com</a>). All rights reserved.</p>
+        <div class="footer-legal-links">
+          <a href="../about.html">关于本站</a>
+          <a href="../disclaimer.html">免责声明</a>
+          <a href="../sitemap.xml">网站地图</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/js/main.js"></script>
+  <script>
+    document.querySelectorAll('.faq-question').forEach(item => {
+      item.addEventListener('click', () => {
+        const parent = item.parentElement;
+        const isActive = parent.classList.contains('active');
+        
+        document.querySelectorAll('.faq-item').forEach(el => {
+          el.classList.remove('active');
+          el.querySelector('.faq-answer').style.maxHeight = null;
+        });
+        
+        if (!isActive) {
+          parent.classList.add('active');
+          const answer = parent.querySelector('.faq-answer');
+          answer.style.maxHeight = answer.scrollHeight + 32 + "px";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

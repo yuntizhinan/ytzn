@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>Shadowrocket 小火箭 iOS 苹果手机一键订阅配置与规则代理教程 - 云梯指南</title>
+  <meta name="description" content="苹果iOS系统必备代理客户端小火箭使用指南。包含海外Apple ID注册与小火箭下载、一键节点订阅、全局路由模式切换，以及远程防DNS泄露规则导入。">
+  <link rel="canonical" href="https://nodehub168.com/topics/shadowrocket-ios.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  
+  <!-- BreadcrumbList JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://nodehub168.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "专题汇总",
+        "item": "https://nodehub168.com/topics/index.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "iOS小火箭配置教程",
+        "item": "https://nodehub168.com/topics/shadowrocket-ios.html"
+      }
+    ]
+  }
+  </script>
+
+  <!-- FAQPage JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "为什么在苹果应用商店 App Store 里搜不到 Shadowrocket？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "因为 Shadowrocket（小火箭）已被中国大陆地区的 App Store 下架。要想下载它，你必须在 iPhone 登录非大陆地区的 Apple ID（如美国、香港、日本等账户），在海外应用商店购买并下载（价格一般为 2.99 美元）。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "小火箭导入节点后，开启代理没有任何反应，所有网页都打不开怎么办？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "首先请检查你的节点本身是否有效，在小火箭中点击节点右侧的延迟进行测试。如果显示超时，说明节点不可用。其次，请检查是否在首次开启时弹出了 VPN 写入权限提示并点击了 'Allow'，如果拒绝了，请前往系统设置 - 通用 - VPN 处重新开启配置。"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .topic-article {
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .topic-article h2 {
+      font-size: 1.6rem;
+      margin: 36px 0 16px;
+      border-left: 4px solid var(--accent-cyan);
+      padding-left: 12px;
+    }
+    .topic-article p {
+      margin-bottom: 20px;
+      color: var(--text-main);
+      text-align: justify;
+    }
+    .topic-article ul {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    .topic-article li {
+      margin-bottom: 8px;
+    }
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin: 24px 0;
+    }
+    
+    .faq-section {
+      margin-top: 48px;
+    }
+    .faq-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      user-select: none;
+      transition: var(--transition-smooth);
+    }
+    .faq-question:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--accent-cyan);
+    }
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      border-top: 1px solid transparent;
+    }
+    .faq-item.active .faq-answer {
+      padding: 16px 20px;
+      max-height: 500px;
+      border-top-color: var(--border-color);
+    }
+    .faq-icon {
+      transition: transform 0.3s ease;
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+      color: var(--accent-cyan);
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+
+      <button class="menu-toggle" aria-label="切换导航菜单" aria-expanded="false" aria-controls="main-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav">
+        <a href="../index.html" class="nav-link">首页</a>
+        <a href="../reviews/index.html" class="nav-link">机场推荐</a>
+        <a href="../reviews/brands.html" class="nav-link">机场评测</a>
+        <a href="../guides/clash.html" class="nav-link">Clash教程</a>
+        <a href="../guides/shadowrocket.html" class="nav-link">小火箭教程</a>
+        <a href="../guides/v2rayn.html" class="nav-link">V2rayN教程</a>
+        <a href="../categories/knowledge.html" class="nav-link">机场知识库</a>
+        <a href="../faq/index.html" class="nav-link">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 900px;">
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="index.html" style="color: inherit;">专题汇总</a> 
+        &gt; 
+        <span style="color: var(--accent-cyan); font-weight: 500;">iOS小火箭配置教程</span>
+      </nav>
+
+      <!-- H1 -->
+      <h1 style="font-size: 2.25rem; margin-bottom: 20px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
+        Shadowrocket 小火箭 iOS 苹果手机一键订阅配置与规则代理教程
+      </h1>
+
+      <article class="topic-article">
+        <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 30px;">
+          在 iOS 系统（iPhone 与 iPad）下，**Shadowrocket**（因图标常被称为“小火箭”）是科学上网领域无可争议的国民级代理客户端。虽然它是付费应用，但凭借一键秒配、规则极速分流、支持全协议（Shadowsocks, VMess, VLess, Trojan, Hysteria 2）以及极低的系统耗电，成为每个苹果用户的出海标配。本教程将为您详细讲解如何安装、快速导入机场订阅，并配置高可用的分流规则。
+        </p>
+
+        <h2>一、 准备工作：如何获取海外 Apple ID 及购买</h2>
+        <p>
+          由于众所周知的原因，小火箭已被中国大陆地区的 App Store 锁区下架。获取它的合规路径如下：
+        </p>
+        <p>
+          1. <strong>准备一个海外 Apple ID：</strong> 建议注册或购买一个美国或中国香港地区的 Apple ID。在浏览器端前往 Apple 官方网站修改注册地区即可完成（注意注册时地址和电话需填写真实的海外虚拟信息，防止被风控锁区）。
+        </p>
+        <p>
+          2. <strong>充值与购买：</strong> 登录刚准备好的海外 Apple ID，前往 App Store 搜索 `Shadowrocket`。注意核对图标（带黄色小火箭的阴影火箭）和开发者。购买美国区 ID 时，可以通过支付宝或第三方平台购买美国 App Store Gift Card（礼品卡）进行充值绑定。小火箭价格为 2.99 美元。
+        </p>
+
+        <h2>二、 导入节点订阅的几种常用方法</h2>
+        <p>
+          小火箭提供了极具人性化的多种节点导入方式：
+        </p>
+        <ul>
+          <li><strong>一键订阅导入：</strong> 登录已购的 <a href="../categories/cheap-airport.html">高性价比便宜机场推荐</a> 后台，在“我的订阅”处点击“一键导入小火箭/Shadowrocket”。浏览器会自动跳转并拉起小火箭，一键完成数据同步。</li>
+          <li><strong>扫码导入：</strong> 在机场后台生成节点或订阅二维码，打开小火箭，点击左上角的“扫一扫”图标，对准二维码，即可秒级识别并导入所有节点。</li>
+          <li><strong>手动复制粘贴导入：</strong> 打开小火箭，点击右上角“+”号。在 **Type**（类型）里选择 `Subcribe`（订阅）。在 **URL** 栏粘贴机场后台复制的订阅链接，并在 **Remark**（备注）栏写上机场名字，点击保存。随后客户端会自动下载节点列表。</li>
+        </ul>
+
+        <h2>三、 核心运行路由模式详解</h2>
+        <p>
+          导入节点后，在主界面下方找到 **Global Routing**（全局路由），这里决定了你的 iPhone 数据流量如何流动：
+        </p>
+        <p>
+          - <strong>Config（配置分流模式）：</strong> 推荐此项。小火箭会依据导入的配置文件规则，自动对国内应用（如微信、淘宝、支付宝）进行本地直连，对海外屏蔽应用进行加密代理。这能完美保障国内应用速度不受任何影响，且极大节省了代理流量。
+        </p>
+        <p>
+          - <strong>Proxy（全局代理模式）：</strong> 所有网络流量强制通过代理节点转发。通常在外贸支付风控场景，或对某些冷门网站进行注册时开启。
+        </p>
+        <p>
+          - <strong>Direct（全局直连模式）：</strong> 所有流量走本地宽带/4G信号。当代理故障，或需要在国内做大流量下载且不想浪费机场额度时开启。
+        </p>
+
+        <div class="highlight-box">
+          <p style="font-weight: 600; color: var(--accent-cyan); margin-bottom: 10px;">⚠️ 运行注意事项：</p>
+          <p style="font-size: 0.95rem; margin-bottom: 0;">首次开启小火箭上方的运行总开关时，系统会弹出 'Shadowrocket Would Like to Add VPN Configurations'（想要写入VPN配置）的弹窗。请务必点击 'Allow' 确认，并输入手机锁屏密码授权，否则代理网卡无法生效。</p>
+        </div>
+
+        <h2>四、 自定义分流规则与模块配置进阶</h2>
+        <p>
+          普通的配置规则有时并不够智能。如果你发现 ChatGPT 经常提示限制，或是在看流媒体时流量飞速流失，可通过配置远程规则集来优化：
+        </p>
+        <p>
+          点击小火箭下方的 **Config**（配置），选择远程规则卡片（通常默认为 default.conf）。你可以导入第三方知名的规则集（如 ACL4SSR 或 Lazy 规则）。导入后，在配置中为特殊的应用（例如 OpenAI、Netflix）单独指定高规格的 <a href="../categories/stable-airport.html">稳定专线机场推荐</a> 节点，实现按需精准代理。
+        </p>
+        <p>
+          此外，进入小火箭底部的 **Settings**，找到 **DNS** 配置，确保启用“本地 DNS 代理解析”（System DNS over Agent），以防止 iOS 系统底层的 WebRTC 或 Apple Push 域名泄漏你的真实地理位置。具体的 AI 工具规避封号规则，可参见专题：<a href="ai-tools-access.html">ChatGPT/Claude防封配置详解</a>。
+        </p>
+      </article>
+
+      <!-- Related Recommendations -->
+      <section style="margin-top: 48px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 32px; border-radius: var(--radius-md);">
+        <h2 style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 20px;">💡 相关分类推荐</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+          <a href="../guides/shadowrocket.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--accent-cyan);">
+            小火箭使用教程汇总 &rarr;
+          </a>
+          <a href="clash-verge-rev.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--accent-purple);">
+            PC端Clash Verge教程 &rarr;
+          </a>
+          <a href="../categories/knowledge.html" style="padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; display: block; font-weight: 500; color: var(--text-main);">
+            查看技术知识库 &rarr;
+          </a>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="faq-section">
+        <h2 style="font-size: 1.6rem; color: var(--text-main); margin-bottom: 24px; border-left: 4px solid var(--accent-cyan); padding-left: 12px;">
+          🙋 常见问题 FAQ
+        </h2>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>为什么在苹果应用商店 App Store 里搜不到 Shadowrocket？</span>
+            <span class="faq-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            因为 Shadowrocket（小火箭）已被中国大陆地区的 App Store 下架。要想下载它，你必须在 iPhone 登录非大陆地区的 Apple ID（如美国、香港、日本等账户），在海外应用商店购买并下载（价格一般为 2.99 美元）。
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>小火箭导入节点后，开启代理没有任何反应，所有网页都打不开怎么办？</span>
+            <span class="faq-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            首先请检查你的节点本身是否有效，在小火箭中点击节点右侧的延迟进行测试。如果显示超时，说明节点不可用。其次，请检查是否在首次开启时弹出了 VPN 写入权限提示并点击了 'Allow'，如果拒绝了，请前往系统设置 - 通用 - VPN 处重新开启配置。
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>共享的苹果 Apple ID 下载小火箭安全吗？</span>
+            <span class="faq-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            极其不安全。网络上很多“免费分享的美国Apple ID”存在极大安全隐患。如果你在 iPhone 系统的“设置（iCloud）”里登录了这些共享账户，一旦账号被原主人锁定为丢失模式，你的 iPhone 会瞬间变砖。必须仅在“App Store”应用内登录下载，且强烈建议花钱购买自己的专属非国区 Apple ID，保障隐私安全。
+          </div>
+        </div>
+      </section>
+
+      <!-- Disclaimer Section -->
+      <section style="margin-top: 60px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+        <h2 style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 12px;">📢 免责声明</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+          本站所展示的技术原理解析、配置步骤指导及相关客户端使用指南仅供局域网科学管理、外贸合规商用及网络安全学术研究。本站不销售任何付费机场节点，不对外部网络服务商提供连通性担保。请严格遵守所在国家的相关法律法规，合法合规上网。
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="logo-area" style="margin-bottom: 16px;">
+            <img src="../assets/images/logo.svg" alt="云梯指南 Logo" class="logo-icon" width="32" height="32">
+            <span class="logo-text" style="font-size: 1.25rem;">云梯指南</span>
+          </a>
+          <p>云梯指南是2026年专业的机场推荐与网络加速配置知识库，协助您规避跑路商家，筛选高性价比的科学上网套餐。</p>
+        </div>
+        
+        <div class="footer-col">
+          <h4>核心板块</h4>
+          <ul class="footer-links">
+            <li><a href="../reviews/index.html">机场推荐排行榜</a></li>
+            <li><a href="../reviews/brands.html">机场品牌综合评测</a></li>
+            <li><a href="../guides/index.html">客户端配置教程中心</a></li>
+            <li><a href="../posts/warnings.html">跑路风险黑名单</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>快捷导航</h4>
+          <ul class="footer-links">
+            <li><a href="../categories/index.html">全站分类归档</a></li>
+            <li><a href="index.html">专题分类汇总</a></li>
+            <li><a href="../about.html">关于云梯指南</a></li>
+            <li><a href="../disclaimer.html">网站免责声明</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col footer-disclaimer">
+          <h4>本站声明</h4>
+          <p>本站提供的科学上网教程、网络加速软件配置指南以及节点测速数据仅作为技术学习 and 合规外贸交流参考。本站不提供、不销售任何付费机场节点，请严格遵守您当地的网络法律法规。</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="copyright">© 2026 云梯指南 (<a href="../index.html" style="color: inherit;">nodehub168.com</a>). All rights reserved.</p>
+        <div class="footer-legal-links">
+          <a href="../about.html">关于本站</a>
+          <a href="../disclaimer.html">免责声明</a>
+          <a href="../sitemap.xml">网站地图</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/js/main.js"></script>
+  <script>
+    document.querySelectorAll('.faq-question').forEach(item => {
+      item.addEventListener('click', () => {
+        const parent = item.parentElement;
+        const isActive = parent.classList.contains('active');
+        
+        document.querySelectorAll('.faq-item').forEach(el => {
+          el.classList.remove('active');
+          el.querySelector('.faq-answer').style.maxHeight = null;
+        });
+        
+        if (!isActive) {
+          parent.classList.add('active');
+          const answer = parent.querySelector('.faq-answer');
+          answer.style.maxHeight = answer.scrollHeight + 32 + "px";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
