@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -33,6 +33,74 @@
     ]
   }
   </script>
+  <style>
+    .comp-table-wrapper {
+      margin: 24px 0 32px;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      text-align: left;
+    }
+    .comp-table th {
+      background: var(--bg-tertiary);
+      color: #1e3a8a;
+      padding: 14px 16px;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border-color);
+    }
+    .comp-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+    .comp-table tr:last-child td {
+      border-bottom: none;
+    }
+    .comp-table tr:hover {
+      background-color: rgba(0, 242, 254, 0.02);
+    }
+    .airport-link {
+      color: var(--text-main);
+      font-weight: 600;
+      border-bottom: 1px dashed var(--accent-purple);
+      transition: var(--transition-smooth);
+    }
+    .airport-link:hover {
+      color: var(--accent-purple);
+      border-bottom-style: solid;
+    }
+    .site-link {
+      color: var(--accent-purple);
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: var(--transition-smooth);
+    }
+    .site-link:hover {
+      color: #7b2cbf;
+      text-decoration: underline;
+    }
+    .status-yes {
+      color: var(--accent-purple);
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .status-no {
+      color: #ef4444;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+  </style>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -58,11 +126,86 @@
           2026便宜高性价比机场推荐
         </h1>
         <p style="color: var(--text-main); font-size: 1.1rem; line-height: 1.8; margin-bottom: 24px;">
-          欢迎来到云梯指南的技术库。当前页面是关于 <strong>便宜机场推荐</strong> 的深度内容占位符。我们正在整理最新、最权威的网络加速配置信息。
+          本栏目为您搜集并整理了2026年市面上高性价比的便宜稳定机场。以下是经过实测的网络加速服务商，包含详细的套餐、流量以及官网跳转链接：
         </p>
-        <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.8; margin-bottom: 32px;">
-          作为 2026 年专业的科学上网与机场评测平台，云梯指南旨在通过实测数据、详细图文与技术科普，帮助大家解决网络延迟高、节点频繁超时、ChatGPT 被拦截、流媒体无法解锁等痛点。请稍后返回此页面阅读完整的图文教程与详细分析报告。
-        </p>
+
+        <div class="comp-table-wrapper">
+          <table class="comp-table" id="cheap-airports-table">
+            <thead>
+              <tr>
+                <th>名称</th>
+                <th>官网地址</th>
+                <th>试用</th>
+                <th>最便宜订阅</th>
+                <th>按流量</th>
+                <th>TG/群</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="speedworld.html" class="airport-link" id="link-speedworld">速界</a></td>
+                <td>
+                  <a href="https://everett7623.speedworldaff.com/#/register?code=p3EKNmlp" target="_blank" rel="noopener noreferrer" class="site-link" id="site-speedworld">
+                    speedworld.cc <span style="font-size: 0.8rem;">↗</span>
+                  </a>
+                </td>
+                <td style="color: var(--text-muted);">无</td>
+                <td style="font-weight: 500;">6元/月起</td>
+                <td><span class="status-no">✘</span></td>
+                <td style="color: var(--text-muted);">暂无</td>
+              </tr>
+              <tr>
+                <td><a href="jilianyun.html" class="airport-link" id="link-jilianyun">极连云</a></td>
+                <td>
+                  <a href="https://liujie2002.jlyvipaff.com/#/?code=0MxRdXiu" target="_blank" rel="noopener noreferrer" class="site-link" id="site-jilianyun">
+                    jiliancloud.net <span style="font-size: 0.8rem;">↗</span>
+                  </a>
+                </td>
+                <td style="color: var(--text-muted);">无</td>
+                <td style="font-weight: 500;">8元 60G/月</td>
+                <td><span class="status-yes">✔</span></td>
+                <td style="color: var(--text-muted);">TG</td>
+              </tr>
+              <tr>
+                <td><a href="edge.html" class="airport-link" id="link-edge">边缘节点</a></td>
+                <td>
+                  <a href="https://zoio.edgenovaaff.cc/#/register?code=ti8OUEN2" target="_blank" rel="noopener noreferrer" class="site-link" id="site-edge">
+                    edgenovaaff.cc <span style="font-size: 0.8rem;">↗</span>
+                  </a>
+                </td>
+                <td style="color: var(--text-muted);">无</td>
+                <td style="font-weight: 500;">108元/年付 45G</td>
+                <td><span class="status-no">✘</span></td>
+                <td style="color: var(--text-muted);">暂无</td>
+              </tr>
+              <tr>
+                <td><a href="guangnianti.html" class="airport-link" id="link-guangnianti">光年梯</a></td>
+                <td>
+                  <a href="http://liujie2002.gntaff.com/#/?code=NoPkovej" target="_blank" rel="noopener noreferrer" class="site-link" id="site-guangnianti">
+                    gntvipaff.cc <span style="font-size: 0.8rem;">↗</span>
+                  </a>
+                </td>
+                <td style="color: var(--text-muted);">无</td>
+                <td style="font-weight: 500;">18元 110G/月</td>
+                <td><span class="status-no">✘</span></td>
+                <td style="color: var(--text-muted);">暂无</td>
+              </tr>
+              <tr>
+                <td><a href="kuaili.html" class="airport-link" id="link-kuaili">快狸</a></td>
+                <td>
+                  <a href="https://yyo649929.kuailiaff.com/#/register?code=JVuUcHke" target="_blank" rel="noopener noreferrer" class="site-link" id="site-kuaili">
+                    kuailicloud.cc <span style="font-size: 0.8rem;">↗</span>
+                  </a>
+                </td>
+                <td style="color: var(--text-muted);">无</td>
+                <td style="font-weight: 500;">10元 30G/月</td>
+                <td><span class="status-no">✘</span></td>
+                <td style="color: var(--text-muted);">暂无</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <div style="display: flex; gap: 16px; flex-wrap: wrap;">
           <a href="../index.html" class="btn btn-primary">返回首页</a>
           <a href="../reviews/index.html" class="btn btn-outline">查看推荐机场</a>
