@@ -225,7 +225,7 @@
           在系统代理（System Proxy）模式下，代理软件只接管支持代理协议的软件（如浏览器）的 HTTP/HTTPS/SOCKS 流量。而对于底层的 UDP 53 端口（DNS 默认端口）请求，系统代理是无法拦截的。
         </p>
         <p>
-          要彻底封堵此漏洞，必须使用<strong>虚拟网卡拦截（TUN 模式）</strong>，或者在代理软件的内置 DNS 模块中建立严格的解析分流分流规则（Fake-IP 模式或安全 DoH）。
+          要彻底封堵此漏洞，必须使用<strong>虚拟网卡拦截（TUN 模式）</strong>，或者在代理软件的内置 DNS 模块中建立严格的解析分流分流规则（Fake-IP 模式或安全 DoH）。关于代理客户端如何根据域名和解析后的 IP 进行精细化流量分配，推荐深入查阅科普文章 <a href="../posts/traffic-routing-rules.html">Clash 与小火箭规则分流原理解析</a>。
         </p>
 
         <h2 id="clashcfg">四、 Clash / Mihomo 内核防泄露黄金配置</h2>

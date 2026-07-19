@@ -195,7 +195,7 @@
         <ul>
           <li><strong>数据中心 IP（Data Center IP）的大面积拉黑：</strong> 绝大多数代理节点所使用的服务器都是部署在亚马逊 AWS、谷歌云 GCP、甲骨文 Oracle 等大型云服务商的机房里。这些服务器的 IP 被称为“机房 IP（Hosting/Data Center IP）”。OpenAI 为了防范大规模网络爬虫、API 滥用以及恶意 DDoS 攻击，几乎全线拉黑了主流机房的公网 IP 段。当检测到请求来自机房 IP 时，会立即返回 Access Denied。</li>
           <li><strong>IP 归属地与欺诈分判定（Cloudflare WAF 拦截）：</strong> OpenAI 采用 Cloudflare 的企业级 Web 应用防火墙（WAF）来保护其服务。如果同一个代理 IP 被数千名机场用户同时共用，该 IP 就会被 Cloudflare 判定为高风险 IP（欺诈分过高）。这会触发人机验证死循环，甚至直接阻断访问。</li>
-          <li><strong>DNS 泄漏暴露真实地理位置：</strong> 虽然你的代理客户端已经开启，但如果本地浏览器的 DNS 解析没有完全走代理，而是直接向国内的运营商 DNS（如 114.114.114.114）查询了 <code>chatgpt.com</code> 的 IP，就会导致 DNS 泄漏。OpenAI 的检测机制如果发现客户端的握手请求与 DNS 查询源位置不匹配，便会拒绝服务。关于网络抖动和 DNS 解析的底层机制，可以阅读 <a href="../posts/why-high-latency.html">为什么延迟很高</a> 进行了解。</li>
+          <li><strong>DNS 泄漏与 WebRTC 穿透暴露真实地理位置：</strong> 虽然你的代理客户端已经开启，但如果本地浏览器的 DNS 解析没有完全走代理，而是直接向国内的运营商 DNS（如 114.114.114.114）查询了 <code>chatgpt.com</code> 的 IP，就会导致 DNS 泄漏。另外，浏览器内置的 WebRTC 协议也会绕过系统代理直接向 STUN 服务发送 UDP 包获取你的真实国内 ISP IP。OpenAI 的检测机制一旦发现客户端中存在国内 IP，便会当场封锁访问。关于如何彻底排查此漏洞，可以参考 <a href="../posts/webrtc-leak-prevention.html">WebRTC 隐私泄露防范教程</a>。关于网络抖动和 DNS 解析的底层机制，可以阅读 <a href="../posts/why-high-latency.html">为什么延迟很高</a> 进行了解。</li>
         </ul>
 
         <h2 id="step2">二、 ChatGPT 访问受限的三步自救法</h2>
@@ -203,7 +203,7 @@
           当你遇到 ChatGPT 无法访问时，请按照以下步骤逐步排查并解决：
         </p>
         <ol>
-          <li><strong>第一步：清除浏览器 Cookie 与使用“无痕模式”：</strong> 当你用国内 IP 或已被拦截的节点访问过一次 ChatGPT 后，浏览器中会留下特定的缓存和 LocalStorage 数据，打上“不支持此区域”的标记。即使你随后切换到了优质的解锁节点，这个标记依然有效。手动在 Chrome 浏览器中按下 <code>Ctrl + Shift + N</code> 打开无痕窗口再试。或者在设置中找到“隐私和安全 -> 网站设置 -> 查看所有权限和网站数据”，搜索 <code>openai</code> 和 <code>chatgpt</code>，将其全部清除，然后重新开启代理登录。</li>
+          <li><strong>第一步：清除浏览器 Cookie 与使用“无痕模式”：</strong> 当你用国内 IP 或已被拦截的节点访问过一次 ChatGPT 后，浏览器中会留下特定的缓存和 LocalStorage 数据，打上“不支持此区域”的标记。即使你随后切换到了优质的解锁节点，这个标记依然有效。手动在 Chrome 浏览器中按下 <code>Ctrl + Shift + N</code> 打开无痕窗口再试。或者在设置中找到“隐私和安全 -> 网站设置 -> 查看所有权限 and 网站数据”，搜索 <code>openai</code> 和 <code>chatgpt</code>，将其全部清除，然后重新开启代理登录。同时，建议临时关闭 WebRTC，具体请参阅 <a href="../posts/webrtc-leak-prevention.html">防止 WebRTC 泄露真实 IP 地址</a> 进行排查。</li>
           <li><strong>第二步：选择“原生 IP（Native IP）”或“双栈 IP”节点：</strong> 解决机房 IP 拦截的根本方法是使用原生 IP。原生 IP 是指 IP 注册地与服务器物理所在地一致的 IP，其在数据库中的标记通常为非机房宽带（ISP）或小众 IDC，更容易被 OpenAI 视作“普通住宅用户”而放行。尽量选择带有“解锁”、“ChatGPT”、“原生”、“住宅”或 <a href="../posts/dual-stack-ip.html">双栈 IP</a> 标识的节点。通常，韩国、日本、新加坡以及美国的某些原生节点解锁概率最高。如果您对原生 IP 不太了解，可以阅读科普文章 <a href="../posts/what-is-native-ip.html">什么是原生 IP</a> 进行深入学习。</li>
           <li><strong>第三步：开启全局路由与防止本地 DNS 冲突：</strong> 如果在规则模式下频繁报错，请在客户端中将“路由模式”临时切换为“全局（Global）”，以排除分流规则不完善导致的漏网流量。此外，在 Windows 客户端中，若遇到系统底层代理与虚拟网卡冲突，可以参考 <a href="system-proxy-issue.html">系统代理故障排查手册</a> 或者查阅 <a href="../topics/v2rayn-troubleshooting.html">v2rayN 故障排查与调优</a> 进行系统重置。</li>
         </ol>
