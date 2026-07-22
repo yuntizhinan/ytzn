@@ -370,7 +370,7 @@
             <!-- Table of New Articles Generated Today -->
             <div style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 16px;">
               <h4 style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-                <span>🆕 7月19日 新增技术文章</span>
+                <span id="latest-articles-date-title">🆕 7月22日 新增技术文章</span>
               </h4>
               <div style="overflow-x: auto;">
                 <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.8rem; line-height: 1.4;">
@@ -380,31 +380,67 @@
                       <th style="padding: 6px 4px; font-weight: 600; text-align: right; white-space: nowrap;">核心主题</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="latest-articles-tbody">
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                      <td style="padding: 8px 4px;"><a href="posts/tuic-v5-protocol.html" style="font-weight: 500; color: var(--accent-cyan);">揭秘 TUIC v5 协议</a></td>
-                      <td style="padding: 8px 4px; text-align: right; color: var(--accent-cyan);">极速协议</td>
+                      <td style="padding: 8px 4px;"><a href="posts/node-multiplier-rules.html" style="font-weight: 500; color: var(--accent-cyan);">节点倍率原理与算账避坑</a></td>
+                      <td style="padding: 8px 4px; text-align: right; color: var(--accent-cyan);">倍率算账</td>
                     </tr>
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                      <td style="padding: 8px 4px;"><a href="posts/diy-relay-server.html" style="font-weight: 500; color: var(--accent-cyan);">Gost自建中转教程</a></td>
-                      <td style="padding: 8px 4px; text-align: right; color: var(--accent-cyan);">网络中转</td>
+                      <td style="padding: 8px 4px;"><a href="posts/transit-types-explained.html" style="font-weight: 500; color: var(--accent-cyan);">公网隧道与IPLC专线对比</a></td>
+                      <td style="padding: 8px 4px; text-align: right; color: var(--accent-cyan);">专线对比</td>
                     </tr>
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                      <td style="padding: 8px 4px;"><a href="posts/traffic-routing-rules.html">Clash分流原理剖析</a></td>
-                      <td style="padding: 8px 4px; text-align: right; color: var(--text-muted);">分流控制</td>
+                      <td style="padding: 8px 4px;"><a href="posts/proxy-dns-fakeip-redirhost.html">FakeIP模式与DNS防泄漏</a></td>
+                      <td style="padding: 8px 4px; text-align: right; color: var(--text-muted);">DNS防泄漏</td>
                     </tr>
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                      <td style="padding: 8px 4px;"><a href="posts/webrtc-leak-prevention.html">防止 WebRTC 泄露真实IP</a></td>
-                      <td style="padding: 8px 4px; text-align: right; color: var(--text-muted);">隐私保护</td>
+                      <td style="padding: 8px 4px;"><a href="posts/udp-fullcone-nat-gaming.html">UDP转发与FullCone游戏联机</a></td>
+                      <td style="padding: 8px 4px; text-align: right; color: var(--text-muted);">游戏UDP</td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px 4px;"><a href="posts/handshake-latency-vs-speed.html">Ping延迟低但网页卡顿原因</a></td>
-                      <td style="padding: 8px 4px; text-align: right; color: var(--text-muted);">延迟原理</td>
+                      <td style="padding: 8px 4px;"><a href="posts/load-balancing-failover.html">节点负载均衡与故障切线</a></td>
+                      <td style="padding: 8px 4px; text-align: right; color: var(--text-muted);">负载均衡</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
+
+            <script>
+              (function autoUpdateLatestArticles() {
+                var articles = [
+                  { title: "节点倍率原理与算账避坑", url: "posts/node-multiplier-rules.html", tag: "倍率算账", date: "2026-07-22" },
+                  { title: "公网隧道与IPLC专线对比", url: "posts/transit-types-explained.html", tag: "专线对比", date: "2026-07-22" },
+                  { title: "FakeIP模式与DNS防泄漏", url: "posts/proxy-dns-fakeip-redirhost.html", tag: "DNS防泄漏", date: "2026-07-22" },
+                  { title: "UDP转发与FullCone游戏联机", url: "posts/udp-fullcone-nat-gaming.html", tag: "游戏UDP", date: "2026-07-22" },
+                  { title: "节点负载均衡与故障切线", url: "posts/load-balancing-failover.html", tag: "负载均衡", date: "2026-07-22" }
+                ];
+                
+                var titleEl = document.getElementById("latest-articles-date-title");
+                var tbodyEl = document.getElementById("latest-articles-tbody");
+                if (!titleEl || !tbodyEl) return;
+                
+                var latestDateObj = articles.length > 0 && articles[0].date ? new Date(articles[0].date) : new Date();
+                var month = latestDateObj.getMonth() + 1;
+                var day = latestDateObj.getDate();
+                titleEl.textContent = "🆕 " + month + "月" + day + "日 新增技术文章";
+                
+                var html = "";
+                for (var i = 0; i < Math.min(articles.length, 5); i++) {
+                  var item = articles[i];
+                  var isTop2 = i < 2;
+                  var linkStyle = isTop2 ? 'font-weight: 500; color: var(--accent-cyan);' : '';
+                  var tagColor = isTop2 ? 'color: var(--accent-cyan);' : 'color: var(--text-muted);';
+                  var borderStyle = (i === Math.min(articles.length, 5) - 1) ? '' : 'border-bottom: 1px solid rgba(255,255,255,0.05);';
+                  
+                  html += '<tr style="' + borderStyle + '">' +
+                          '<td style="padding: 8px 4px;"><a href="' + item.url + '" style="' + linkStyle + '">' + item.title + '</a></td>' +
+                          '<td style="padding: 8px 4px; text-align: right; ' + tagColor + '">' + item.tag + '</td>' +
+                          '</tr>';
+                }
+                tbodyEl.innerHTML = html;
+              })();
+            </script>
           </div>
 
           <!-- Module 13: 机场知识库 -->
