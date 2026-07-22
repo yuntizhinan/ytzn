@@ -187,7 +187,8 @@
           网络加速并非简单的“拿来即用”，理解底层的中转架构和代理协议能帮您在大面积断网或拥堵时快速排查问题，并挑选出最具有性价比的加速套餐。请点击下方各分类目录，阅读我们为您整理的干货文章：
         </p>
         <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-          <a href="../index.html" class="btn btn-primary">返回网站首页</a>
+          <a href="today.html" class="btn btn-primary">🔥 今日更新资讯</a>
+          <a href="../index.html" class="btn btn-outline">返回网站首页</a>
           <a href="../categories/knowledge.html" class="btn btn-outline">查看分类知识库</a>
         </div>
       </section>
@@ -202,6 +203,14 @@
             <span>专线与中转技术</span>
           </h2>
           <ul class="kb-list">
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="transit-types-explained.html">公网隧道 vs BGP中转 vs IPLC专线：机场中转技术架构全对比</a>
+            </li>
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="node-multiplier-rules.html">机场节点倍率原理与算账避坑指南（0.1x到5x倍率）</a>
+            </li>
             <li class="kb-list-item">
               <span class="kb-bullet">➔</span>
               <a href="what-is-iplc.html">什么是 IPLC 专线？揭秘机场网络中最昂贵的高速线路</a>
@@ -222,20 +231,28 @@
           <p class="kb-card-desc">针对商业级别专有光缆（IPLC/IEPL）、公网中转以及出口端 IP 属性（原生与广播）的深度原理解析，了解其高可用特性的底层支撑。</p>
         </div>
 
-        <!-- Category 2: 代理协议解密 -->
+        <!-- Category 2: 代理协议解密与高阶配置 -->
         <div class="kb-card">
           <h2 class="kb-card-title">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-cyan);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <span>主流代理协议解密</span>
+            <span>代理协议与高阶路由功能</span>
           </h2>
           <ul class="kb-list">
             <li class="kb-list-item">
               <span class="kb-bullet">➔</span>
-              <a href="airport-vs-vpn.html">为什么机场节点比传统 VPN 加速服务更好用？核心机制对比</a>
+              <a href="proxy-dns-fakeip-redirhost.html">科学上网 DNS 原理：FakeIP 与 Redir-Host 模式防泄漏解析</a>
             </li>
             <li class="kb-list-item">
               <span class="kb-bullet">➔</span>
-              <a href="shadowsocks-protocol.html">Shadowsocks (SS) 协议优缺点及在 2026 年的适用性</a>
+              <a href="udp-fullcone-nat-gaming.html">机场 UDP 转发与 FullCone NAT 详解：游戏联机与 Voice/QUIC 优化</a>
+            </li>
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="load-balancing-failover.html">机场节点负载均衡与故障自动转移配置指南（高可用架构）</a>
+            </li>
+            <li class="kb-list-item">
+              <span class="kb-bullet">➔</span>
+              <a href="airport-vs-vpn.html">为什么机场节点比传统 VPN 加速服务更好用？核心机制对比</a>
             </li>
             <li class="kb-list-item">
               <span class="kb-bullet">➔</span>
@@ -246,7 +263,7 @@
               <a href="vmess-vless-protocol.html">V2Ray 核心 Vmess 协议与轻量级 Vless 协议对比</a>
             </li>
           </ul>
-          <p class="kb-card-desc">对比传统加密 VPN 与现代分流代理，解密 Shadowsocks 基础加密、Trojan 混淆伪装以及 Vmess/Vless（REALITY）的核心架构逻辑。</p>
+          <p class="kb-card-desc">解密各种加密代理协议细节、DNS 防泄漏（FakeIP）、UDP 转发全双工 NAT 以及节点多重负载均衡高可用配置。</p>
         </div>
 
         <!-- Category 3: 选购指南与防割避坑 -->

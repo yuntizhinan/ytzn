@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>公网隧道 vs BGP中转 vs IPLC专线：机场中转技术架构全对比与选型指南 - 云梯指南</title>
+  <meta name="description" content="全方位对比公网隧道中转（Gost/WS）、单端与双端 BGP 入口中转、以及 IPLC/IEPL 跨境物理专线三类机场链路技术架构。分析延迟、丢包率、抗封锁能力与成本，帮助用户看清真假专线陷阱。">
+  <link rel="canonical" href="https://nodehub168.com/posts/transit-types-explained.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  
+  <!-- BreadcrumbList JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://nodehub168.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "技术知识库",
+        "item": "https://nodehub168.com/categories/knowledge.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "机场中转架构深度对比",
+        "item": "https://nodehub168.com/posts/transit-types-explained.html"
+      }
+    ]
+  }
+  </script>
+
+  <!-- FAQPage JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "公网隧道中转和真正的 IPLC 物理专线有什么本质区别？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "公网隧道中转（如 Gost 隧道）的数据依然通过公网国际出口传输，只是在入口与落地服务器之间建立了加密通道，依然需要经过 GFW 审查与公网拥堵点，晚高峰容易受骨干网丢包影响；而 IPLC（国际私用出租电路）是运营商提供的内网物理点对点专线，数据完全跨过公网防火墙与国际出口，全天无丢包且延迟极其稳定。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "如何辨别机场宣传的“IPLC 专线”是不是拿公网中转冒充的假专线？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "最简单的方法是在敏感时期（如重大节假日或公网封锁加剧时）以及每日晚高峰（20:00 - 23:00）测试节点表现。真正 IPLC 专线的 ping 延时波动极小（如广深到香港稳定在 15-25ms），丢包率恒定为 0%；若晚高峰延时翻倍、出现高达 10% 以上丢包，甚至在封锁期出现节点批量断连，则必然是公网隧道中转冒充的伪专线。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "BGP 多线中转对于北方用户（如联通、移动）体验提升大吗？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "提升非常巨大。如果机场仅采用单电信入口中转，北方联通或移动用户连接时跨网延迟会高达 80-120ms 且易拥堵。而真正的双端或多端 BGP 中转在广州、上海、北京均设有入口机房，能让联通、移动、电信用户自动就近接入本网 BGP 节点，从而大幅降低国内首跳握手延时。"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .post-article {
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .post-article h2 {
+      font-size: 1.6rem;
+      margin: 36px 0 16px;
+      border-left: 4px solid var(--accent-cyan);
+      padding-left: 12px;
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.03) 0%, transparent 100%);
+      padding-top: 6px;
+      padding-bottom: 6px;
+      scroll-margin-top: 100px;
+    }
+    .post-article h3 {
+      font-size: 1.25rem;
+      margin: 28px 0 12px;
+      color: var(--accent-cyan);
+      scroll-margin-top: 100px;
+    }
+    .post-article p {
+      margin-bottom: 20px;
+      color: var(--text-main);
+      text-align: justify;
+    }
+    .post-article ul, .post-article ol {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    .post-article li {
+      margin-bottom: 8px;
+    }
+    .post-article strong {
+      color: var(--accent-cyan);
+    }
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin: 24px 0;
+      border-left: 4px solid var(--accent-purple);
+    }
+    .highlight-box.cyan {
+      border-left-color: var(--accent-cyan);
+    }
+    .highlight-box.red {
+      border-left-color: #ff4d4f;
+      background: rgba(255, 77, 79, 0.03);
+    }
+    
+    .toc-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin: 32px 0;
+    }
+    .toc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .toc-item a {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toc-item a:hover {
+      color: var(--accent-cyan);
+      transform: translateX(4px);
+    }
+    
+    .diagram-container {
+      margin: 32px 0;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .diagram-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+    
+    .faq-section {
+      margin-top: 48px;
+    }
+    .faq-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      user-select: none;
+      transition: var(--transition-smooth);
+    }
+    .faq-question:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--accent-cyan);
+    }
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      border-top: 1px solid transparent;
+    }
+    .faq-item.active .faq-answer {
+      padding: 16px 20px;
+      max-height: 500px;
+      border-top-color: var(--border-color);
+    }
+    .faq-icon {
+      transition: transform 0.3s ease;
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+      color: var(--accent-cyan);
+    }
+
+    .comp-table-wrapper {
+      margin: 32px 0;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+    }
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      text-align: left;
+    }
+    .comp-table th {
+      background: var(--bg-secondary);
+      color: var(--accent-cyan);
+      padding: 14px 16px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .comp-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+    .comp-table tr:last-child td {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+
+      <button class="menu-toggle" aria-label="切换导航菜单" aria-expanded="false" aria-controls="main-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav">
+        <a href="../index.html" class="nav-link">首页</a>
+        <a href="../reviews/index.html" class="nav-link">机场推荐</a>
+        <a href="../reviews/brands.html" class="nav-link">机场评测</a>
+        <a href="../guides/clash.html" class="nav-link">Clash教程</a>
+        <a href="../guides/shadowrocket.html" class="nav-link">小火箭教程</a>
+        <a href="../guides/v2rayn.html" class="nav-link">V2rayN教程</a>
+        <a href="../categories/knowledge.html" class="nav-link">机场知识库</a>
+        <a href="../faq/index.html" class="nav-link">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 900px;">
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="../categories/knowledge.html" style="color: inherit;">技术知识库</a> 
+        &gt; 
+        <span style="color: var(--accent-cyan); font-weight: 500;">机场中转技术架构全对比</span>
+      </nav>
+
+      <!-- H1 Title -->
+      <h1 style="font-size: 2.25rem; margin-bottom: 20px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; line-height: 1.3;">
+        公网隧道 vs BGP中转 vs IPLC专线：机场中转技术架构全对比与选型指南
+      </h1>
+      
+      <!-- Article Metadata -->
+      <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
+        <span>✍️ 作者: 技术编辑部</span>
+        <span>⏱️ 阅读时长: 4 分钟</span>
+        <span>📅 发布于: 2026-07-22</span>
+        <span>🔄 更新于: 2026-07-22</span>
+      </div>
+
+      <article class="post-article">
+        <p>在挑选科学上网机场或阅读机场节点参数时，我们经常会看到“公网隧道”、“BGP 多线入口”、“IPLC 专线”以及“IEPL 物理专线”等技术名词。虽然它们在客户端上呈现的都是一个代理节点，但在后端的网络传输拓扑、抗封锁能力、晚高峰延迟和带宽成本上，却存在着天壤之别。</p>
+
+        <p>理解这三种主流机场中转技术架构，不仅能帮助你揭穿个别商家用低成本公网隧道充当“假专线”的套路，还能让你根据自身的预算与使用场景（网页浏览、4K 视频、高频交易或游戏联机）选出性价比最高的机场服务。</p>
+
+        <!-- Table of Contents -->
+        <div class="toc-container">
+          <div class="toc-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+            本文目录指引
+          </div>
+          <div class="toc-grid">
+            <div class="toc-item"><a href="#section-1">1. 三大机场技术架构工作原理解析</a></div>
+            <div class="toc-item"><a href="#section-2">2. 传输链路拓扑结构对比</a></div>
+            <div class="toc-item"><a href="#section-3">3. 性能、稳定性与成本全方位比对</a></div>
+            <div class="toc-item"><a href="#section-4">4. 识别“假专线”与“伪中转”实战技巧</a></div>
+            <div class="toc-item"><a href="#faq">5. 常见 FAQ 问答</a></div>
+          </div>
+        </div>
+
+        <h2 id="section-1">1. 三大机场技术架构工作原理解析</h2>
+
+        <h3>① 公网隧道中转（Public Internet Tunnel）</h3>
+        <p>公网隧道是指机场在境内租用一台国内公网服务器（如阿里云、腾讯云、移动 VPS），通过 Gost、Cloudflare Tunnel 或 WireGuard 协议加密建立一条从“国内入口”到“海外落地”的加密数据隧道。数据虽然在国内进行了打包封装，但最终依然需要通过标准的国际出口光缆发送出境。</p>
+        <p><strong>优点</strong>：部署极其简单，成本低廉。<br>
+        <strong>缺点</strong>：晚高峰会遭遇国际出口公网拥堵，丢包率显著上升；遭遇敏感时期仍可能被防火墙进行 IP 封锁或 QoS 限速。</p>
+
+        <h3>② BGP 入口中转（BGP Multi-Line Transit）</h3>
+        <p>BGP（边界网关协议）中转是指机场在境内使用了具备电信、联通、移动三网 BGP 接入资质的高级 IDC 机房作为数据入口（例如广州 BGP、上海 BGP）。用户流量在进入 BGP 机房后，服务器会自动匹配最佳骨干网，并通过高品质专享公网通道（如 CN2 GIA / 9929 / CMIN2）转发至海外落地服务器。想深度了解此架构可阅读<a href="domestic-relay.html">国内中转（BGP/入口/出口）解析</a>。</p>
+        <p><strong>优点</strong>：兼容国内任何运营商网络，全国延迟低；突发带宽大，极其适合 4K/8K 超高清流媒体。<br>
+        <strong>缺点</strong>：成本高于普通公网 VPS，且受公网国际出口影响仍有极轻微的延迟波动。</p>
+
+        <h3>③ IPLC / IEPL 跨境物理专线（Cross-Border Private Circuit）</h3>
+        <p>IPLC（国际私用出租电路）与 IEPL（国际以太网专线）是电信运营商（如中国电信、中国联通）直接开通的点对点内网物理光纤回路。机场通过将国内入口与香港/日本机房进行物理网线直连，使得流量在传输全程中<strong>完全不需要经过公网 GFW 防火墙检测</strong>。</p>
+        <p><strong>优点</strong>：不过 GFW，绝不被封锁；物理内网传输，丢包率恒定为 0%，延迟全天一条直线。<br>
+        <strong>缺点</strong>：专线带宽单价极高（往往比普通公网贵 10-20 倍），且机场通常会设置较高的<a href="node-multiplier-rules.html">节点倍率</a>。</p>
+
+        <h2 id="section-2">2. 传输链路拓扑结构对比</h2>
+
+        <!-- Diagram SVG -->
+        <div class="diagram-container">
+          <div class="diagram-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan);">
+              <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 29 14.5 14.5 0 0 0 0-29"/><line x1="2" y1="12" x2="22" y2="12"/>
+            </svg>
+            公网隧道 vs BGP中转 vs IPLC物理专线 流量路径对比图
+          </div>
+          <svg viewBox="0 0 800 280" width="100%" height="auto" style="background: #080c18; border-radius: 8px; font-family: system-ui, -apple-system, sans-serif;">
+            <!-- Public Tunnel -->
+            <g transform="translate(40, 30)">
+              <rect x="0" y="0" width="720" height="60" rx="6" fill="#12192f" stroke="#00f2fe" stroke-width="1"/>
+              <text x="20" y="35" fill="#00f2fe" font-size="12" font-weight="bold">公网隧道</text>
+              <text x="110" y="35" fill="#f8fafc" font-size="11">用户 ➔ 普通国内入口 ➔ [ 公网国际出口 + GFW 审查 ] ➔ 海外落地 VPS</text>
+              <text x="630" y="35" fill="#ff4d4f" font-size="10">晚高峰拥堵/易抖动</text>
+            </g>
+            <!-- BGP Transit -->
+            <g transform="translate(40, 110)">
+              <rect x="0" y="0" width="720" height="60" rx="6" fill="#12192f" stroke="#9b51e0" stroke-width="1"/>
+              <text x="20" y="35" fill="#9b51e0" font-size="12" font-weight="bold">BGP中转</text>
+              <text x="110" y="35" fill="#f8fafc" font-size="11">用户 ➔ 三网BGP入口 ➔ [ CN2 GIA/9929 优质公网出境 ] ➔ 核心节点</text>
+              <text x="630" y="35" fill="#00f2fe" font-size="10">大带宽 / 高吞吐</text>
+            </g>
+            <!-- IPLC Dedicated -->
+            <g transform="translate(40, 190)">
+              <rect x="0" y="0" width="720" height="60" rx="6" fill="#12192f" stroke="#ff4d4f" stroke-width="1"/>
+              <text x="20" y="35" fill="#ff4d4f" font-size="12" font-weight="bold">IPLC专线</text>
+              <text x="110" y="35" fill="#f8fafc" font-size="11">用户 ➔ 专线内网入口 ➔ [ 运营商点对点物理光纤 (免GFW) ] ➔ 跨境落地</text>
+              <text x="630" y="35" fill="#00f2fe" font-size="10">0 丢包 / 超低延时</text>
+            </g>
+          </svg>
+        </div>
+
+        <h2 id="section-3">3. 性能、稳定性与成本全方位比对</h2>
+
+        <div class="comp-table-wrapper">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>维度</th>
+                <th>公网隧道中转</th>
+                <th>BGP 多线入口中转</th>
+                <th>IPLC / IEPL 物理专线</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>平均延迟 (广深-香港)</strong></td>
+                <td>35ms - 60ms（抖动较大）</td>
+                <td>25ms - 40ms（非常稳定）</td>
+                <td><strong>15ms - 22ms（直线恒定）</strong></td>
+              </tr>
+              <tr>
+                <td><strong>晚高峰丢包率</strong></td>
+                <td>3% - 12%</td>
+                <td>0.5% - 2%</td>
+                <td><strong>0%（零丢包）</strong></td>
+              </tr>
+              <tr>
+                <td><strong>过 GFW 审查</strong></td>
+                <td>是（依靠加密协议伪装）</td>
+                <td>是（基于优质骨干网传输）</td>
+                <td><strong>否（内网点对点直连）</strong></td>
+              </tr>
+              <tr>
+                <td><strong>敏感时期抗封能力</strong></td>
+                <td>较弱（可能遭遇 IP 被封）</td>
+                <td>中等（入口被封时可秒切）</td>
+                <td><strong>极强（不受公网封锁影响）</strong></td>
+              </tr>
+              <tr>
+                <td><strong>带宽突发性能</strong></td>
+                <td>一般（100M-300M）</td>
+                <td><strong>极高（可达 1G-10Gbps）</strong></td>
+                <td>受限（专线带宽成本昂贵）</td>
+              </tr>
+              <tr>
+                <td><strong>典型套餐价格</strong></td>
+                <td>￥10 - ￥20 / 月</td>
+                <td>￥25 - ￥50 / 月</td>
+                <td>￥50 - ￥150+ / 月</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="section-4">4. 识别“假专线”与“伪中转”实战技巧</h2>
+        <p>市面上少部分不良机场为了赚取高额利润，常将几块钱成本的公网隧道包装为“IPLC 纳米级物理专线”进行宣传。掌握以下 3 个实测技巧，即可一眼识别真假：</p>
+
+        <div class="highlight-box red">
+          <strong>假专线三大破绽：</strong><br>
+          1. <strong>晚高峰 ping 延时暴涨</strong>：真正的 IPLC 专线在晚高峰（20:00 - 23:00）的 Ping 延时波动不会超过 3ms。如果晚高峰延时从 30ms 暴涨到 90ms，必定是公网中转。<br>
+          2. <strong>敏感时期批量挂断</strong>：若遭遇公网封锁时期，机场所有所谓“专线节点”全部掉线或变红，说明该节点根本没有走内网物理专线。<br>
+          3. <strong>MTR 路由追踪包含公网 IP</strong>：通过 MTR 工具追踪节点入口，如果数据包中出现了公网骨干网出口（如 202.97 / 219.158），说明数据依然通过了公网出境。
+        </div>
+
+        <p>在选购机场时，若追求性价比与超大带宽看 4K 视频，建议首选 <strong>BGP 中转机场</strong>；若用于外汇交易、实时 P2P 游戏联机或对稳定性要求极高，请认准真正的 <strong>IPLC 专线机场</strong>。更多稳定机场推荐可参考<a href="../reviews/index.html">机场评测榜单</a>。</p>
+
+        <!-- FAQ Section -->
+        <div class="faq-section" id="faq">
+          <h2 style="border-left: none; padding-left: 0; background: none;">常见问题解答 (FAQ)</h2>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>公网隧道中转和真正的 IPLC 物理专线有什么本质区别？</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <p>公网隧道中转（如 Gost 隧道）的数据依然通过公网国际出口传输，只是在入口与落地服务器之间建立了加密通道，依然需要经过 GFW 审查与公网拥堵点，晚高峰容易受骨干网丢包影响；而 IPLC（国际私用出租电路）是运营商提供的内网物理点对点专线，数据完全跨过公网防火墙与国际出口，全天无丢包且延迟极其稳定。</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>如何辨别机场宣传的“IPLC 专线”是不是拿公网中转冒充的假专线？</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <p>最简单的方法是在敏感时期（如重大节假日或公网封锁加剧时）以及每日晚高峰（20:00 - 23:00）测试节点表现。真正 IPLC 专线的 ping 延时波动极小（如广深到香港稳定在 15-25ms），丢包率恒定为 0%；若晚高峰延时翻倍、出现高达 10% 以上丢包，甚至在封锁期出现节点批量断连，则必然是公网隧道中转冒充的伪专线。</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>BGP 多线中转对于北方用户（如联通、移动）体验提升大吗？</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <p>提升非常巨大。如果机场仅采用单电信入口中转，北方联通或移动用户连接时跨网延迟会高达 80-120ms 且易拥堵。而真正的双端或多端 BGP 中转在广州、上海、北京均设有入口机房，能让联通、移动、电信用户自动就近接入本网 BGP 节点，从而大幅降低国内首跳握手延时。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div style="margin-top: 48px; padding: 24px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+          <h3 style="margin-top: 0; color: var(--accent-cyan);">相关延伸阅读</h3>
+          <ul style="margin-bottom: 0; padding-left: 20px;">
+            <li><a href="what-is-iplc.html">什么是 IPLC？物理专线加密与延迟优势深度解析</a></li>
+            <li><a href="what-is-iepl.html">什么是 IEPL 专线？与 IPLC 的异同及实用测试方法</a></li>
+            <li><a href="domestic-relay.html">国内中转（BGP / 入口 / 出口）运维原理剖析</a></li>
+            <li><a href="node-multiplier-rules.html">机场节点倍率原理与算账避坑指南（0.1x - 5x 倍率）</a></li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" style="background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding: 40px 0; margin-top: auto;">
+    <div class="container" style="max-width: 900px; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+      <p style="margin-bottom: 12px;">&copy; 2026 云梯指南 (nodehub168.com) - 专注网络加速与机场节点专业技术评测</p>
+      <p style="margin-bottom: 0;">
+        <a href="../index.html" style="color: var(--accent-cyan); text-decoration: none;">首页</a> | 
+        <a href="../reviews/index.html" style="color: var(--accent-cyan); text-decoration: none;">机场推荐</a> | 
+        <a href="../categories/knowledge.html" style="color: var(--accent-cyan); text-decoration: none;">知识库</a> | 
+        <a href="../faq/index.html" style="color: var(--accent-cyan); text-decoration: none;">常见问题</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Navigation toggle
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mainNav = document.getElementById('main-nav');
+    if (menuToggle && mainNav) {
+      menuToggle.addEventListener('click', () => {
+        const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', !expanded);
+        mainNav.classList.toggle('active');
+      });
+    }
+
+    // FAQ Accordion logic
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        item.classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>

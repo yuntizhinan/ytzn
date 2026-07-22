@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -167,6 +167,51 @@
           📖 机场技术与防坑干货教程
         </h2>
         
+        <div class="article-item-card">
+          <h3><a href="../posts/node-multiplier-rules.html">机场节点倍率原理与算账避坑指南：0.1x到5x倍率背后的计费陷阱</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">深入解析 0.1x/1x/3x/5x 节点倍率计算规则，分析后端带宽成本构成，曝光流量秒光陷阱并提供分流正则实操。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">节点倍率</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">流量算账</span>
+          </div>
+        </div>
+
+        <div class="article-item-card">
+          <h3><a href="../posts/transit-types-explained.html">公网隧道 vs BGP中转 vs IPLC专线：机场中转技术架构全对比</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">系统对比公网隧道中转、BGP 多线入口中转与 IPLC/IEPL 跨境物理专线，分析丢包、延迟与成本差异并揭露假专线。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">BGP中转</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">IPLC专线</span>
+          </div>
+        </div>
+
+        <div class="article-item-card">
+          <h3><a href="../posts/proxy-dns-fakeip-redirhost.html">科学上网 DNS 原理与防泄漏设置：FakeIP 与 Redir-Host 模式深度解析</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">解密 DNS 污染与倒流导致 ChatGPT / Netflix 拦截的原因，对比 FakeIP 0 毫秒首包响应优势并提供标准防泄漏 YAML。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">FakeIP</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">DNS防泄漏</span>
+          </div>
+        </div>
+
+        <div class="article-item-card">
+          <h3><a href="../posts/udp-fullcone-nat-gaming.html">机场 UDP 转发与 FullCone NAT 详解：低延迟游戏联机与 Voice/QUIC 优化</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">详解 FullCone NAT1 映射原理在主机游戏 P2P 匹配、Discord 语音通话与 QUIC (HTTP/3) 4K 视频加速中的决定性作用。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">FullCone NAT</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">游戏联机</span>
+          </div>
+        </div>
+
+        <div class="article-item-card">
+          <h3><a href="../posts/load-balancing-failover.html">机场节点负载均衡与故障自动转移配置指南：打造永不中断的高可用网络</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">解析 Clash / Sing-box 客户端中的 Fallback 策略与 consistent-hashing (一致性哈希) 算法，实现故障无感秒切与带宽叠加。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">负载均衡</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">故障转移</span>
+          </div>
+        </div>
+
         <div class="article-item-card">
           <h3><a href="../posts/what-is-iplc.html">什么是 IPLC 专线网络？其工作原理与特点</a></h3>
           <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">全面剖析国际私有租用线路（IPLC）的概念。了解为什么它是网络加速领域中最稳健、延迟最低的顶级节点方案。</p>

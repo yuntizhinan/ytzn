@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>科学上网 DNS 原理与防泄漏设置：FakeIP 与 Redir-Host 模式深度解析 - 云梯指南</title>
+  <meta name="description" content="深入解密科学上网客户端中 DNS 污染、DNS 泄漏与 DNS 抢答攻击机制，对比 FakeIP 与 Redir-Host (TUN) 模式原理，并提供 Clash / Sing-box / Surge 的防 DNS 泄漏实操配置。">
+  <link rel="canonical" href="https://nodehub168.com/posts/proxy-dns-fakeip-redirhost.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  
+  <!-- BreadcrumbList JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://nodehub168.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "技术知识库",
+        "item": "https://nodehub168.com/categories/knowledge.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "DNS 原理与 FakeIP 解析",
+        "item": "https://nodehub168.com/posts/proxy-dns-fakeip-redirhost.html"
+      }
+    ]
+  }
+  </script>
+
+  <!-- FAQPage JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "为什么开启代理后访问 ChatGPT 或 Netflix 依然提示地区不受支持或代理错误？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "这通常是因为发生了 DNS 泄漏或本地 DNS 解析倒流。当你的客户端使用了传统的 Redir-Host 模式，且使用了本地 ISP（电信/联通）的 DNS 服务器解析域名时，流媒体服务商或 OpenAI 会接收到由国内 DNS 返回的本地 IP 地址或被 DNS 抢答伪造的 IP，从而判定你的请求来源于不受支持的地区并进行拦截。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "FakeIP 模式返回的 198.18.0.0/16 虚拟 IP 会影响局域网打印机或 NAS 访问吗？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "默认情况下不会。因为 198.18.0.0/16 是专门预留给网络基准测试和代理客户端的虚构 IP 段，不会与常见的局域网网段（如 192.168.x.x 或 10.x.x.x）冲突。只要在 Clash / Sing-box 的 fake-ip-filter 中将局域网域名（如 *.local、*.lan、workgroup）加入白名单排除即可正常访问局域网设备。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "在 Clash 和 Sing-box 中，应该优先选择 FakeIP 还是 Redir-Host？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "强力推荐使用 FakeIP 模式。FakeIP 能彻底避免本地 DNS 延迟，省去建立代理连接前耗时的域名解析过程，在网页秒开、防 DNS 污染、防 SNI 泄漏方面拥有压倒性优势。只有在使用非常古老不支持 FakeIP 的特殊 UDP 协议软件时才考虑 Redir-Host。"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .post-article {
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .post-article h2 {
+      font-size: 1.6rem;
+      margin: 36px 0 16px;
+      border-left: 4px solid var(--accent-cyan);
+      padding-left: 12px;
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.03) 0%, transparent 100%);
+      padding-top: 6px;
+      padding-bottom: 6px;
+      scroll-margin-top: 100px;
+    }
+    .post-article h3 {
+      font-size: 1.25rem;
+      margin: 28px 0 12px;
+      color: var(--accent-cyan);
+      scroll-margin-top: 100px;
+    }
+    .post-article p {
+      margin-bottom: 20px;
+      color: var(--text-main);
+      text-align: justify;
+    }
+    .post-article ul, .post-article ol {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    .post-article li {
+      margin-bottom: 8px;
+    }
+    .post-article strong {
+      color: var(--accent-cyan);
+    }
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin: 24px 0;
+      border-left: 4px solid var(--accent-purple);
+    }
+    .highlight-box.cyan {
+      border-left-color: var(--accent-cyan);
+    }
+    .highlight-box.red {
+      border-left-color: #ff4d4f;
+      background: rgba(255, 77, 79, 0.03);
+    }
+    
+    .toc-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin: 32px 0;
+    }
+    .toc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .toc-item a {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toc-item a:hover {
+      color: var(--accent-cyan);
+      transform: translateX(4px);
+    }
+    
+    .diagram-container {
+      margin: 32px 0;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .diagram-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+    
+    .faq-section {
+      margin-top: 48px;
+    }
+    .faq-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      user-select: none;
+      transition: var(--transition-smooth);
+    }
+    .faq-question:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--accent-cyan);
+    }
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      border-top: 1px solid transparent;
+    }
+    .faq-item.active .faq-answer {
+      padding: 16px 20px;
+      max-height: 500px;
+      border-top-color: var(--border-color);
+    }
+    .faq-icon {
+      transition: transform 0.3s ease;
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+      color: var(--accent-cyan);
+    }
+
+    .comp-table-wrapper {
+      margin: 32px 0;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+    }
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      text-align: left;
+    }
+    .comp-table th {
+      background: var(--bg-secondary);
+      color: var(--accent-cyan);
+      padding: 14px 16px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .comp-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+    .comp-table tr:last-child td {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+
+      <button class="menu-toggle" aria-label="切换导航菜单" aria-expanded="false" aria-controls="main-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav">
+        <a href="../index.html" class="nav-link">首页</a>
+        <a href="../reviews/index.html" class="nav-link">机场推荐</a>
+        <a href="../reviews/brands.html" class="nav-link">机场评测</a>
+        <a href="../guides/clash.html" class="nav-link">Clash教程</a>
+        <a href="../guides/shadowrocket.html" class="nav-link">小火箭教程</a>
+        <a href="../guides/v2rayn.html" class="nav-link">V2rayN教程</a>
+        <a href="../categories/knowledge.html" class="nav-link">机场知识库</a>
+        <a href="../faq/index.html" class="nav-link">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="flex-grow: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 900px;">
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> 
+        &gt; 
+        <a href="../categories/knowledge.html" style="color: inherit;">技术知识库</a> 
+        &gt; 
+        <span style="color: var(--accent-cyan); font-weight: 500;">DNS 原理与 FakeIP 模式</span>
+      </nav>
+
+      <!-- H1 Title -->
+      <h1 style="font-size: 2.25rem; margin-bottom: 20px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; line-height: 1.3;">
+        科学上网 DNS 原理与防泄漏设置：FakeIP 与 Redir-Host 模式深度解析
+      </h1>
+      
+      <!-- Article Metadata -->
+      <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
+        <span>✍️ 作者: 技术编辑部</span>
+        <span>⏱️ 阅读时长: 4 分钟</span>
+        <span>📅 发布于: 2026-07-22</span>
+        <span>🔄 更新于: 2026-07-22</span>
+      </div>
+
+      <article class="post-article">
+        <p>在网络科学上网与机场代理使用过程中，绝大多数“网页能打开但视频打不开”、“ChatGPT 提示所在国家不受支持”、“Netflix 显示使用代理无法观影”等诡异故障，90% 以上并不是因为机场节点失效，而是因为发生了解析错误、<strong>DNS 污染（DNS Poisoning）与 DNS 泄漏（DNS Leak）</strong>。</p>
+
+        <p>在现代代理客户端（如 <a href="../guides/clash-verge.html">Clash Verge</a>、<a href="../guides/sing-box-mobile.html">Sing-box</a>、<a href="../guides/surge-ios.html">Surge</a>）中，系统提供了两大核心 DNS 处理模式：<strong>FakeIP 模式</strong>与 <strong>Redir-Host 模式</strong>。本文将深度剖析其底层运行机制，帮助你彻底消除 DNS 泄漏隐患。</p>
+
+        <!-- Table of Contents -->
+        <div class="toc-container">
+          <div class="toc-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+            本文目录指引
+          </div>
+          <div class="toc-grid">
+            <div class="toc-item"><a href="#section-1">1. 传统网络中的 DNS 污染与抢答原理</a></div>
+            <div class="toc-item"><a href="#section-2">2. FakeIP 模式的工作原理与优势</a></div>
+            <div class="toc-item"><a href="#section-3">3. Redir-Host 模式的工作机制</a></div>
+            <div class="toc-item"><a href="#section-4">4. FakeIP vs Redir-Host 选型全方位对比</a></div>
+            <div class="toc-item"><a href="#section-5">5. 彻底防止 DNS 泄漏的最佳配置指南</a></div>
+            <div class="toc-item"><a href="#faq">6. 常见 FAQ 问答</a></div>
+          </div>
+        </div>
+
+        <h2 id="section-1">1. 传统网络中的 DNS 污染与抢答原理</h2>
+        <p>域名系统（DNS）相当于互联网的电话簿，负责将人类易读的域名（如 <code>google.com</code>）翻译为计算机识别的 IP 地址（如 <code>142.250.190.46</code>）。在未经保护的直连网络中，DNS 查询默认使用 UDP 明文传输。</p>
+
+        <p>防火墙（GFW）可以通过旁路设备监测公网 53 端口的 DNS 查询报文。一旦检测到包含敏感域名的请求，防火墙会抢在目标 DNS 服务器响应之前，向用户发送一个<strong>虚假的错误 IP 地址</strong>（即 DNS 抢答攻击）。这会导致你的浏览器向错误的 IP 发起连接，从而出现“连接超时”或“无法访问”。更多防范细节可参考 <a href="../faq/dns-leak-prevention.html">DNS 泄漏防护 FAQ</a> 与 <a href="webrtc-leak-prevention.html">WebRTC 泄漏防护技巧</a>。</p>
+
+        <h2 id="section-2">2. FakeIP 模式的工作原理与优势</h2>
+        <p>为了彻底解决 DNS 污染和本地 DNS 解析耗时问题，Clash / Sing-box 引入了革命性的 <strong>FakeIP 模式</strong>。其工作原理如下：</p>
+
+        <!-- Diagram SVG -->
+        <div class="diagram-container">
+          <div class="diagram-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan);">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+            FakeIP 模式免本地 DNS 延迟与远程解析拓扑图
+          </div>
+          <svg viewBox="0 0 800 240" width="100%" height="auto" style="background: #080c18; border-radius: 8px; font-family: system-ui, -apple-system, sans-serif;">
+            <!-- Step 1 -->
+            <g transform="translate(60, 40)">
+              <rect x="0" y="0" width="200" height="160" rx="8" fill="#12192f" stroke="#00f2fe" stroke-width="1"/>
+              <text x="100" y="30" fill="#00f2fe" font-size="13" font-weight="bold" text-anchor="middle">步骤 1：域名查询</text>
+              <text x="15" y="65" fill="#f8fafc" font-size="11">应用发起：google.com</text>
+              <text x="15" y="90" fill="#f8fafc" font-size="11">Clash 内置 DNS 拦截</text>
+              <text x="15" y="115" fill="#00f2fe" font-size="11">立即返回虚假 IP:</text>
+              <text x="15" y="135" fill="#00f2fe" font-size="12" font-weight="bold">198.18.0.2</text>
+            </g>
+            <!-- Step 2 -->
+            <g transform="translate(300, 40)">
+              <rect x="0" y="0" width="200" height="160" rx="8" fill="#12192f" stroke="#9b51e0" stroke-width="1"/>
+              <text x="100" y="30" fill="#9b51e0" font-size="13" font-weight="bold" text-anchor="middle">步骤 2：建立连接</text>
+              <text x="15" y="65" fill="#f8fafc" font-size="11">应用发起 TCP 连接至</text>
+              <text x="15" y="90" fill="#f8fafc" font-size="11">198.18.0.2 虚拟地址</text>
+              <text x="15" y="115" fill="#9b51e0" font-size="11">Clash 根据映射表还原</text>
+              <text x="15" y="135" fill="#9b51e0" font-size="11">目标真实域名</text>
+            </g>
+            <!-- Step 3 -->
+            <g transform="translate(540, 40)">
+              <rect x="0" y="0" width="200" height="160" rx="8" fill="#12192f" stroke="#00f2fe" stroke-width="1"/>
+              <text x="100" y="30" fill="#00f2fe" font-size="13" font-weight="bold" text-anchor="middle">步骤 3：远程出境解析</text>
+              <text x="15" y="65" fill="#f8fafc" font-size="11">将目标域名放入代理信道</text>
+              <text x="15" y="90" fill="#f8fafc" font-size="11">发给海外机场落地节点</text>
+              <text x="15" y="115" fill="#f8fafc" font-size="11">在海外当地执行真实 DNS</text>
+              <text x="100" y="145" fill="#00f2fe" font-size="10" font-weight="bold" text-anchor="middle">100% 免疫污染与泄露</text>
+            </g>
+          </svg>
+        </div>
+
+        <p><strong>FakeIP 核心优势：</strong></p>
+        <ul>
+          <li><strong>网页秒开响应</strong>：客户端本地无需等待网络 DNS 查询，0 毫秒立即返回虚拟 IP，省去了几十至几百毫秒的 DNS 握手花费。</li>
+          <li><strong>防 DNS 污染与泄露</strong>：域名直接发送给海外机场代理节点在当地解析，国内运营商 DNS 根本无法得知你的实际访问域名。</li>
+          <li><strong>解决域名与 SNI 不匹配</strong>：在防阻断 TLS 伪装中，能确保 SNI 保持原始域名形态。</li>
+        </ul>
+
+        <h2 id="section-3">3. Redir-Host 模式的工作机制</h2>
+        <p>Redir-Host 是早期的经典 DNS 解析模式。在该模式下，当客户端收到域名访问请求时，必须先使用内置的 DNS 服务器（如 223.5.5.5 或 8.8.8.8）在本地发起真实的 DNS 解析，拿到真实的公网 IP（例如 <code>142.250.190.46</code>）后，再根据 IP CIDR 分流规则判定是否走代理。</p>
+
+        <p><strong>Redir-Host 存在的隐患：</strong>如果你的本地 DNS 配置不当，查询污染域名的请求会先泄漏给国内 ISP DNS，引发地区倒流与 ChatGPT 拦截；同时每次访问新网站都需要等待本地 DNS 解析完成，导致网页首包延迟明显变高。</p>
+
+        <h2 id="section-4">4. FakeIP vs Redir-Host 选型全方位对比</h2>
+
+        <div class="comp-table-wrapper">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>比对维度</th>
+                <th>FakeIP 模式 (推荐)</th>
+                <th>Redir-Host 模式</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>首包建立延迟</strong></td>
+                <td><strong>极致（0ms 本地即时响应）</strong></td>
+                <td>较慢（需要等待本地 DNS 解析完成）</td>
+              </tr>
+              <tr>
+                <td><strong>防 DNS 污染能力</strong></td>
+                <td><strong>100% 完全免疫</strong></td>
+                <td>依赖加密 DoH/DoT 服务配置</td>
+              </tr>
+              <tr>
+                <td><strong>防 DNS 泄露（倒流）</strong></td>
+                <td><strong>完美防止（海外落地端解析）</strong></td>
+                <td>配置不当极易导致运营商 DNS 泄漏</td>
+              </tr>
+              <tr>
+                <td><strong>局域网设备兼容性</strong></td>
+                <td>良好（支持通过 Filter 排除局域网）</td>
+                <td>极佳（原生兼容任何老旧硬件）</td>
+              </tr>
+              <tr>
+                <td><strong>推荐应用场景</strong></td>
+                <td><strong>日常上网、ChatGPT、流媒体解锁</strong></td>
+                <td>仅限古老专有 UDP 抓包分析或特种协议</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="section-5">5. 彻底防止 DNS 泄漏的最佳配置指南</h2>
+        <p>要确保科学上网过程中零 DNS 泄漏，请按照以下标准在配置文件中调整 DNS 模块：</p>
+
+        <pre style="background: #080c18; padding: 16px; border-radius: 6px; border: 1px solid var(--border-color); color: #00f2fe; font-family: monospace; overflow-x: auto; margin-bottom: 24px;"><code>dns:
+  enable: true
+  listen: 0.0.0.0:53
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  
+  # 排除局域网域名，防止 NAS 与打印机打不开
+  fake-ip-filter:
+    - '*.lan'
+    - '*.local'
+    - 'workgroup'
+    
+  # 国内直连域名解析服务器 (使用 DoH/DoT)
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    
+  # 代理域名解析服务器 (远程加密 DoH)
+  fallback:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+</code></pre>
+
+        <p>如果不确定自己的设备是否存在 DNS 泄漏，可访问 <a href="https://dnsleaktest.com" target="_blank" rel="noopener">dnsleaktest.com</a> 进行标准测试。如果测试结果中出现了你所在地国内运营商（如中国电信/中国联通）的名称，说明仍存在 DNS 泄漏，请检查客户端是否完全开启了 FakeIP 模式。关于其他客户端配置指南可进一步查阅 <a href="../guides/quantumult-x.html">Quantumult X 配置</a> 与 <a href="../guides/loon-guide.html">Loon 教程</a>。</p>
+
+        <!-- FAQ Section -->
+        <div class="faq-section" id="faq">
+          <h2 style="border-left: none; padding-left: 0; background: none;">常见问题解答 (FAQ)</h2>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>为什么开启代理后访问 ChatGPT 或 Netflix 依然提示地区不受支持或代理错误？</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <p>这通常是因为发生了 DNS 泄漏或本地 DNS 解析倒流。当你的客户端使用了传统的 Redir-Host 模式，且使用了本地 ISP（电信/联通）的 DNS 服务器解析域名时，流媒体服务商或 OpenAI 会接收到由国内 DNS 返回的本地 IP 地址或被 DNS 抢答伪造的 IP，从而判定你的请求来源于不受支持的地区并进行拦截。</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>FakeIP 模式返回的 198.18.0.0/16 虚拟 IP 会影响局域网打印机或 NAS 访问吗？</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <p>默认情况下不会。因为 198.18.0.0/16 是专门预留给网络基准测试和代理客户端的虚构 IP 段，不会与常见的局域网网段（如 192.168.x.x 或 10.x.x.x）冲突。只要在 Clash / Sing-box 的 fake-ip-filter 中将局域网域名（如 *.local、*.lan、workgroup）加入白名单排除即可正常访问局域网设备。</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>在 Clash 和 Sing-box 中，应该优先选择 FakeIP 还是 Redir-Host？</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <p>强力推荐使用 FakeIP 模式。FakeIP 能彻底避免本地 DNS 延迟，省去建立代理连接前耗时的域名解析过程，在网页秒开、防 DNS 污染、防 SNI 泄漏方面拥有压倒性优势。只有在使用非常古老不支持 FakeIP 的特殊 UDP 协议软件时才考虑 Redir-Host。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div style="margin-top: 48px; padding: 24px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+          <h3 style="margin-top: 0; color: var(--accent-cyan);">相关延伸阅读</h3>
+          <ul style="margin-bottom: 0; padding-left: 20px;">
+            <li><a href="../faq/dns-leak-prevention.html">如何检测并防护科学上网 DNS 泄漏？</a></li>
+            <li><a href="webrtc-leak-prevention.html">防止 WebRTC 暴露真实 IP 地址与防倒流指南</a></li>
+            <li><a href="traffic-routing-rules.html">科学上网流量分流规则详解（Clash / Sing-box）</a></li>
+            <li><a href="../guides/clash-verge.html">Clash Verge Rev 进阶 TUN 与 FakeIP 设置教程</a></li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" style="background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding: 40px 0; margin-top: auto;">
+    <div class="container" style="max-width: 900px; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+      <p style="margin-bottom: 12px;">&copy; 2026 云梯指南 (nodehub168.com) - 专注网络加速与机场节点专业技术评测</p>
+      <p style="margin-bottom: 0;">
+        <a href="../index.html" style="color: var(--accent-cyan); text-decoration: none;">首页</a> | 
+        <a href="../reviews/index.html" style="color: var(--accent-cyan); text-decoration: none;">机场推荐</a> | 
+        <a href="../categories/knowledge.html" style="color: var(--accent-cyan); text-decoration: none;">知识库</a> | 
+        <a href="../faq/index.html" style="color: var(--accent-cyan); text-decoration: none;">常见问题</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Navigation toggle
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mainNav = document.getElementById('main-nav');
+    if (menuToggle && mainNav) {
+      menuToggle.addEventListener('click', () => {
+        const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', !expanded);
+        mainNav.classList.toggle('active');
+      });
+    }
+
+    // FAQ Accordion logic
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        item.classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>
