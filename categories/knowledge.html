@@ -168,7 +168,49 @@
         </h2>
         
         <div class="article-item-card">
-          <h3><a href="../posts/node-multiplier-rules.html">机场节点倍率原理与算账避坑指南：0.1x到5x倍率背后的计费陷阱</a></h3>
+          <h3><a href="../posts/subconverter-custom-rules.html">Subconverter 订阅转换原理与自建私有转换节点避坑指南</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">深入剖析 Subconverter 订阅转换机制底层原理，揭秘公共转换后端泄露 Token 的安全风险，提供 Docker 一键搭建私有转换服务实战。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">订阅转换</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">Token安全</span>
+          </div>
+        </div>
+
+        <div class="article-item-card">
+          <h3><a href="../posts/bbr-tcp-congestion-control.html">TCP BBR 拥塞控制算法原理与机场中转节点加速调优</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">深度剖析 Google BBR 算法底层原理，对比传统 Cubic 算法在高延迟高丢包跨境网络下的表现差距，提供 VPS 部署 BBR 调优方案。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">TCP BBR</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">中转调优</span>
+          </div>
+        </div>
+
+        <div class="article-item-card">
+          <h3><a href="../posts/geoip-geosite-rules.html">GEOIP 与 GEOSITE 规则库解析及机场防 DNS 劫持分流实战</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">详解 MaxMind GEOIP 与 Geosite 二进制数据库架构，分析域名分流与 IP 分流的协同机制，指导用户配置无污染分流。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">GEOIP</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">GEOSITE分流</span>
+          </div>
+        </div>
+
+        <div class="article-item-card">
+          <h3><a href="../posts/v2ray-tls-reality-protocol.html">VLESS REALITY 协议工作原理与防主动探测伪装机制解析</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">深入解读 Xray-core 推出的 VLESS REALITY 伪装协议技术细节，对比传统 Web+TLS 模式的优势，分析其防主动探测原理。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">REALITY协议</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">防探测</span>
+          </div>
+        </div>
+
+        <div class="article-item-card">
+          <h3><a href="../posts/airport-panel-backend-architecture.html">SSPanel-UIM 与 V2Board 机场前端架构及节点后端对接解密</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">揭秘现代机场系统的整体技术架构，深入剖析 SSPanel-UIM 与 V2Board 前端控制台、后端节点的 WebAPI 通信机制与实时审计。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">机场架构</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">V2Board/SSPanel</span>
+          </div>
+        </div>
           <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">深入解析 0.1x/1x/3x/5x 节点倍率计算规则，分析后端带宽成本构成，曝光流量秒光陷阱并提供分流正则实操。</p>
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">节点倍率</span>

@@ -370,7 +370,7 @@
             <!-- Table of New Articles Generated Today -->
             <div style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 16px;">
               <h4 style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-                <span id="latest-articles-date-title">🆕 7月22日 新增技术文章</span>
+                <span id="latest-articles-date-title">🆕 7月23日 新增技术文章</span>
               </h4>
               <div style="overflow-x: auto;">
                 <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.8rem; line-height: 1.4;">
@@ -382,24 +382,24 @@
                   </thead>
                   <tbody id="latest-articles-tbody">
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                      <td style="padding: 8px 4px;"><a href="posts/node-multiplier-rules.html" style="font-weight: 500; color: var(--accent-cyan);">节点倍率原理与算账避坑</a></td>
-                      <td style="padding: 8px 4px; text-align: right; color: var(--accent-cyan);">倍率算账</td>
+                      <td style="padding: 8px 4px;"><a href="posts/subconverter-custom-rules.html" style="font-weight: 500; color: var(--accent-cyan);">Subconverter订阅转换避坑</a></td>
+                      <td style="padding: 8px 4px; text-align: right; color: var(--accent-cyan);">订阅转换</td>
                     </tr>
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                      <td style="padding: 8px 4px;"><a href="posts/transit-types-explained.html" style="font-weight: 500; color: var(--accent-cyan);">公网隧道与IPLC专线对比</a></td>
-                      <td style="padding: 8px 4px; text-align: right; color: var(--accent-cyan);">专线对比</td>
+                      <td style="padding: 8px 4px;"><a href="posts/bbr-tcp-congestion-control.html" style="font-weight: 500; color: var(--accent-cyan);">TCP BBR算法与中转调优</a></td>
+                      <td style="padding: 8px 4px; text-align: right; color: var(--accent-cyan);">BBR调优</td>
                     </tr>
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                      <td style="padding: 8px 4px;"><a href="posts/proxy-dns-fakeip-redirhost.html">FakeIP模式与DNS防泄漏</a></td>
-                      <td style="padding: 8px 4px; text-align: right; color: var(--text-muted);">DNS防泄漏</td>
+                      <td style="padding: 8px 4px;"><a href="posts/geoip-geosite-rules.html">GEOIP与GEOSITE分流</a></td>
+                      <td style="padding: 8px 4px; text-align: right; color: var(--text-muted);">智能分流</td>
                     </tr>
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                      <td style="padding: 8px 4px;"><a href="posts/udp-fullcone-nat-gaming.html">UDP转发与FullCone游戏联机</a></td>
-                      <td style="padding: 8px 4px; text-align: right; color: var(--text-muted);">游戏UDP</td>
+                      <td style="padding: 8px 4px;"><a href="posts/v2ray-tls-reality-protocol.html">VLESS REALITY防探测</a></td>
+                      <td style="padding: 8px 4px; text-align: right; color: var(--text-muted);">REALITY</td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px 4px;"><a href="posts/load-balancing-failover.html">节点负载均衡与故障切线</a></td>
-                      <td style="padding: 8px 4px; text-align: right; color: var(--text-muted);">负载均衡</td>
+                      <td style="padding: 8px 4px;"><a href="posts/airport-panel-backend-architecture.html">SSPanel与V2Board架构</a></td>
+                      <td style="padding: 8px 4px; text-align: right; color: var(--text-muted);">机场架构</td>
                     </tr>
                   </tbody>
                 </table>
@@ -409,11 +409,11 @@
             <script>
               (function autoUpdateLatestArticles() {
                 var articles = [
-                  { title: "节点倍率原理与算账避坑", url: "posts/node-multiplier-rules.html", tag: "倍率算账", date: "2026-07-22" },
-                  { title: "公网隧道与IPLC专线对比", url: "posts/transit-types-explained.html", tag: "专线对比", date: "2026-07-22" },
-                  { title: "FakeIP模式与DNS防泄漏", url: "posts/proxy-dns-fakeip-redirhost.html", tag: "DNS防泄漏", date: "2026-07-22" },
-                  { title: "UDP转发与FullCone游戏联机", url: "posts/udp-fullcone-nat-gaming.html", tag: "游戏UDP", date: "2026-07-22" },
-                  { title: "节点负载均衡与故障切线", url: "posts/load-balancing-failover.html", tag: "负载均衡", date: "2026-07-22" }
+                  { title: "Subconverter订阅转换避坑", url: "posts/subconverter-custom-rules.html", tag: "订阅转换", date: "2026-07-23" },
+                  { title: "TCP BBR算法与中转调优", url: "posts/bbr-tcp-congestion-control.html", tag: "BBR调优", date: "2026-07-23" },
+                  { title: "GEOIP与GEOSITE分流", url: "posts/geoip-geosite-rules.html", tag: "智能分流", date: "2026-07-23" },
+                  { title: "VLESS REALITY防探测", url: "posts/v2ray-tls-reality-protocol.html", tag: "REALITY", date: "2026-07-23" },
+                  { title: "SSPanel与V2Board架构", url: "posts/airport-panel-backend-architecture.html", tag: "机场架构", date: "2026-07-23" }
                 ];
                 
                 var titleEl = document.getElementById("latest-articles-date-title");
@@ -447,8 +447,13 @@
           <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px;">
             <h3 style="font-size: 1.25rem; color: var(--text-main); margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">📖 机场与科学上网知识库</h3>
             <ul style="list-style: none; padding: 0; font-size: 0.9rem;">
-              <li style="margin-bottom: 10px;"><a href="posts/tuic-v5-protocol.html" style="color: var(--accent-cyan); font-weight: bold;">🔥 揭秘 TUIC v5 极速代理协议</a></li>
-              <li style="margin-bottom: 10px;"><a href="posts/diy-relay-server.html" style="color: var(--accent-cyan); font-weight: bold;">🔥 Gost + 极光自建中转教程</a></li>
+              <li style="margin-bottom: 10px;"><a href="posts/subconverter-custom-rules.html" style="color: var(--accent-cyan); font-weight: bold;">🔥 Subconverter 订阅转换与自建指南</a></li>
+              <li style="margin-bottom: 10px;"><a href="posts/bbr-tcp-congestion-control.html" style="color: var(--accent-cyan); font-weight: bold;">🔥 TCP BBR 拥塞控制算法与中转调优</a></li>
+              <li style="margin-bottom: 10px;"><a href="posts/v2ray-tls-reality-protocol.html" style="color: var(--accent-cyan); font-weight: bold;">🔥 VLESS REALITY 伪装协议原理</a></li>
+              <li style="margin-bottom: 10px;"><a href="posts/geoip-geosite-rules.html">GEOIP 与 GEOSITE 规则分流解析</a></li>
+              <li style="margin-bottom: 10px;"><a href="posts/airport-panel-backend-architecture.html">SSPanel 与 V2Board 机场前端后端架构</a></li>
+              <li style="margin-bottom: 10px;"><a href="posts/tuic-v5-protocol.html">TUIC v5 极速代理协议解析</a></li>
+              <li style="margin-bottom: 10px;"><a href="posts/diy-relay-server.html">Gost + 极光自建中转教程</a></li>
               <li style="margin-bottom: 10px;"><a href="posts/traffic-routing-rules.html">Clash与小火箭规则分流解析</a></li>
               <li style="margin-bottom: 10px;"><a href="posts/webrtc-leak-prevention.html">防止 WebRTC 泄露真实 IP 地址</a></li>
               <li style="margin-bottom: 10px;"><a href="posts/handshake-latency-vs-speed.html">Ping延迟低但网页卡顿转圈解析</a></li>

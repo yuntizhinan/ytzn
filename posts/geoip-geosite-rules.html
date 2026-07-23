@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>GEOIP 与 GEOSITE 规则库解析及机场防 DNS 劫持分流实战 - 云梯指南</title>
+  <meta name="description" content="详解 MaxMind GEOIP 与 v2ray-rules-dat / Geosite 数据库技术架构，分析域名分流与 IP 分流的协同机制，指导用户在 Clash 和 Sing-box 中配置无污染分流系统。">
+  <link rel="canonical" href="https://nodehub168.com/posts/geoip-geosite-rules.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  
+  <!-- BreadcrumbList JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://nodehub168.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "技术知识库",
+        "item": "https://nodehub168.com/categories/knowledge.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "GEOIP 与 GEOSITE 分流指南",
+        "item": "https://nodehub168.com/posts/geoip-geosite-rules.html"
+      }
+    ]
+  }
+  </script>
+
+  <!-- FAQPage JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "GEOIP 和 GEOSITE 有什么根本区别？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "GEOSITE 是根据域名（Domain）分类的数据库，例如 geosite:cn 包含了绝大多数国内域名，geosite:google 包含了谷歌旗下域名；而 GEOIP 是根据目标服务器 IP 地址和地理归属分类的数据库，例如 geoip:cn 包含了分配给中国大陆的全部 IPv4/IPv6 地址段。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "为什么有了 GEOSITE 域名分流，还需要 GEOIP 规则兜底？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "因为互联网上的域名浩如烟海，GEOSITE 无法 100% 覆盖所有冷门网站。当一个请求没有匹配上任何域名规则时，代理客户端会发起 DNS 查询获得 IP 地址，此时 GEOIP 规则就能根据该 IP 的物理归属（是否属于国内 IP）决定是直连还是走代理，起到完美的兜底作用。"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .post-article { line-height: 1.8; color: var(--text-main); }
+    .post-article h2 { font-size: 1.6rem; margin: 36px 0 16px; border-left: 4px solid var(--accent-cyan); padding-left: 12px; background: linear-gradient(90deg, rgba(0, 242, 254, 0.03) 0%, transparent 100%); padding-top: 6px; padding-bottom: 6px; }
+    .post-article h3 { font-size: 1.25rem; margin: 24px 0 12px; color: var(--accent-cyan); }
+    .post-article p { margin-bottom: 18px; color: var(--text-muted); }
+    .post-article ul, .post-article ol { margin-bottom: 20px; padding-left: 24px; color: var(--text-muted); }
+    .post-article li { margin-bottom: 8px; }
+    .info-box { background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; margin: 24px 0; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="../index.html" class="logo-area" aria-label="云梯指南首页">
+        <img src="../assets/images/logo.svg" alt="云梯指南" class="logo-icon" width="42" height="42">
+        <span class="logo-text">云梯指南</span>
+      </a>
+      <nav class="main-nav" style="display: flex;">
+        <a href="../index.html" class="nav-link">返回首页</a>
+        <a href="../categories/knowledge.html" class="nav-link">知识库中心</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="padding: 50px 0;">
+    <div class="container" style="max-width: 900px;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../index.html" style="color: inherit;">首页</a> &gt; 
+        <a href="../categories/knowledge.html" style="color: inherit;">技术知识库</a> &gt; 
+        <span style="color: var(--accent-cyan);">GEOIP 与 GEOSITE 分流指南</span>
+      </nav>
+
+      <article class="post-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 40px; border-radius: var(--radius-md);">
+        <h1 style="font-size: 2.2rem; margin-bottom: 16px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          GEOIP 与 GEOSITE 规则库解析及机场防 DNS 劫持分流实战
+        </h1>
+
+        <!-- Article Metadata -->
+        <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
+          <span>✍️ 作者: 技术编辑部</span>
+          <span>⏱️ 阅读时长: 5 分钟</span>
+          <span>📅 发布于: 2026-07-23</span>
+          <span>🔄 更新于: 2026-07-23</span>
+        </div>
+
+        <div class="info-box">
+          <strong>💡 摘要：</strong>网络分流是科学上网的核心体验指标之一。本文深入拆解 GEOIP（地理 IP 库）与 GEOSITE（域名分类库）的二进制数据打包结构与匹配流转逻辑，解决国内流量误走代理、国外网站被 DNS 污染等常见痛点。
+        </div>
+
+        <h2>一、 分流演进史：从繁琐的单条域名规则到二进制规则库</h2>
+        <p>
+          在早期代理工具（如 GFWList 时代）中，规则列表由几万条长长的域名文本组成（例如 <code>DOMAIN-SUFFIX,google.com,Proxy</code>）。随着互联网生态爆发，大型跨国公司（如 Apple、Netflix、Microsoft）拥有数以万计的子域名与 CDN 节点，使用纯文本进行逐行匹配不仅效率低下，而且会极大地消耗客户端 CPU 与内存。
+        </p>
+        <p>
+          为了解决这一瓶颈，社区推出了基于 Protobuf 二进制封装的 <strong>GEOSITE</strong> 和 <strong>GEOIP</strong> 规则库，将数百万条域名和 IP 段压缩为体积仅数兆字节的单文件，大幅提高了匹配效率与智能分流准确率。
+        </p>
+
+        <h2>二、 GEOIP 与 GEOSITE 的匹配协作机制</h2>
+        <p>
+          当客户端（如 Clash Verge 或 Sing-box）发起一个网络请求时，路由分流引擎会遵循严谨的优先级判定流程：
+        </p>
+        <ol>
+          <li><strong>Domain 域名阶段：</strong> 客户端优先检查请求的目标域名。首先匹配 <code>geosite:private</code>（局域网直连），其次匹配 <code>geosite:cn</code>（国内主流网站直连），再匹配 <code>geosite:gfw</code> / <code>geosite:google</code> 等代理规则。</li>
+          <li><strong>DNS 解析与 FakeIP 处理：</strong> 如果请求在 GEOSITE 阶段未命中任何显式规则，客户端会进入 DNS 解析阶段。配合我们在 <a href="proxy-dns-fakeip-redirhost.html">FakeIP模式与DNS防泄漏原理</a> 中介绍的技术，生成安全无污染的 IP。</li>
+          <li><strong>IP 阶段 (GEOIP 兜底)：</strong> 得到目标真实 IP（或客户端解析出的真实 IP）后，引擎调用 <code>geoip:cn</code> 进行匹配。如果是国内 IP，直接触发 Direct 路由；如果是国外 IP，触发 Proxy 路由。</li>
+        </ol>
+        <p>
+          这种“域名优先、IP 兜底”的双层防线，能够完美兼顾打开国内淘宝、微信的极致低延迟与访问海外服务的顺畅体验。
+        </p>
+
+        <h2>三、 避免分流失效与 DNS 污染的 3 大实战技巧</h2>
+        <h3>1. 禁用 Chrome / Edge 浏览器的“安全 DNS (DoH)”</h3>
+        <p>
+          许多现代浏览器默认启用了内建的“安全 DNS (DNS-over-HTTPS)”功能，这会导致浏览器的 DNS 解析绕过代理客户端的 TUN/FakeIP 接管，直接从浏览器内部发起 DNS 查询，从而打破 GEOSITE 的判定逻辑。建议在浏览器设置中将“使用安全 DNS”关闭，交由代理客户端统一调度。
+        </p>
+
+        <h3>2. 配置严格的防泄漏 WebRTC 规则</h3>
+        <p>
+          即使配置了精准的 GEOIP/GEOSITE 分流，某些基于网页 UDP 的探测请求依然可能泄露 IP。建议结合我们的 <a href="webrtc-leak-prevention.html">防止 WebRTC 泄露真实 IP 地址</a> 教程，将相关检测点彻底封堵。
+        </p>
+
+        <h3>3. 选择具备原生 IP 与低延迟出口的高品质机场</h3>
+        <p>
+          精确的分流规则需要配合优质的底层节点。如 <a href="../reviews/jilianyun.html">极连云</a> 提供的 IPLC 专线节点，能够保证被分流到代理策略组的请求永远拥有纯净的出口环境。
+        </p>
+
+        <h2>四、 总结</h2>
+        <p>
+          深入理解 GEOIP 与 GEOSITE 的工作机制，能够让你不再盲目套用网上的“万能规则模板”，而是根据个人网络需求灵活配置无污染的科学上网路由系统。更多关于规则匹配的语法细节，可查阅 <a href="traffic-routing-rules.html">Clash与小火箭规则分流解析</a>。
+        </p>
+
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+          <h3 style="font-size: 1.1rem; color: var(--text-main);">📌 相关延伸阅读</h3>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 8px;"><a href="traffic-routing-rules.html" style="color: var(--accent-cyan);">· Clash与小火箭规则分流解析</a></li>
+            <li style="margin-bottom: 8px;"><a href="proxy-dns-fakeip-redirhost.html" style="color: var(--accent-cyan);">· FakeIP模式与DNS防泄漏原理</a></li>
+            <li style="margin-bottom: 8px;"><a href="webrtc-leak-prevention.html" style="color: var(--accent-cyan);">· 防止 WebRTC 泄露真实 IP 地址</a></li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container" style="text-align: center; padding: 20px 0;">
+      <p class="copyright">© 2026 云梯指南 (nodehub168.com). All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
