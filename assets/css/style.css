@@ -204,25 +204,115 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;
+  min-height: 110px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 .logo-area {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+}
+.logo-brand-link {
+  display: flex;
   align-items: center;
   gap: 12px;
+  text-decoration: none;
 }
 .logo-icon {
-  width: 42px;
-  height: 42px;
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 242, 254, 0.25));
+  transition: var(--transition-smooth);
+}
+.logo-brand-link:hover .logo-icon {
+  transform: scale(1.08);
 }
 .logo-text {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.65rem;
   font-weight: 800;
   background: var(--grad-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   letter-spacing: 1px;
+  line-height: 1.1;
+}
+
+/* Social Icon Buttons (图1 & 图2) */
+.logo-social-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+.social-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: #e2e8f0;
+  background: #334155;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: var(--transition-smooth);
+  text-decoration: none;
+}
+.social-icon-btn.btn-tg {
+  border-radius: 50%;
+}
+.social-icon-btn.btn-email {
+  border-radius: 6px;
+}
+.social-icon-btn:hover {
+  background: #475569;
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Quick Nav Cards: 标签 分类 归档 (图3) */
+.logo-nav-cards {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.nav-card-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 48px;
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #f8fafc;
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  gap: 3px;
+  transition: var(--transition-smooth);
+}
+.nav-card-icon {
+  color: #38bdf8;
+  transition: var(--transition-smooth);
+}
+.nav-card-item:hover {
+  background: #334155;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+  transform: translateY(-2px);
+  color: var(--accent-cyan);
+}
+.nav-card-item:hover .nav-card-icon {
+  color: var(--accent-cyan);
+  transform: scale(1.1);
 }
 
 .main-nav {
@@ -350,16 +440,14 @@ a:hover {
 }
 .visual-box {
   width: 100%;
-  max-width: 320px;
-  aspect-ratio: 1;
+  max-width: 340px;
   background: rgba(255, 255, 255, 0.8);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   position: relative;
   z-index: 2;
-  overflow: hidden;
   backdrop-filter: blur(10px);
 }
 .visual-box::before {
@@ -376,19 +464,20 @@ a:hover {
 }
 .visual-box-inner {
   width: 100%;
-  height: 100%;
   background: var(--bg-secondary);
   border-radius: calc(var(--radius-lg) - 4px);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
+  padding: 24px 16px;
   border: 1px solid rgba(15, 23, 42, 0.05);
 }
 .visual-box-logo {
-  width: 100px;
-  height: 100px;
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
   animation: pulse-slow 4s infinite ease-in-out;
 }
 
