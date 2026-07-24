@@ -12,11 +12,11 @@
   --bg-secondary: #f8fafc;
   --bg-tertiary: #f1f5f9;
   --card-bg: rgba(241, 245, 249, 0.6);
-  --card-hover-border: rgba(0, 242, 254, 0.4);
+  --card-hover-border: rgba(30, 58, 138, 0.4);
   
-  --accent-cyan: #00f2fe;
+  --accent-cyan: #1e3a8a;
   --accent-purple: #9b51e0;
-  --accent-cyan-rgb: 0, 242, 254;
+  --accent-cyan-rgb: 30, 58, 138;
   --accent-purple-rgb: 155, 81, 224;
   
   --text-main: #000000;
@@ -872,12 +872,28 @@ a:hover {
   }
 }
 
-/* Deep Blue Text Overrides for Inline Styling & Explicit Accent Colors */
+/* Deep Blue Text Overrides for all Cyan/Accent Text Elements */
+.post-article strong,
+.post-article b,
+.post-article h3,
+.post-article code,
+strong,
+code,
+.toc-title,
+.kb-card-title,
+.timeline-date,
+.account-box h3,
+.toc-item a:hover {
+  color: #1e3a8a !important;
+}
+
 a[style*="color: var(--accent-cyan)"],
 a[style*="color: var(--accent-purple)"],
 span[style*="color: var(--accent-cyan)"],
 span[style*="color: var(--accent-purple)"],
 p[style*="color: var(--accent-cyan)"],
-p[style*="color: var(--accent-purple)"] {
+p[style*="color: var(--accent-purple)"],
+h2[style*="color: var(--accent-cyan)"],
+h3[style*="color: var(--accent-cyan)"] {
   color: #1e3a8a !important;
 }
