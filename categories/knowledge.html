@@ -168,6 +168,51 @@
         </h2>
         
         <div class="article-item-card">
+          <h3><a href="../posts/v2ray-mux-multiplexing-guide.html">V2Ray Mux 多路复用原理详解：降低并发握手延迟与高并发配置实战</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">深入解析 V2Ray Mux 多路复用原理。涵盖 TCP 与 TLS 握手开销分析、Mux.Cool 帧分包重组、队头阻塞困境及 Sing-box/Clash 调优配置。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">V2Ray Mux</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">多路复用</span>
+          </div>
+        </div>
+
+        <div class="article-item-card">
+          <h3><a href="../posts/grpc-transport-protocol-explained.html">gRPC 代理协议深度剖析：HTTP/2 长连接复用、Protobuf 效率与 CDN 穿透优化</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">深入解析代理客户端中的 gRPC 传输层协议。详解 HTTP/2 Stream 复用、Protobuf 二进制序列化优势以及通过 Cloudflare CDN 反向代理实战。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">gRPC协议</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">CDN穿透</span>
+          </div>
+        </div>
+
+        <div class="article-item-card">
+          <h3><a href="../posts/tun-tap-wfp-traffic-interception.html">TUN 模式与 WFP 驱动底层原理解析：全局流量拦截、三层网卡重组与冲突排查</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">深入解析 Clash 与 Sing-box 中的 TUN 模式与 WFP 驱动底层接管机制。探讨 OSI 三层虚拟网卡、LwIP 协议栈重组与 DNS 环路防范。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">TUN模式</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">WFP驱动</span>
+          </div>
+        </div>
+
+        <div class="article-item-card">
+          <h3><a href="../posts/tls-ja3-ja4-fingerprint-sni-ech.html">TLS 指纹（JA3/JA4）识别与 SNI 阻断原理：客户端特征伪装与 ECH 加密防护</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">深度剖析网络代理中的 TLS 指纹识别（JA3/JA4 Hash）与 SNI 阻断原理。详解 Client Hello 握手特征、uTLS 指纹伪装与 ECH 密文握手。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">TLS指纹</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">ECH加密</span>
+          </div>
+        </div>
+
+        <div class="article-item-card">
+          <h3><a href="../posts/anycast-bgp-routing-explained.html">Anycast 任意播与 BGP 动态路由解析：机场高速接入点选路与跨境调度原理</a></h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">深度剖析高端机场节点中使用的 Anycast 任意播技术与 BGP 动态路由机制。详解 Unicast 与 Anycast 拓扑差异、AS-PATH 选路及秒级故障收敛。</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 0.8rem; background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">Anycast</span>
+            <span style="font-size: 0.8rem; background: rgba(155, 81, 224, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 4px;">BGP选路</span>
+          </div>
+        </div>
+        
+        <div class="article-item-card">
           <h3><a href="../posts/subconverter-custom-rules.html">Subconverter 订阅转换原理与自建私有转换节点避坑指南</a></h3>
           <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 8px 0 12px;">深入剖析 Subconverter 订阅转换机制底层原理，揭秘公共转换后端泄露 Token 的安全风险，提供 Docker 一键搭建私有转换服务实战。</p>
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
