@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -39,30 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "使用第三方公共订阅转换转换接口安全吗？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "存在较大的安全隐患。第三方公共订阅转换后端在处理请求时，能够明文获取你的订阅链接和密钥 Token。不怀好意的服务提供者可能会记录你的节点 Server 地址、密钥及节点列表，导致节点流量被盗用甚至账号被封禁。因此强烈建议自建私有 Subconverter 服务。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Subconverter 支持哪些客户端格式相互转换？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Subconverter 支持 Clash、Sing-box、Quantumult X、Shadowrocket、Surge、V2RayN、Loon 等几乎市面上所有科学上网客户端格式之间的相互解析与生成转换。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article { line-height: 1.8; color: var(--text-main); }
@@ -74,6 +50,33 @@
     .info-box { background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; margin: 24px 0; }
     .code-box { background: #0d1117; border: 1px solid #30363d; border-radius: var(--radius-sm); padding: 16px; font-family: monospace; font-size: 0.9rem; color: #c9d1d9; overflow-x: auto; margin: 20px 0; }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-23",
+    "description":  "深入解析 Subconverter 订阅转换机制底层原理，揭秘公共转换后端泄露 Token 的安全风险，提供 Docker 一键搭建私有订阅转换服务、自定义分流规则及节点名称重组的高级教程。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "Subconverter 订阅转换原理与自建私有转换节点避坑指南",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/subconverter-custom-rules.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body>
 
@@ -103,15 +106,14 @@
           Subconverter 订阅转换原理与自建私有转换节点避坑指南
         </h1>
 
-        <!-- Article Metadata -->
-        <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
-          <span>✍️ 作者: 技术编辑部</span>
-          <span>⏱️ 阅读时长: 5 分钟</span>
-          <span>📅 发布于: 2026-07-23</span>
-          <span>🔄 更新于: 2026-07-23</span>
-        </div>
-
-        <div class="info-box">
+<!-- Article Metadata -->
+      <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
+        <span>✍️ 作者: 技术编辑部</span>
+        <span>⏱️ 阅读时长: 5 分钟</span>
+        <span>📅 发布于: 2026-07-23</span>
+        <span>🔄 更新于: 2026-08-01</span>
+      </div>
+<div class="info-box">
           <strong>💡 摘要：</strong>本文深入剖析 Subconverter（订阅转换工具）的底层数据解析机制，揭示公共订阅转换 API 背后隐藏的节点明文泄露风险，并手把手教你如何基于 Docker 搭建独享的私有订阅转换服务，实现高效、安全且定制化的分流规则合成。
         </div>
 

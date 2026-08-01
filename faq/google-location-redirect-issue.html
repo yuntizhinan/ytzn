@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -39,30 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "为什么在代理软件里选了美国节点，打开 Google 依然跳到 google.com.hk？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "这是由于代理节点的 IP 属于‘广播 IP’而非原生物理 IP，或者该 IP 过去曾被大量香港地区的代理用户使用，导致 Google 内部的算法（如 Location History / IP Geolocation）将该 IP 的地理归属判定为了香港。此外，浏览器之前留存的 NID / PREF Cookies 也会强制锁定之前的地区偏好。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "如何彻底防止 Google 自动跳转到香港域名或小语种界面？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "1. 访问 `https://www.google.com/ncr`（No Country Redirect），强行写入不跳转设置；2. 清理浏览器中的 Google 域名 Cookies；3. 在代理客户端中更换为真正的‘原生 IP（Native IP）’节点。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -184,6 +160,46 @@
       border-top: 1px solid var(--border-color);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "大部分性价比机场为了控制成本，使用的节点出口 IP 并非在该国家当地注册购买的 **原生 IP (Native IP)**，而是 **广播 IP (Broadcast IP)**。 例如，机场主在欧洲购买了一批便宜的 IPv4 地址段，随后在 ARIN 注册机构中将其宣告（Broadcast）到美国机房使用。虽然 MaxMind 等第三方商业 GeoIP 数据库显示其属于“美国”，但 Google 拥有自己独立、强大的 **Location History 自研定位算法**。如果这组 IP 长期有大量香港用户登录使用，Google 系统的机器学习模型就会自动将其修正标记为“香港地区”。关于原生 IP 与广播 IP 的底层差异，详见 原生 IP 节点与广播 IP 判定原理 。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "IP 定位漂移：广播 IP vs 原生 IP",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "除了 IP 归属外，浏览器留存的 Cookie 也是罪魁祸首。当您之前在未开启代理或使用香港节点时访问过 Google，Google 会在浏览器本地写入名为 `PREF` 和 `NID` 的 Cookie，记住您的区域喜好。即使后来切换到了美国节点，只要 Cookie 还在，Google 依旧会优先拉取历史偏好。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "Google 自建地理位置算法与 Cookies 缓存",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "针对重定向跳转，Google 官方提供了一个隐秘的无国界锁定入口：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "解决方案一：访问 google.com/ncr 强制写入",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "如果您在使用 Netflix 视频流媒体或 TikTok 时也遇到了同样的跨区风控封锁，说明广播 IP 已经影响到了流媒体解锁。建议在代理软件中选择带有 `[原生/Native]` 标识的节点。关于 Netflix 代理错误与解锁排查，可参阅 Netflix 代理警告解决 ；TikTok 风控解决可参阅 TikTok IP 风控锁区排障 。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "解决方案二：切换真正原生 IP 节点",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -226,16 +242,15 @@
       <h1 style="font-size: 2.1rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
         选用美国节点却跳 Google.com.hk 或小语种？IP 定位漂移与 NCR 解锁技巧
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 4 分钟</span>
+        <span>⏱️ 阅读时长: 3 分钟</span>
         <span>📅 发布于: 2026-07-25</span>
-        <span>🔄 更新于: 2026-07-25</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 36px; border-radius: var(--radius-md);">
+<article class="post-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 36px; border-radius: var(--radius-md);">
         <p>
           在使用代理节点上网时，许多用户经常遇到这样一个古怪的现象：<strong>在节点列表中明明选的是“美国-01”或“新加坡-01”节点，但在浏览器打开 `google.com` 时，地址栏却被强制重定向自动跳转至 `google.com.hk`（香港），甚至界面语言变成了泰语、越南语或阿拉伯语。同样的情况也发生在 YouTube 推荐页面。</strong>
         </p>

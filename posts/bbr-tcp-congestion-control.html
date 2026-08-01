@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -39,30 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "为什么在 VPS 上开启 BBR 算法后，4K 视频看得很流畅？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "传统 TCP 算法只要遇到丢包就会剧烈降低发包速率（减少发送窗口大小）。而在跨境线路上，由于公网链路拥堵导致的非拥塞性丢包非常频繁，这会导致传统算法速度陡降。BBR 算法不再以丢包作为拥塞指标，而是精准计算物理信道的瓶颈带宽与往返延迟，从而在有一定丢包率的情况下依然维持最大物理吞吐量。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "BBRv1、BBRv2、BBRv3 与 BBRplus 有何区别？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "BBRv1 激进追求高吞吐，但在多连接竞争时抢占带宽较狠；BBRv2 增加了对公平性与丢包率的适度考虑；BBRv3 是 Google 官方最新演进版，优化了高并发场景下的 Bufferbloat（缓冲区膨胀）与延迟；BBRplus 则是由第三方修正调谐的激进优化版，常用于中转 VPS 的极限发包。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article { line-height: 1.8; color: var(--text-main); }
@@ -74,6 +50,33 @@
     .info-box { background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; margin: 24px 0; }
     .code-box { background: #0d1117; border: 1px solid #30363d; border-radius: var(--radius-sm); padding: 16px; font-family: monospace; font-size: 0.9rem; color: #c9d1d9; overflow-x: auto; margin: 20px 0; }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-23",
+    "description":  "深度剖析 Google BBR 算法底层原理，对比传统 Cubic 算法在高延迟高丢包跨境网络下的表现差距，提供 VPS 部署 BBRv3/BBRplus 内核优化方案及中转网络吞吐提升实战。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "TCP BBR 拥塞控制算法原理与机场中转节点加速调优",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/bbr-tcp-congestion-control.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body>
 
@@ -103,15 +106,14 @@
           TCP BBR 拥塞控制算法原理与机场中转节点加速调优
         </h1>
 
-        <!-- Article Metadata -->
-        <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
-          <span>✍️ 作者: 技术编辑部</span>
-          <span>⏱️ 阅读时长: 5 分钟</span>
-          <span>📅 发布于: 2026-07-23</span>
-          <span>🔄 更新于: 2026-07-23</span>
-        </div>
-
-        <div class="info-box">
+<!-- Article Metadata -->
+      <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
+        <span>✍️ 作者: 技术编辑部</span>
+        <span>⏱️ 阅读时长: 4 分钟</span>
+        <span>📅 发布于: 2026-07-23</span>
+        <span>🔄 更新于: 2026-08-01</span>
+      </div>
+<div class="info-box">
           <strong>💡 摘要：</strong>网络加速的核心不仅在于物理带宽的大小，更在于传输层 TCP 拥塞控制算法的选择。本文深入解析 Google BBR 算法对传统 TCP 拥塞控制机制的革命性颠覆，并详细演示如何通过 Linux 内核调优，释放机场中转服务器与 VPS 节点的极限吞吐能力。
         </div>
 

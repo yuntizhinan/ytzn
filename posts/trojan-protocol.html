@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "为什么 Trojan 协议能有效防止主动探测？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "传统代理服务器（如 Shadowsocks）在收到未知流量探针时，通常会直接关闭连接或返回特定的报错特征。防火墙（GFW）可以通过向目标端口发送随机字节包，观察其报错反应来判定代理服务。而 Trojan 服务端部署在 443 端口，当收到错误的密码或非代理握手报文时，不会断开连接，而是将该请求无缝转发给本地运行的真实 Nginx 网页服务器。在防火墙看来，这只是一个正常的 200 OK 个人博客或企业静态网页，从而完美隐藏了代理属性。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Trojan-Go 和原生 Trojan 协议有什么不同？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Trojan-Go 是由 Go 语言实现的原生 Trojan 拓展版本。它不仅完全兼容原生协议，还增加了多路复用（Multiplexing）以降低建立连接的握手延迟，支持 WebSocket 传输（从而能借助 Cloudflare CDN 代理隐藏真实 IP），以及内置 AEAD 二次加密，提供比原生 Trojan 更高的抗封锁机能与高负载吞吐效率。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Trojan 可以不用申请 SSL/TLS 证书直接运行吗？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "不能。Trojan 的底层设计完全依赖标准的 TLS 安全加密信道。如果不配置由可信 CA 机构（如 Let's Encrypt）签发的正式合法证书，或者强制使用客户端忽略证书报错的自签名证书，数据包在通过公网出境时，其自签名或无效的 TLS 证书握手特征会被防火墙瞬间识别并拦截，导致 IP 端口被秒封。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -262,6 +230,33 @@
       border-bottom: none;
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-10",
+    "description":  "系统介绍 Trojan 协议的防主动探测机制、SOCKS5 over TLS 握手特征、旁路 Nginx/Benign Web 重定向分流原理，对比 VMess/VLESS Reality/Hysteria，并提供部署与证书管理方案。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "Trojan 协议伪装原理：工作原理、防探测机制与部署配置指南",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/trojan-protocol.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -306,16 +301,15 @@
       <h1 style="font-size: 2.25rem; margin-bottom: 20px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; line-height: 1.3;">
         Trojan 协议伪装原理：工作原理、防探测机制与部署配置指南
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 12 分钟</span>
+        <span>⏱️ 阅读时长: 11 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <!-- SVG 1: Redirect & Bypass -->
         <div class="diagram-container">
           <div class="diagram-title">

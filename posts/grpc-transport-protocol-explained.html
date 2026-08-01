@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "gRPC 传输协议与 WebSocket 相比有哪些核心区别和优势？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "WebSocket 是一种在单一 TCP 连接上进行双向文本/二进制帧传输的简单协议；而 gRPC 建立在 HTTP/2 之上，天然支持真正的多路复用（Streams）、二进制 Protobuf 高效序列化以及更完善的头部压缩（HPACK）。在 CDN 反向代理和长连接稳定性方面，gRPC 相比 WebSocket 具有更低的头部开销和更强的穿透能力。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "为什么配置 gRPC 节点时必须填写正确的 ServiceName？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "ServiceName 是 gRPC 协议中用于路由与方法定位的关键 Path 标识。在代理传输中，ServiceName 被映射为 HTTP/2 请求路径（如 /ServiceName/Tun）。如果客户端填写的 ServiceName 与服务端不一致，反向代理（如 Nginx 或 Cloudflare）或代理服务端将无法正确分发流，导致 HTTP 404 或连接中断。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "使用 CDN 代理 gRPC 节点时，出现长连接中断卡顿该如何解决？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "CDN 边缘节点（如 Cloudflare）通常对无数据交互的 HTTP/2 闲置 Stream 设有较短的空闲超时时间（通常为 100 秒）。解决办法是在客户端代理配置中开启 gRPC Keepalive 心跳包（设置心跳间隔为 15-30 秒），保持 HTTP/2 PING 帧持续交互，防止中继节点主动切断连接。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -219,6 +187,33 @@
       color: var(--accent-cyan);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-25",
+    "description":  "深入解析代理客户端中的 gRPC 传输层协议。详解基于 HTTP/2 的 Stream 流管道复用、Protocol Buffers 二进制序列化优势、Keepalive 心跳防断连机制以及通过 Cloudflare 等 CDN 进行边缘节点反向代理与抗封锁实战。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "gRPC 代理协议深度剖析：HTTP/2 长连接复用、Protobuf 效率与 CDN 穿透优化",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/grpc-transport-protocol-explained.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -261,16 +256,15 @@
       <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
         gRPC 代理协议深度剖析：HTTP/2 长连接复用、Protobuf 效率与 CDN 穿透优化
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 5 分钟</span>
+        <span>⏱️ 阅读时长: 8 分钟</span>
         <span>📅 发布于: 2026-07-25</span>
-        <span>🔄 更新于: 2026-07-25</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <p>
           在现代代理技术架构中，除了传统的 TCP、WebSocket（WS）和 KCP 传输方式外，<strong>gRPC 协议</strong>越来越频繁地出现在高端机场节点与自动化代理软体（如 Xray、Sing-box、Clash Meta）的配置选项中。gRPC 凭借其底层依托的 HTTP/2 强劲性能以及完美的 CDN 反向代理兼容性，成为了跨越复杂网络封锁的利器。
         </p>

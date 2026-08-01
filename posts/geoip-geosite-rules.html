@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -39,30 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "GEOIP 和 GEOSITE 有什么根本区别？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "GEOSITE 是根据域名（Domain）分类的数据库，例如 geosite:cn 包含了绝大多数国内域名，geosite:google 包含了谷歌旗下域名；而 GEOIP 是根据目标服务器 IP 地址和地理归属分类的数据库，例如 geoip:cn 包含了分配给中国大陆的全部 IPv4/IPv6 地址段。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "为什么有了 GEOSITE 域名分流，还需要 GEOIP 规则兜底？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "因为互联网上的域名浩如烟海，GEOSITE 无法 100% 覆盖所有冷门网站。当一个请求没有匹配上任何域名规则时，代理客户端会发起 DNS 查询获得 IP 地址，此时 GEOIP 规则就能根据该 IP 的物理归属（是否属于国内 IP）决定是直连还是走代理，起到完美的兜底作用。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article { line-height: 1.8; color: var(--text-main); }
@@ -73,6 +49,33 @@
     .post-article li { margin-bottom: 8px; }
     .info-box { background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; margin: 24px 0; }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-23",
+    "description":  "详解 MaxMind GEOIP 与 v2ray-rules-dat / Geosite 数据库技术架构，分析域名分流与 IP 分流的协同机制，指导用户在 Clash 和 Sing-box 中配置无污染分流系统。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "GEOIP 与 GEOSITE 规则库解析及机场防 DNS 劫持分流实战",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/geoip-geosite-rules.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body>
 
@@ -102,15 +105,14 @@
           GEOIP 与 GEOSITE 规则库解析及机场防 DNS 劫持分流实战
         </h1>
 
-        <!-- Article Metadata -->
-        <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
-          <span>✍️ 作者: 技术编辑部</span>
-          <span>⏱️ 阅读时长: 5 分钟</span>
-          <span>📅 发布于: 2026-07-23</span>
-          <span>🔄 更新于: 2026-07-23</span>
-        </div>
-
-        <div class="info-box">
+<!-- Article Metadata -->
+      <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
+        <span>✍️ 作者: 技术编辑部</span>
+        <span>⏱️ 阅读时长: 4 分钟</span>
+        <span>📅 发布于: 2026-07-23</span>
+        <span>🔄 更新于: 2026-08-01</span>
+      </div>
+<div class="info-box">
           <strong>💡 摘要：</strong>网络分流是科学上网的核心体验指标之一。本文深入拆解 GEOIP（地理 IP 库）与 GEOSITE（域名分类库）的二进制数据打包结构与匹配流转逻辑，解决国内流量误走代理、国外网站被 DNS 污染等常见痛点。
         </div>
 

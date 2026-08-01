@@ -126,6 +126,62 @@
       transform: translateX(4px);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "代理客户端默认为了主机安全，通常只监听 `127.0.0.1`（即仅限本地环回地址访问）。要想让局域网内的其他设备连进来，必须修改软件配置使其监听 `0.0.0.0`（允许所有局域网地址连接）：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "第一步：在代理主机端开启局域网允许",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "很多用户在按照第一步设置后，尝试连接时依然显示“无法连接代理”或“连接被拒绝”。在 90% 的情况下，这并不是代理软件配置出错，而是 **Windows Defender 防火墙拦截了局域网内的入站流量**。 Windows 默认的安全策略会阻断外部 IP 访问主机的非必要开放端口（如 7890/10809）。解决方法是为代理软件手动开辟绿色通道：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "第二步：解决 Windows 防火墙阻拦的隐形障碍",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "打通了主机的物理阻碍后，就可以配置需要上网的接收端设备了。确保接收端设备与代理主机连接在 **同一个 Wi-Fi（即同一路由器子网下）**： 1. 智能手机（iOS / Android）设置： 进入无线局域网设置，点击已连接 Wi-Fi 旁的“详细信息/配置”按钮。拉到最下方，找到“HTTP 代理”，选择“手动”。 在“服务器/主机”中填入代理主机的局域网 IP（例如 `192.168.3.15`），在“端口”中填入代理软件的端口（如 `7890`），保存。此时，手机上的所有浏览器和应用流量都将通过主机的代理节点转发出去。 2. 游戏主机（Switch / PS5 / Xbox）设置： 在主机网络设置中，选择当前 Wi-Fi，进入高级设置。将“代理服务器”选项从“禁用”改为“启用”。 同样填入代理主机的局域网 IP 与对应端口。这对于快速下载游戏更新、联机登入 Nintendo eShop...",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "第三步：接收端设备的网络设置与调试",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "传统的 HTTP 局域网共享存在一定的技术局限性：它只能代理支持 HTTP 协议的应用。许多主机游戏（基于 UDP 协议）或特定应用会直接绕过 HTTP 代理，导致依然无法联网。 如果您需要“无死角”的全局局域网加速，可以考虑以下进阶配置：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "进阶方案：TUN 虚拟网卡与软路由共享的抉择",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "当配置好一切却依然无法上网时，请依据这套自救逻辑进行逐一排除：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "局域网代理共享常见故障排查",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "要成功开启局域网代理共享，请随时对照以下极简确认清单： 主机端开启 Allow LAN？ → 防火墙入站规则已添加？ → 获取到了正确的内网 IPv4？ → 接收端与主机在同一 Wi-Fi？ → 接收端手动填写了 IP 与端口？ 只要满足以上五项条件，您就能彻底打通局域网内的设备屏障。如果您想进一步在多平台上优化代理客户端的使用体验，建议阅读我们的主流客户端详细教程，包括 [Clash Verge 教程](../guides/clash-verge.html)、[Loon 客户端配置](../guides/loon-guide.html) 以及 [v2rayN 调试流程](../topics/v2rayn-troubleshooting.html)。合理运用网络共享，能让您的多设备联动体验更加顺畅丝滑。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "自救逻辑清单总结",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -151,16 +207,15 @@
         <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
           局域网代理共享设置
         </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
         <span>⏱️ 阅读时长: 8 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-        
-        <p>
+<p>
           在日常工作、学习和娱乐中，我们经常遇到这样的场景：主力电脑（Windows 或 macOS）上已经配置并运行了顺畅的代理软件（如 Clash 或 v2rayN）。但是，身边的其他设备——例如不方便或无法直接安装客户端的 Switch、PS5、Xbox 游戏主机，或者是苹果电视盒子 Apple TV、智能电视，亦或是没有配置代理订阅的备用手机——同样需要访问国际网络。
         </p>
         <p>

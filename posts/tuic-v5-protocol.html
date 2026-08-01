@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "TUIC 协议和 Hysteria 2 有什么核心区别？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "二者虽同为基于 QUIC/UDP 的协议，但拥塞控制哲学完全不同。Hysteria 2 采用定制的主动拥塞控制算法（基于 BBR 进行二次修改的暴力发包），在公网带宽争抢中极为霸道，但也极易触发国内运营商对大流量 UDP 的 QoS 限制（丢包率激增或端口封锁）。而 TUIC v5 严格遵循标准 QUIC 规范（一般搭载默认 of BBR 或 Cubic 算法），不搞强制暴力发包，依靠多路复用和 0-RTT 高效握手，提供更持久平稳的建连表现。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "为什么开启 TUIC v5 后，连接建立感觉非常快？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "因为 TUIC v5 利用了 QUIC 的 0-RTT 建连特性。在客户端与服务器首次完成握手后，后续请求会在发送连接包的同时直接发送加密业务数据，省去了传统 TCP 三次握手以及 TLS 多次往返的握手时延（RTT），这在请求小文件或网页首屏加载时有显著的加速感。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "遇到运营商屏蔽 UDP，TUIC 不能使用怎么办？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "如果当地运营商对 UDP 协议实施了极其严格的封锁或白名单限制，所有基于 QUIC 的协议（包括 TUIC, Hysteria 2）都会面临延迟极高甚至完全超时的情况。此时应回退到经典的 Shadowsocks 或者基于 TCP/WebSocket 的 VLESS-XTLS-Reality 协议以保证连通性。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -246,6 +214,33 @@
       color: var(--accent-cyan);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-19",
+    "description":  "深入对比分析基于 QUIC 的代理协议 TUIC v5 与 Hysteria 2 的工作原理和底层差异。为您阐释为什么 TUIC 在拥塞控制、多路复用以及防止运营商 UDP QoS 限速方面表现更佳，并提供 Clash 与 Sing-box 客户端配置指南。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "揭秘 TUIC v5 协议：为什么它是比 Hysteria 2 更稳的 QUIC 科学上网利器？",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/tuic-v5-protocol.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -289,17 +284,14 @@
         揭秘 TUIC v5 协议：为什么它是比 Hysteria 2 更稳的 QUIC 科学上网利器？
       </h1>
 
-      
-      
-      <!-- Article Metadata -->
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 10 分钟</span>
+        <span>⏱️ 阅读时长: 9 分钟</span>
         <span>📅 发布于: 2026-07-19</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <p>
           在当今网络干扰日益严峻的背景下，基于 UDP 的传输协议已逐步成为网络加速（科学上网）的重要前沿。在上一代协议（如 Shadowsocks、VLESS）面临 DPI（深度包检测）精准识别的威胁时，基于 <strong>QUIC（Quick UDP Internet Connections）</strong> 的新一代代理协议应运而生。这其中，<strong>Hysteria 2</strong> 和 <strong>TUIC v5</strong> 是最受极客与机场主追捧的杰出代表。
         </p>

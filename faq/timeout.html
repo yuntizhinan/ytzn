@@ -126,6 +126,46 @@
       transform: translateX(4px);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "当您的软件中显示大面积超时红字时，通常可以归纳为以下几大底层诱因：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "触发节点超时的六大核心原因",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "遇到节点连接超时，请按照以下由易到难的步骤手动诊断并修复：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "解决节点超时故障的手动修复步骤",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "想要精准定位超时故障，最科学的方法是查看客户端的后台日志（Logs）。以下为几种经典的错误提示及其含义： 在排障中，如果使用的是 v2rayN，可以查看我们的 v2rayN 调试流程 ；若是 iOS 用户，可查阅 小火箭配置大合集 或 Loon 客户端指南 观察控制台日志。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "深入日志：排查内核报错代码",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "当您面对大面积节点超时标红时，请牢记以下极简自救逻辑树： 强制同步系统时间 → 退出系统代理尝试强制更新订阅 → 检查账户流量及到期状态 → 查看日志判断报错类型 → 依然全红则执行 节点全挂紧急自救 并切换 备份稳定机场 。 掌握这套针对时延与握手协议的系统化修复技巧，能帮您在网络波动或配置错乱时迅速找回流畅的冲浪体验。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "总结与排障逻辑树",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -151,16 +191,15 @@
         <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
           解决节点连接超时
         </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 5 分钟</span>
+        <span>⏱️ 阅读时长: 6 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-        
-        <p>
+<p>
           在使用代理网络时，最让用户感到绝望的画面莫过于：打开客户端进行测速，节点列表中跳出一整片触目的红色 `Timeout`（连接超时/测试超时）字样。
         </p>
         <p>

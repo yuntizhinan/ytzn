@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -39,30 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "VLESS REALITY 为什么不需要自己购买域名和申请 TLS 证书？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "REALITY 协议直接“借用”第三方的真实大厂 TLS 证书（例如 Apple、Microsoft、Cloudflare 等）。它在 TLS 握手阶段将客户端请求伪装成向这些真实目标网站发起的握手，服务端通过验证客户端私钥签名来识别合法用户；若验证失败，则直接将连接透传回源到真实目标网站，因此无需自备域名。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "VLESS REALITY 与 Hysteria 2 / TUIC v5 相比，哪种更好？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "两者的侧重点不同。VLESS REALITY 运行在 TCP 协议上，主打的是极高的“隐蔽性”与“抗主动探测能力”；而 Hysteria 2 / TUIC v5 运行在 UDP (QUIC) 协议上，主打的是“高吞吐与恶劣网络环境下的抗丢包”。两者各有优势，优质机场通常会同时提供这两种协议节点。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article { line-height: 1.8; color: var(--text-main); }
@@ -73,6 +49,33 @@
     .post-article li { margin-bottom: 8px; }
     .info-box { background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; margin: 24px 0; }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-23",
+    "description":  "深入解读 Xray-core 推出的 VLESS REALITY 伪装协议技术细节，对比传统 Web+TLS 模式的优势，分析其如何消灭 TLS 证书特征并防御防火墙的主动探测。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "VLESS REALITY 协议工作原理与防主动探测伪装机制解析",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/v2ray-tls-reality-protocol.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body>
 
@@ -102,15 +105,14 @@
           VLESS REALITY 协议工作原理与防主动探测伪装机制解析
         </h1>
 
-        <!-- Article Metadata -->
-        <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
-          <span>✍️ 作者: 技术编辑部</span>
-          <span>⏱️ 阅读时长: 5 分钟</span>
-          <span>📅 发布于: 2026-07-23</span>
-          <span>🔄 更新于: 2026-07-23</span>
-        </div>
-
-        <div class="info-box">
+<!-- Article Metadata -->
+      <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
+        <span>✍️ 作者: 技术编辑部</span>
+        <span>⏱️ 阅读时长: 4 分钟</span>
+        <span>📅 发布于: 2026-07-23</span>
+        <span>🔄 更新于: 2026-08-01</span>
+      </div>
+<div class="info-box">
           <strong>💡 摘要：</strong>VLESS REALITY 是近年来防封锁领域的划时代协议。本文深入探讨 REALITY 如何通过“借用大厂 TLS 证书”彻底消除 TLS 证书暴露与主动探测特征，并将其与传统 Vmess+TLS、Trojan 及 Hysteria 2 进行多维度对比。
         </div>
 

@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "为什么延迟极低（如20ms），网页加载还是非常慢？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "因为网络体验不仅取决于单次的延迟时间，还受到丢包率和抖动的严重制约。在 TCP 拥塞控制机制（RFC 5681）下，哪怕只有 1% 的微小丢包，也会导致 TCP 发送窗口减半并频繁发起重传，这会直接锁死实际的吞吐带宽。此外，若本地 DNS 解析被污染、或者客户端的虚拟网卡（TUN 模式）与本地杀毒软件存在路由冲突，也会造成连接卡顿。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "代理客户端的系统代理与 TUN 虚拟网卡模式有何区别？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "系统代理（System Proxy）是一种运行在应用层（如浏览器）的代理协议设置，它主要接管遵循系统代理设置的网络程序；而 TUN 模式则是通过在操作系统内核注册一个虚拟的三层网卡，参与本机的默认路由分发。TUN 模式能够接管全局所有的 TCP 与 UDP 流量，非常适合需要接管游戏客户端、命令行工具和 UWP 软件的场景，但其配置相对复杂，可能面临网卡冲突和 DNS 环路风险。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "在节点协议中，Hysteria 2 这类基于 UDP 的协议为什么能改善恶劣网络表现？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Hysteria 2 基于谷歌开发的 QUIC 协议（RFC 9000），使用 UDP 承载数据。传统的 TCP 遇到网络丢包时会无条件触发阻塞重传并降速，而 Hysteria 2 使用了自适应的拥塞控制算法，能够在检测到公网跨境光缆发生大面积丢包时，主动以恒定速率或前向纠错进行数据传输，不轻易降速，因此对高延迟、高丢包的恶劣公网环境具有极强的穿透和提速效果。但是如果运营商对本地 UDP 进行恶意限速（QoS），其表现反而不如 TCP 协议。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {

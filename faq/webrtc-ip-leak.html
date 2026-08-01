@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -102,6 +102,38 @@
       font-size: 0.9rem;
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "WebRTC（Web Real-Time Communication）是现代浏览器（Chrome、Edge、Firefox、Safari）内置的网页实时音视频通信标准。为了实现低延迟的网页端 P2P 通信，WebRTC 协议使用 STUN（Session Traversal Utilities for NAT）服务向外部发送底层 UDP 探测请求。 由于这些 UDP 探测请求由浏览器底层直接发起， 普通的浏览器代理插件（如 SwitchyOmega）或系统代理（System Proxy）无法拦截 WebRTC 的 STUN 探测 。网页中的 JavaScript 脚本可以通过简短的代码直接向 WebRTC API 查询本机的真实物理网卡 IP 与公网 IP，从而完美绕过您的代理服务器，将真实地理位置彻底曝光。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "什么是 WebRTC？它是如何绕过代理泄露真实 IP 的？",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "Chrome / Edge 浏览器用户 ：可在 Chrome 网上应用店搜索并安装扩展程序 WebRTC Control 或 uBlock Origin 。在 WebRTC Control 设置中将模式切换为 Disable WebRTC (完全禁用) 或 Disable non-proxied UDP (禁用未代理的 UDP) 。 Firefox 浏览器用户 ：在地址栏输入 about:config ，搜索 media.peerconnection.enabled ，将其值双击修改为 false 即可彻底切断 WebRTC 功能。 许多国内宽带运营商已全面普及 IPv6。若代理节点不支持 IPv6 转发，浏览器发起 IPv6 请求时会直接通过本地运营商公网直连，导致真实 IPv6 地址曝光（详见 WebRTC 泄露防范与 IPv6 禁用指南 ）。可在代理客户端中关闭 IPv6 选中开关 ...",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "防范 WebRTC 真实 IP 泄露的三大实用防护手段",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "实现 100% 伪装度的关键组合拳是： 浏览器禁用 WebRTC + 操作系统禁用 IPv6 + 代理软件开启 FakeIP TUN 模式 。在完成配置后，重新打开 Whoer.net 检测，确保 WebRTC 栏目显示无泄露（No Leak），即可安心进行跨境业务。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "总结",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -135,15 +167,14 @@
           【隐私与跨境】已挂代理但在 Whoer/IPiP 检测依然显示真实中国 IP？WebRTC 泄露与浏览器隐私防护全解
         </h1>
 
-        <!-- Article Metadata -->
-        <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
-          <span>✍️ 作者: 技术编辑部</span>
-          <span>⏱️ 阅读时长: 3 分钟</span>
-          <span>📅 发布于: 2026-07-24</span>
-          <span>🔄 更新于: 2026-07-24</span>
-        </div>
-
-        <p>
+<!-- Article Metadata -->
+      <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
+        <span>✍️ 作者: 技术编辑部</span>
+        <span>⏱️ 阅读时长: 4 分钟</span>
+        <span>📅 发布于: 2026-07-24</span>
+        <span>🔄 更新于: 2026-08-01</span>
+      </div>
+<p>
           对于从事跨境电商（Amazon、Shopee、Etsy）、海外社交媒体运营或注重隐私安全的用户而言，最令人担忧的隐患莫过于：明明已经在代理软件中开启了全局代理，但在访问 <strong>Whoer.net 或 IPiP.net</strong> 进行伪装度检测时，系统依然敏锐地侦测到了您国内运营商（电信/联通/移动）的<strong>真实 IPv4 或 IPv6 地址</strong>。
         </p>
         <p>

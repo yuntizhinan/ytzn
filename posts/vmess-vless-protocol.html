@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "为什么 VMess 节点连不上时，要优先检查系统时间？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "VMess 协议使用用户的 UUID 和当前 UTC 时间共同计算出 16 字节的认证占位符。服务端在收到请求时，会根据自身系统时间校验这个认证头是否在有效的时间窗口内（默认为前后 120 秒）。如果客户端或服务器的时间与标准的 NTP 时间偏差超过 120 秒，就会导致服务端认为该请求已过期，直接拒绝建立连接。而 VLESS 协议在认证设计上剔除了对时间的依赖，因而不会受此影响。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "VLESS 配置为 encryption: none 时，数据在公网传输是安全的吗？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "安全与否取决于你的整体节点分层配置。当 VLESS 协议层设置加密为 none 时，业务流量确实没有被 VLESS 自身重复加密，但如果外层包裹了标准的 TLS 加密信道，或者启用了 REALITY 握手伪装，数据包在出境传输时依然会被 TLS/REALITY 进行高强度非对称/对称加密封装，黑客或网络运营者在公网上仍然只能看到一片密文，因此是十分安全的。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "XTLS Vision 和 REALITY 可以独立于 VLESS 运行吗？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "不可以。REALITY 属于底层的传输流安全层（替代 TLS），XTLS Vision 属于应用层流控机制，它们都需要配合上层的代理协议（如 VLESS）才能协同工作。虽然 REALITY 理论上也能拓展到其他协议，但在 Xray 的官方生产规范和开发重心上，XTLS Vision 是与 VLESS 协议深度绑定的流控引擎。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -262,6 +230,33 @@
       border-bottom: none;
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-10",
+    "description":  "系统解析 VMess 与 VLESS 的工作原理，对比两者在身份认证、数据加密、时间同步、协议开销、TLS、REALITY、XTLS Vision 和客户端兼容性方面的区别。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "VMess 与 VLESS 协议解析：认证、加密、传输方式与应用区别",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/vmess-vless-protocol.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -306,16 +301,15 @@
       <h1 style="font-size: 2.25rem; margin-bottom: 20px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; line-height: 1.3;">
         VMess 与 VLESS 协议解析：认证、加密、传输方式与应用区别
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 12 分钟</span>
+        <span>⏱️ 阅读时长: 11 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <!-- SVG 1: Connection structures -->
         <div class="diagram-container">
           <div class="diagram-title">

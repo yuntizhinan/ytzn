@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "什么是 Anycast（任意播）技术？它与常规的 Unicast（单播）有何不同？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Unicast（单播）是指一个 IP 地址在全网唯一对应一台特定的物理服务器；而 Anycast（任意播）是指在全球多个不同地理位置的机房服务器上，广播完全相同的同一个 IP 地址。运营商骨干网会通过 BGP 路由协议，自动将用户的网络数据包发送到网络拓扑上物理或延迟最近的那一台 Anycast 节点。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "在机场加速节点中，BGP 动态中转线路相比静态单线有什么优势？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "静态单线在遇到电信、联通或移动跨网互联拥堵时无法实时切换；而 BGP（边界网关协议）能够实时监控电信 CN2 GIA、联通 CU9929、移动 CMIN2 等多家骨干网的网络质量。当某条主光缆出现高丢包或断纤时，BGP 路由器能在秒级时间内自动将流量收敛重定向至备用最优路径。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "为什么 Anycast 节点在遭受 DDoS 攻击时能展现出极强的防护能力？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "因为 Anycast 具备天然的流量分散（Traffic Dispersion）特性。当攻击者发动几百 Gbps 的 DDoS 流量轰炸 Anycast IP 时，大流量不会集中击垮某单一机房，而是被 BGP 路由自动稀释分流到全球数十个 Anycast 边缘数据中心中被就地清洗吸收。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -219,6 +187,33 @@
       color: var(--accent-cyan);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-25",
+    "description":  "深度剖析高端机场节点中使用的 Anycast（任意播）技术与 BGP（边界网关协议）动态路由机制。详解 Unicast 单播与 Anycast 拓扑差异、BGP AS-PATH 选路算法、海底光缆故障秒级自愈以及全球近程接入与 DDoS 流量清洗架构。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "Anycast 任意播与 BGP 动态路由解析：机场高速接入点选路与跨境调度原理",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/anycast-bgp-routing-explained.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -261,16 +256,15 @@
       <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
         Anycast 任意播与 BGP 动态路由解析：机场高速接入点选路与跨境调度原理
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 5 分钟</span>
+        <span>⏱️ 阅读时长: 6 分钟</span>
         <span>📅 发布于: 2026-07-25</span>
-        <span>🔄 更新于: 2026-07-25</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <p>
           在使用高端机场或国际加速网络时，许多用户经常注意到这样一个现象：订阅节点列表中的入口域名（例如 `entry.node.com`）解析出的真实 IP 在全球各地测试都是同一个，但无论在广州、上海、北京还是在香港连接，延迟都能稳定保持在极低水平。
         </p>

@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "为什么开启代理后，微信经常收发图卡顿，甚至提示异地登陆？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "这通常是因为您不小心开启了客户端的“全局模式（Global）”。在全局模式下，包括微信、QQ、淘宝在内的所有国内应用流量都会被强制发送到境外的代理服务器，绕了一大圈才返回国内。这不仅会导致严重的延迟卡顿，还会使微信检测到你的登录 IP 变为了香港或美国，从而触发账号风控。切换回“规则模式（Rule）”即可解决该问题。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "在规则模式下，如何确保新出炉的网站能走正确的代理？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "规则列表通常不可能实时收录网络上所有的域名。如果某个被墙的新网站没有被现有的 Geosite 或规则集收录，流量就会因为不匹配任何特定规则而滑落到最底部的兜底规则（MATCH/FINAL）。如果你的兜底规则设为 DIRECT（直连），该网页就打不开。建议在客户端配置中，将 FINAL 规则设为代理节点（Proxy Group），以保证未被收录的境外网站默认走代理。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "什么是 Rule-Set，它比普通的 Rule 强在哪里？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Rule-Set（规则集）是 Clash Meta/Verge 引入的一种更先进的规则格式。传统的规则直接写在 YAML 配置文件中，会导致配置文件体积庞大且无法动态更新。而 Rule-Set 允许客户端在后台异步拉取第三方的二进制规则文件（如包含数万条域名的列表），不仅大幅降低了内存占用，还能保持规则自动同步更新，是目前极力推崇的配置方式。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -246,6 +214,33 @@
       color: var(--accent-cyan);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-19",
+    "description":  "深度科普主流科学上网客户端（如 Clash Verge, Shadowrocket）中全局模式、规则模式与直连模式的底层分流工作原理。详细拆解 DNS 域名解析、IP-CIDR 匹配策略，助您优化分流配置，避免国内流量误走代理。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "Clash与小火箭规则分流原理解析：彻底搞懂全局、规则与直连的流量去向",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/traffic-routing-rules.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -289,17 +284,14 @@
         Clash与小火箭规则分流原理解析：彻底搞懂全局、规则与直连的流量去向
       </h1>
 
-      
-      
-      <!-- Article Metadata -->
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 9 分钟</span>
+        <span>⏱️ 阅读时长: 7 分钟</span>
         <span>📅 发布于: 2026-07-19</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <p>
           在第一次接触 <strong>Clash</strong>、<strong>Shadowrocket（小火箭）</strong>、<strong>Sing-box</strong> 等现代网络代理工具时，很多新手用户都会被其复杂的面板所震撼。与传统“一键挂梯子”的 VPN 软件不同，这些工具默认不接管你电脑或手机的全部流量，而是通过一套精密的<strong>分流规则引擎</strong>，决定哪些流量走代理、哪些走直连。
         </p>

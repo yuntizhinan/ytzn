@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "TUN 模式与普通系统代理（System Proxy）有什么本质区别？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "系统代理主要在 HTTP/SOCKS5 应用层工作，仅对主动读取系统代理设置的程序（如浏览器）有效，无法拦截命令行（cmd/git）、游戏客户端或 UWP 应用；而 TUN 模式是在操作系统内核注册一个三层（Network Layer）虚拟网卡，通过修改系统路由表将全机所有的 TCP/UDP IP 数据包无差别接管，实现真正的全局代理。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "为什么开启 TUN 模式后会导致某些本地网络或虚拟机（VMware/Hyper-V）断网？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "这是由于 TUN 模式在修改默认路由（0.0.0.0/0）时，将优先级（Metric 权值）设为极高，导致发往本地局域网（192.168.x.x）或虚拟网卡（172.x.x.x）的流量也被误拦截至代理内核。解决方法是在客户端中配置 `strict_route: true` 并正确排除局域网 CIDR 网段。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Windows 下 TUN 模式的 WFP (Windows Filtering Platform) 驱动有什么作用？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "WFP 是 Windows 内核级的网络过滤平台。当代理客户端安装 WFP 驱动后，它能够在网络数据包离开物理网卡之前，直接在内核 Socket 层将其拦截并注入到 TUN 虚拟网卡中。相比传统修改路由表的方法，WFP 驱动能够彻底避免 DNS 泄漏与绕过物理网卡直接发包的恶意绕过行为。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -219,6 +187,33 @@
       color: var(--accent-cyan);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-25",
+    "description":  "深入解析 Clash、Sing-box 及 V2RayN 等客户端中 TUN 模式与 WFP（Windows Filtering Platform）底层流量接管机制。探讨 OSI 三层虚拟网卡工作原理、LwIP 协议栈重组、路由表 Metric 权值篡改以及 DNS 环路与杀毒软件冲突排查。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "TUN 模式与 WFP 驱动底层原理解析：全局流量拦截、三层网卡重组与冲突排查",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/tun-tap-wfp-traffic-interception.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -261,16 +256,15 @@
       <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
         TUN 模式与 WFP 驱动底层原理解析：全局流量拦截、三层网卡重组与冲突排查
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 5 分钟</span>
+        <span>⏱️ 阅读时长: 8 分钟</span>
         <span>📅 发布于: 2026-07-25</span>
-        <span>🔄 更新于: 2026-07-25</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <p>
           在科学上网日常使用中，许多用户发现开启普通“系统代理”后，像 Steam 游戏客户端、Git 命令行工具、Node.js / Python 终端脚本以及 WSL 虚拟机依然无法连接外网。只有开启客户端中的 <strong>TUN 模式（虚拟网卡模式）</strong>，才能实现真正无缝的全局网络接管。
         </p>

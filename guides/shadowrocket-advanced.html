@@ -119,6 +119,33 @@
       font-size: 0.9rem;
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-10",
+    "description":  "讲解如何配置iOS小火箭（Shadowrocket）的高级规则，包括规则类型匹配、Module模块机制、MITM中间人解密根证书信任、URL-Test策略组故障自愈调优以及DOH安全DNS解析。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "小火箭高级规则配置：自定义分流策略、MITM 脚本注入与策略组自愈高阶指南",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/guides/shadowrocket-advanced.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -143,16 +170,15 @@
         <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
           小火箭高级规则配置
         </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 7 分钟</span>
+        <span>⏱️ 阅读时长: 8 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-        
-        <p>
+<p>
           在苹果 iOS 生态中，<strong>Shadowrocket（小火箭）</strong> 之所以被公认为最强大的网络代理工具之一，并不仅仅因为其直观的“一键导入订阅”界面，更在于其底层极其完善的 <code>.conf</code> 规则配置文件、灵活的模块系统（Modules）、HTTPS 中间人解密（Mitm）以及 JavaScript 脚本引擎（Scripting）。通过合理编写高级规则，小火箭不仅能自动识别规则分流，更能实现强力去除网页广告、解锁付费限制、提取网页 Cookie 乃至全自动后台签到等强大操作。
         </p>
         <p>

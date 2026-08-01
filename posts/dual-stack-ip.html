@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "如何简单判断一个代理节点是否同时支持 IPv4 和 IPv6 访问？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "可以在连接代理节点后，分别访问 IPv4-only 和 IPv6-only 的 IP 归属地检测网站（例如 ipw.cn 或 test-ipv6.com）。如果系统能同时成功获取到代理节点出的 IPv4 公网地址与 IPv6 公网地址，并且没有提示超时，说明该节点同时支持两种协议的出口代理。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "为什么在开启了双栈代理后，部分网站（如 ChatGPT、Netflix）反而比以前更容易触发风控或打不开？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "这多由 IPv6 出口流量泄漏或出口 IP 信誉度低引起。相较于成熟的公网 IPv4，很多机房服务商租用的 IPv6 地址段尚未经过充分清洗，易被 WAF 防火墙标记为数据中心或僵尸网络。如果客户端没有配置好 IPv6 接管，部分数据包可能直接暴露了本地用户的真实 IPv6 地址，导致地理风控限制。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Happy Eyeballs（快乐眼球）机制在双栈节点中起到什么作用？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Happy Eyeballs（RFC 8305）是一种用于双栈网络中的智能选路算法。当客户端发起对双栈域名的连接请求时，它会近乎并行地向该域名的 IPv4 和 IPv6 地址发送握手请求。哪条链路最先成功建立连接，后续数据就会走哪条链路。这能有效避免因为单侧协议栈（如 IPv6 故障）长时间挂起重试造成的连接超时与卡顿。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -244,6 +212,33 @@
       color: #e2e8f0;
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-10",
+    "description":  "详细介绍节点双栈技术的工作原理，解释IPv4与IPv6入口、出口、DNS解析和地址选择机制，并分析双栈节点的优势、限制、安全风险及检测方法。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "双栈技术介绍：IPv4、IPv6工作原理、优势与检测方法",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/dual-stack-ip.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -288,16 +283,15 @@
       <h1 style="font-size: 2.25rem; margin-bottom: 20px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; line-height: 1.3;">
         节点双栈技术介绍：IPv4、IPv6工作原理、优势与检测方法
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 13 分钟</span>
+        <span>⏱️ 阅读时长: 12 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <!-- SVG 1: Working Principle Cover -->
         <div class="diagram-container">
           <div class="diagram-title">

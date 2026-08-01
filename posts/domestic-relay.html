@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "中转节点一定会比直连节点延迟更低吗？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "不一定。在物理层面上，增加国内入口服务器中转意味着数据包多经历了一次转发（即多了一跳），这在理论上会增加处理时间。中转之所以能降低“实际延迟”，是因为它改善了跨国公网路由的绕路或丢包重传。如果直连网络本身路由极佳且不丢包，增加中转反而会因为多出物理跨度而让延迟轻微上升。因此，中转的核心价值在于提升恶劣网络下的“稳定性”而非单纯追求极限低延迟。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "如何通过 Traceroute 路由图判断是否是真正的专线中转？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Traceroute 只能显示公开响应探测的公网 IP 跃点。企业级专线（IEPL/IPLC）、MPLS 网络或经过隧道封装（GRE/IP-in-IP）的链路，通常在传输过程中会“隐藏”中间的跨国路由跳数，从国内入口直接“跃迁”到境外落地出口。然而，部分公网中转服务器如果关闭了中间节点的 ICMP 报文响应，也会在路由图上呈现出大面积星号（*），因此仅凭 Traceroute 隐藏路由无法百分百判定为物理专线，应以高峰期的真实丢包率为最终考核标准。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "云厂商企业内网（CEN）中转和物理专线（IPLC）有何区别？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "云企业内网（CEN）是利用阿里云等大型云厂商自行租用并管理的全球骨干专用网络进行跨地域 VPC 通信；而 IPLC/IEPL 是电信运营商直接为企业定制的跨境物理专线电路。两者的传输质量和 SLA（服务等级协议）都非常可靠。不过，对于零售代理而言，“CEN 中转”在入口和出口端通常仍需要通过公网接入云主机，而“全段 IPLC”在理论上能提供更彻底的端到端专用物理信道隔离。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -294,6 +262,33 @@
       border-bottom: none;
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-10",
+    "description":  "系统介绍国内中转节点的工作原理，并对比直连、公网优化中转、隧道转发、云厂商内网及 IPLC、IEPL 等线路在路由、稳定性和成本方面的区别。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "国内中转节点原理的区别：直连、公网中转、云内网与专线解析",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/domestic-relay.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -338,16 +333,15 @@
       <h1 style="font-size: 2.25rem; margin-bottom: 20px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; line-height: 1.3;">
         国内中转节点原理的区别：直连、公网中转、云内网与专线解析
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 15 分钟</span>
+        <span>⏱️ 阅读时长: 14 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <!-- SVG 1: Direct vs Relay comparison -->
         <div class="diagram-container">
           <div class="diagram-title">

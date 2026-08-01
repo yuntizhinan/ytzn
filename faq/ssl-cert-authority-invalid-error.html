@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -39,30 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "为什么开启代理软件后，打开 Chrome 浏览器提示 NET::ERR_CERT_AUTHORITY_INVALID？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "出现该错误主要是由于客户端开启了 HTTPS 解密/重定向（MITM，中间人解密）或杀毒软件（如 360/卡巴斯基）开启了 SSL 流量扫描。此时代理软件会在本地使用自签发的 Root CA 替代目标网站的合法证书，若操作系统没有将该自签 Root CA 导入并信任，浏览器就会判定为非安全连接并阻断拦截。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "如何正确安装并信任客户端自生成的 MITM CA 根证书？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "在 iOS/macOS 上，需在“设置-已下载的描述文件”中安装证书，并在“关于本机-证书信任设置”中勾选【完全信任】；在 Windows 上，需双击 .crt 证书文件，将其安装至“受信任的根证书颁发机构”存储区。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -184,6 +160,46 @@
       border-top: 1px solid var(--border-color);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "HTTPS 协议通过非对称加密算法（如 RSA/ECDSA）保障网络数据安全。浏览器连接 `https://google.com` 时，会严格校验服务器返回的数字证书是否由操作系统内置的极少数受信任权威 CA 机构（如 DigiCert、Let's Encrypt）颁发。关于 TLS 握手细节，可参阅 TLS 握手与 JA3 指纹伪装解析 。 当您使用高阶代理客户端（如 Quantumult X、Loon、Surge 或 Stash）开启了 MITM (Man-in-the-Middle，HTTPS 解密重写) 功能以重写脚本或去广告时，代理软件必须在本地伪造目标网站的数字证书。若系统根证书库中缺少该自签 Root CA 的信任信任授权，浏览器就会触发防钓鱼拦截，弹出 `NET::ERR_CERT_AUTHORITY_INVALID`。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "错误诱因：MITM 中间人解密与自签 Root CA",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "如果在 iOS 或 macOS 设备上配置了重写规则，必须严格执行证书安装与完全信任两步曲：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "排查一：高级代理客户端 MITM 证书未信任",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "在 Windows 操作系统中，部分杀毒防护软件（如 360 安全卫士、Kaspersky 卡巴斯基、Avast）内置了“网页安全防护/SSL 扫描”功能。它们会强行拦截所有 outbound HTTPS 流量并重新加密。当杀毒软件的 SSL 过滤与 Clash / V2RayN 的代理逻辑发生重叠撞车时，就会导致证书签名链断裂报错。 解决办法： 在杀毒软件设置中暂时关闭“HTTPS 数据包扫描”或“WEB 脚本防护”功能。若为浏览器全局插件冲突，可参阅 系统代理开关与插件冲突排查 。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "排查三：杀毒软件 SSL 扫描与代理冲突",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "这是一个极易被忽视的硬件级原因：HTTPS 证书具有严格的生效时间（Not Before）与过期时间（Not After）。若电脑主板电池没电导致系统时间倒退回数年前，浏览器校验当前时间不在证书有效期内，便会误判证书无效。直接在 Windows【设置 - 时间和语言】中点击“立即同步”即可恢复。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "排查三：本地系统主板 RTC 时钟不同步",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -226,16 +242,15 @@
       <h1 style="font-size: 2.1rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
         浏览器提示 NET::ERR_CERT_AUTHORITY_INVALID 证书错误？SSL 信任与 MITM 修复
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
         <span>⏱️ 阅读时长: 4 分钟</span>
         <span>📅 发布于: 2026-07-25</span>
-        <span>🔄 更新于: 2026-07-25</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 36px; border-radius: var(--radius-md);">
+<article class="post-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 36px; border-radius: var(--radius-md);">
         <p>
           在科学上网和配置代理软体时，许多用户经常在打开网页时遭遇红色警告拦截：“<strong>您的连接不是私密连接</strong>”，下方伴有错误代码 `NET::ERR_CERT_AUTHORITY_INVALID` 或 `SEC_ERROR_UNKNOWN_ISSUER`。此时几乎所有 HTTPS 网站均无法正常打开。
         </p>

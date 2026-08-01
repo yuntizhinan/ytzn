@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "为什么 Hysteria 2 协议在遭受运营商 UDP 丢包限制时速度依然不受明显影响？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "这主要归功于其 Brutal（或者经过优化后的 BBR/Reno）拥塞控制算法。与传统 TCP 协议发现丢包即主动降低一半发送速率的保守策略不同，Hysteria 2 采用主动发包补偿机制。只要丢包率处于合理限度且有可用带宽，算法会保持较稳定的传输速率并主动重传丢失的包，从而在弱网下维持较高的有效吞吐率。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "开启端口跳跃（Port Hopping）功能会中断我现有的代理连接吗？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "不会。端口跳跃在 QUIC/UDP 传输层是透明工作的。Hysteria 2 客户端能够根据策略在不同的 UDP 外部端口之间建立和迁移连接，而上层应用的数据流依然在同一个逻辑 QUIC 连接中平滑流动。这使得即使运营商动态阻断或限制了某一个特定的 UDP 端口，连接也能无感切换，不受影响。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "为什么 Hysteria 2 无法直接像 WebSocket 代理一样套用普通 CDN 使用？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "因为常规的 CDN（内容分发网络）目前仅对 HTTP/TCP（或者特定的七层 WebSocket）连接提供良好的透明反向代理。Hysteria 2 基于自定义的 QUIC/UDP 协议，需要客户端与服务端进行直接的 UDP 数据包握手。目前绝大部分普通 CDN 服务商并不支持对任意 UDP 端口或底层 QUIC 流量的四层中转转发，因此无法套用 CDN。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -229,6 +197,33 @@
       color: var(--accent-cyan);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-10",
+    "description":  "深入介绍Hysteria 2基于QUIC的传输机制、拥塞控制、端口跳跃、TCP与UDP代理能力，并客观分析其优势、限制和适用场景。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "Hysteria 2 协议优势：QUIC传输、弱网性能与适用场景分析",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/hysteria-2-protocol.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -273,16 +268,15 @@
       <h1 style="font-size: 2.25rem; margin-bottom: 20px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; line-height: 1.3;">
         Hysteria 2 协议优势：QUIC传输、弱网性能与适用场景分析
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 13 分钟</span>
+        <span>⏱️ 阅读时长: 12 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <!-- SVG 1: Working Principle Cover -->
         <div class="diagram-container">
           <div class="diagram-title">

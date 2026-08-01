@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "什么是 JA3 / JA4 TLS 指纹？防火墙如何利用它识别代理软件？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "JA3 和 JA4 是通过提取 TLS 握手包中 Client Hello 报文里的版本号、加密套件（Cipher Suites）列表、扩展指令（Extensions）顺序及 Elliptic Curve 算法组合，算出的字符串 MD5/SHA256 哈希值。由于不同的代理客户端（如旧版 Go 语言实现的 V2Ray）TLS 握手套件与 Chrome 浏览器存在固定差异，防火墙无需解密数据，仅凭 JA3/JA4 指纹就能精准判定并封锁代理连接。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "什么是 uTLS？它在代理客户端中起到了什么作用？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "uTLS 是一个 Go 语言的 TLS 伪装扩展库。它允许代理客户端动态仿冒（Impersonate）主流真实浏览器（如 Chrome、Firefox、iOS Safari）的 Client Hello 握手数据包，包括完全一致的加密套件排列与 Padding 填充，从而使代理连接在 JA3/JA4 指纹检测下与正规浏览器访问完全无异。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "ECH (Encrypted Client Hello) 是如何彻底解决 SNI 明文泄露问题的？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "传统的 TLS 握手在 Server Name Indication (SNI) 字段中会以明文形式暴露目标访问域名（例如 google.com）。而 ECH（Encrypted Client Hello，前身为 ESNI）利用预先从 DNS HTTPS 记录中获取的公钥，将包含真实 SNI 的 Client Inner Hello 整个加密封装在外层 Outer Client Hello 中，实现了连 SNI 域名也无法被中间节点监管与阻断的极致安全。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -219,6 +187,33 @@
       color: var(--accent-cyan);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-25",
+    "description":  "深度剖析网络代理中的 TLS 指纹识别（JA3/JA4 Hash）与 SNI 阻断原理。详解 Client Hello 握手明文特征、uTLS 协议库指纹伪装、SNI 域名前置及 ECH (Encrypted Client Hello) 密文握手的技术突破。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "TLS 指纹（JA3/JA4）识别与 SNI 阻断原理：客户端特征伪装与 ECH 加密防护",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/tls-ja3-ja4-fingerprint-sni-ech.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -261,16 +256,15 @@
       <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
         TLS 指纹（JA3/JA4）识别与 SNI 阻断原理：客户端特征伪装与 ECH 加密防护
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 5 分钟</span>
+        <span>⏱️ 阅读时长: 8 分钟</span>
         <span>📅 发布于: 2026-07-25</span>
-        <span>🔄 更新于: 2026-07-25</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <p>
           在网络攻防对抗演进过程中，许多用户曾遇到过奇怪的现象：配置了带 TLS 证书的 <a href="trojan-protocol.html">Trojan 协议</a> 或 WebSocket 节点，域名和 IP 却依然在一夜之间被精确封锁。这说明<strong>仅仅给数据包加上 TLS 加密外壳，并不意味着能逃过深度包检测（DPI）系统的抓捕</strong>。
         </p>

@@ -131,6 +131,33 @@
       padding: 0;
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-10",
+    "description":  "讲解如何在 Mac 上安装配置全新代理核心 Sing-box，包含 Mac App Store 原生版与 Homebrew 版本的抉择、JSON 配置文件结构解析、DNS 防污染与嗅探设置以及 macOS 系统网络扩展授权。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "Sing-box macOS 使用教程：App Store 原生版、JSON 配置导入与 Tun 模式深度配置",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/guides/sing-box-macos.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -155,16 +182,15 @@
         <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
           Sing-box macOS使用教程
         </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 7 分钟</span>
+        <span>⏱️ 阅读时长: 8 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-        
-        <p>
+<p>
           在 2026 年的科学上网与网络分流生态中，<strong>Sing-box</strong> 已经毫无争议地成为了继 Clash 之后的全新“宇宙级核心”代理平台。不同于传统工具，Sing-box 采用 Go 语言重构，以极致的内存占用、几乎为零的运行开销以及对下一代出海加密协议（VMess, Vless, Reality, Hysteria 2, TUIC, Shadowsocks 等）的原生级强力支持，成为了 Mac 用户出海的第一选择。
         </p>
         <p>

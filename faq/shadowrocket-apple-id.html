@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -126,6 +126,54 @@
       transform: translateX(4px);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "虽然网上存在许多租用或共享账号，但**拥有一个自己专属的非大陆 Apple ID** 是最为安全的策略。这能保证您的应用可以随时在后台自动更新，并永久占有该软件。 自建外区 Apple ID 并不难，在手机或电脑浏览器中即可完成：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "自行注册境外 Apple ID（最安全方案）",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "因为中国境内的银联信用卡、微信或支付宝无法直接绑定到美区或港区 App Store 中进行付款，所以我们需要通过以下安全渠道获取资金余额：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "如何安全地给外区 Apple ID 充值购买",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "许多高品质的机场在官网的用户中心会为包月/包年套餐用户提供“共享 Apple ID”用于免费下载小火箭。在使用此类共享账号时，必须牢记以下生死防线： 如果在 iCloud 登录了共享账号，一旦该共享账号被苹果系统锁死、或者被心术不正的管理人员恶意开启“寻找我的 iPhone”并远程锁定锁定，您的整台 iPhone 将沦为无法开机的“板砖”，面临巨额的勒索风险。 共享 ID 正确使用方法： 仅在手机桌面的 **App Store 应用商店** 中点击右上角头像，拉到最下方登出您自己的账号，在此处登录共享 ID，搜索 “Shadowrocket” 下载。下载完成后，立刻回到 App Store 退出账号并登回您本人的 ID。（若需获取实时维护的公用账号池及图文步骤，请阅读 免费 Apple ID 账号使用指南 ）。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "共享/租用 Apple ID 下载避坑警示",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "成功下载安装官方小火箭后，下一步即为配置代理节点：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "小火箭基础使用与节点配置",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "获取小火箭需要我们熟悉苹果的多设备隔离机制，每次操作前请对照以下安全清单： 自行注册 ID 使用独立邮箱？ → 礼品卡充值渠道官方正规？ → 绝对只在 App Store 登录共享 ID，不在设置/iCloud 登录？ → 下载后已及时登回本人的个人 ID？ 安全上网不仅体现在防范恶意扫描，更体现在对个人核心物理设备的控制安全上。希望本篇指南能帮助国内苹果用户安全、顺利地安装小火箭，开启高速顺畅的数字旅程。如果对机场购买有疑问，可以参考我们的 机场选购排坑防坑指南 。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "总结与安全核对清单",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -151,16 +199,15 @@
         <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
           小火箭 Apple ID 与下载
         </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 5 分钟</span>
+        <span>⏱️ 阅读时长: 6 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-24</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-        
-        <p>
+<p>
           在苹果 iOS 移动生态中，**Shadowrocket（俗称“小火箭”）** 凭借其轻量化的内存占用、高强度的连接稳定性、支持全协议（Shadowsocks、Trojan、Vmess、Hysteria 2）以及亲民的价格（2.99 美元），成为了最无可争议的国民级科学上网客户端。
         </p>
         <p>

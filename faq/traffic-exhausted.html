@@ -126,6 +126,46 @@
       transform: translateX(4px);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "在排查问题前，必须搞清楚流量“偷跑”的几个核心渠道：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "为什么我的套餐流量消耗这么快？",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "当网络因为流量打光中断时，请按以下流程打破死锁：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "流量用尽后的紧急自救三步法",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "在购买流量包时，90% 的新手都会掉进同一个误区：**认为“直接续费”就能立刻恢复流量**。 正确处理方式： 1. 购买专门的“流量重置服务”（通常是付费将本月剩余流量清零并补满）。 2. 或者在账单支付后，进入用户中心手动点击“重置当月流量”按钮。 3. 如果套餐支持，可以购买无使用期限限制的“一次性临时流量包”。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "避坑要点：提前续费与重置流量的区别",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "解决流量意外耗尽，请遵守以下防跑流量核对清单： 主用 1.0x 节点，避开高倍率节点？ → 路由器级别限制大流量设备（参见 路由器代理网关配置 与 路由器 OpenWrt 系统固件设置 ）？ → 本地开启分流（Direct直连国内流量，可参阅 Clash Verge 教程 或 Loon 客户端配置 ）？ → 关闭系统后台云同步与自动更新？ → 购买时选择适合的流量额度（参考 如何选择机场套餐 ）？ 养成良好的日常使用习惯，既可以帮我们省下不必要的账单支出，更能避免在急用网络时突发断网的烦恼。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "总结与日常流量防漏清单",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -151,16 +191,15 @@
         <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
           套餐流量耗尽解决
         </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
         <span>⏱️ 阅读时长: 4 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-        
-        <p>
+<p>
           在使用网络加速服务（通常被称为“机场”）的过程中，许多用户会遇到这样一种令人尴尬的瞬间：网页加载突然停滞，客户端测速结果全线超时标红。
         </p>
         <p>

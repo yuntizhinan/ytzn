@@ -126,6 +126,62 @@
       transform: translateX(4px);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "要在路由器上配置代理，有以下三种最主流的硬件与固件方案：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "主流路由器代理方案评估（选择最适合你的硬件）",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "旁路由方案是目前最受欢迎的实战架构，但也是配置出错的重灾区。以下为关键设置细节： 假设您的主路由器 IP（网关）为 192.168.1.1 ，子网掩码为 `255.255.255.0`。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "旁路由网关模式关键网络配置（新手必看）",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "在 OpenWrt 路由器上，**OpenClash** 是功能最强大的配置插件。请遵循以下步骤导入并运行：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "以 OpenClash 为例的保姆级设置流程",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "路由器代理配置中，最容易导致异常访问或无法解锁流媒体的，就是 **DNS 配置失误**。如果电视端 Netflix 查询 DNS 时走向了国内运营商 DNS，就会因 DNS 泄露导致流媒体闪退报错。 防泄露正确配置方式： 在 OpenClash 菜单中，进入“DNS设置”。开启“本地 DNS 拦截（Dnsmasq Redirect）”，确保局域网所有设备的 DNS 请求都被强行引流给 Clash 核心处理。 在 DNS 运行模式中，强烈推荐选择 **Fake-IP 模式**。Fake-IP 模式下，路由器在收到 DNS 查询时会立即返回一个虚假的局域网 IP（如 `198.18.0.x`），并记录该映射。真实解析过程会留到境外落地节点端发起，这能 100% 根除国内 DNS 污染，解决 奈飞检测到代理 及 ChatGPT 限制 等由 DNS 定位偏差引起的问题。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "核心难题：路由器 DNS 劫持与防泄漏",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "如果启动代理路由器后发现全家设备均无法上网，请按以下逻辑自救排查：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "经典故障诊断与排错指南",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "配置路由器代理是打造整屋无感高速网络体验的核心。每次遇到配置疑问时，请随时依照以下核对清单进行自查： 旁路由静态 IP 已绑定？ → DHCP 已禁用？ → 接收端网关和 DNS 完全指向旁路由？ → TUN 模式已开启（游戏主机）？ → Fake-IP 模式防泄漏已激活？ 遵循这套排查逻辑，您即可完成整屋流媒体、AI 工具以及主机加速网络的完美覆盖。如果在多设备客户端分流上遇到问题，还可以结合参考我们的桌面端与移动端教程，例如 [Clash Verge 教程](../guides/clash-verge.html) 或 [Loon 客户端配置](../guides/loon-guide.html)。合理运用网关级网络管理，能让您的智能家居生活更上一个台阶。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "总结与路由器配置核对清单",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -151,16 +207,15 @@
         <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
           路由器代理配置教程
         </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
         <span>⏱️ 阅读时长: 7 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-        
-        <p>
+<p>
           在家庭或小型办公网络中，当需要联网的受网设备较多，或者存在像 Apple TV、PlayStation 5、Switch 游戏机、智能电视（Smart TV）等无法直接安装 Clash 或 v2rayN 等代理客户端的设备时，单独在每台机器上进行分流配置就显得捉襟见肘。
         </p>
         <p>

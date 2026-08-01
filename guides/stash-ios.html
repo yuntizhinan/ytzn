@@ -119,6 +119,33 @@
       font-size: 0.9rem;
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-10",
+    "description":  "讲解如何在苹果 iOS 系统上安装配置 Stash 客户端，包含美区 App Store 购买防坑提示、直接导入 Clash YAML 订阅步骤、HTTPS 解密 CA 根证书双重信任、流量嗅探与安全 DOH 调优。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "Stash 客户端配置教程：Clash iOS 原生订阅导入、MITM证书激活与分流优化深度指南",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/guides/stash-ios.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -143,16 +170,15 @@
         <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
           Stash 客户端配置教程
         </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
         <span>⏱️ 阅读时长: 7 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-        
-        <p>
+<p>
           在苹果 iOS 系统的科学上网生态中，大部分用户熟知 Shadowrocket（小火箭）的易用性。然而，对于习惯了在 Windows 或 Mac 端使用 Clash Verge、Clash for Windows 规则分流的用户而言，寻找一款在 iOS 端能够 <strong>直接无缝读取 Clash YAML 配置文件</strong> 的客户端是绝对的刚需。这就是 <strong>Stash</strong>。
         </p>
         <p>

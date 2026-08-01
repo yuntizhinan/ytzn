@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "节点显示 Timeout 延迟，是否说明机场已经“跑路”？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "不是。Timeout（超时）只代表客户端在规定时间内未收到服务器的响应。这可能由本地网络抖动、DNS解析错误、客户端配置冲突、服务端临时维护或端口被拦截等多种原因造成，并不等于机场跑路。应按照排查流程依次确认账号套餐、订阅链接及日志报错。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "为什么节点在测速时有延迟数字，但浏览器依然无法打开任何网页？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "这通常是“客户端配置冲突”或“系统代理未生效”。有些测速（如 Ping 或真连接延迟）是在客户端内部直接发包测试，不受系统代理设置影响；而浏览器上网依赖系统代理或 TUN 网卡接管。此时应检查客户端的系统代理开关是否开启、TUN 模式是否正常启动，或是否有其他 VPN/加速器后台冲突。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "遇到 TLS handshake failed 错误，应优先检查什么？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "应优先检查本地设备系统时间。由于 TLS 1.3 及多数安全代理协议要求本地时间与服务器时间差不能超过 90 秒，时间偏差会导致握手失败。如果时间同步后依然报错，则需检查订阅是否最新、证书是否过期，或节点 SNI 伪装域名是否配置正确。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -274,6 +242,33 @@
       color: var(--accent-cyan);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-10",
+    "description":  "系统分析代理节点失效、全部Timeout、连接被拒绝、TLS握手失败和节点可用但无法上网的常见原因，并提供从客户端、DNS、网络链路到服务端的排查步骤。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "节点失效原因：Timeout、连接失败与无法上网的排查方法",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/airport-blocked-reasons.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -318,16 +313,15 @@
       <h1 style="font-size: 2.25rem; margin-bottom: 20px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; line-height: 1.3;">
         节点失效原因：Timeout、连接失败与无法上网的排查方法
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 15 分钟</span>
+        <span>⏱️ 阅读时长: 14 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <!-- SVG 1: Banner / Diagnostic Cover -->
         <div class="diagram-container">
           <div class="diagram-title">

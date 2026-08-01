@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -39,30 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "为什么机场面板上显示的节点在线人数和实际连接数不完全一致？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "机场后端节点通过心跳包（WebAPI 轮询）定时向前端面板上报活跃用户列表和实时流量消耗。为了减轻数据库压力，这个轮询周期通常设置为 1 分钟到 3 分钟，因此面板上的在线人数存在一定的统计延迟。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "SSPanel-UIM 与 V2Board 在架构上有何异同？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "SSPanel-UIM 是基于经典的 PHP Slim 框架开发的资深开源项目，扩展性极强且拥有丰富的主题插件；V2Board 则是基于现代化 Laravel + Vue 框架打造的新兴面板，API 交互更加轻量高效，在订阅生成速度与分布式后端支持上表现优异。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article { line-height: 1.8; color: var(--text-main); }
@@ -73,6 +49,33 @@
     .post-article li { margin-bottom: 8px; }
     .info-box { background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; margin: 24px 0; }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-23",
+    "description":  "揭秘现代机场系统的整体技术架构，深入剖析 SSPanel-UIM 与 V2Board 前端控制台、后端节点 (Xray-poseidon / Sing-box 后端) 的 WebAPI 通信机制与实时审计路由逻辑。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "SSPanel-UIM 与 V2Board 机场前端架构及节点后端对接解密",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/airport-panel-backend-architecture.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body>
 
@@ -102,15 +105,14 @@
           SSPanel-UIM 与 V2Board 机场前端架构及节点后端对接解密
         </h1>
 
-        <!-- Article Metadata -->
-        <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
-          <span>✍️ 作者: 技术编辑部</span>
-          <span>⏱️ 阅读时长: 5 分钟</span>
-          <span>📅 发布于: 2026-07-23</span>
-          <span>🔄 更新于: 2026-07-23</span>
-        </div>
-
-        <div class="info-box">
+<!-- Article Metadata -->
+      <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
+        <span>✍️ 作者: 技术编辑部</span>
+        <span>⏱️ 阅读时长: 3 分钟</span>
+        <span>📅 发布于: 2026-07-23</span>
+        <span>🔄 更新于: 2026-08-01</span>
+      </div>
+<div class="info-box">
           <strong>💡 摘要：</strong>一个成熟的机场服务商是如何管理数万用户与分布在全球的数百个节点的？本文揭秘现代机场的技术中枢——SSPanel-UIM 与 V2Board 前端框架，并详细拆解后端节点（Xray-core / Sing-box）与主控面板的鉴权、扣费及规则审计逻辑。
         </div>
 

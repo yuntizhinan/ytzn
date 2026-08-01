@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "单线程测试与多线程测试，哪个结果更真实？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "两者反映的是不同维度的真实表现。单线程测试仅利用单个 TCP 连接进行数据交互（如 M-Lab NDT 规范），由于没有多条并发链路分担丢包重传，它极易暴露出跨境骨干网在丢包与排队拥堵时的真实业务瓶颈；多线程测试则建立多条并发 TCP 管道（如常规 Speedtest），其中某条发生拥堵时其余管道会继续填充带宽，因而最能探测出你本地宽带物理接口的理论上限。日常评估节点，应同时记录并对比这两个参数。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "为什么空闲延迟极佳的节点，一开始下载大文件就卡死？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "这主要涉及“负载延迟”（Loaded Latency）与缓存膨胀（Bufferbloat）技术现象。空闲延迟指的是链路空载时测得的往返响应时间；而负载延迟指的是当你的上行或下行管道处于饱和状态时，数据在路由器、中转网关或落地服务器的硬件缓冲区里发生排队导致的延迟。如果服务商的硬件出口缓冲区过大且没有合理的调度算法，在满载下载时，延迟可能从 20ms 飙升至数百毫秒，导致其他交互业务几乎瘫痪。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "使用 iperf3 测速时，如何避免测试报文被防火墙（GFW）误判拦截？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "由于 iperf3 传输的是无特征的裸 TCP/UDP 字节流，这在流量审计设备看来具有极高的扫描嫌疑，长时间的高速率 UDP 发包（即使用 -u 选项）极易引发运营商端口级别的限速（QoS）或直接阻断。因此，在公网上跑 iperf3 测速时，发送时长应限制在 10s 至 30s 内，测试 UDP 带宽（通过 -b 选项）时，应从低水位逐渐向上推进，切忌盲目设置过高发包速率造成人为的链路级拥塞。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -262,6 +230,33 @@
       border-bottom: none;
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-10",
+    "description":  "系统介绍网络与代理节点的科学测速方法，解释带宽、吞吐量、延迟、抖动、丢包和负载延迟的区别，并提供基准测试、分时段监测及结果分析流程。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "科学测速与带宽监测：延迟、丢包、抖动与真实速度测试方法",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/speedtest-methods.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -306,16 +301,15 @@
       <h1 style="font-size: 2.25rem; margin-bottom: 20px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; line-height: 1.3;">
         科学测速与带宽监测：延迟、丢包、抖动与真实速度测试方法
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 13 分钟</span>
+        <span>⏱️ 阅读时长: 12 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <!-- SVG 1: Speed Test Metrics -->
         <div class="diagram-container">
           <div class="diagram-title">

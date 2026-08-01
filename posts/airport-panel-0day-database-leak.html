@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -45,38 +45,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "机场后台数据库泄露对我的日常翻墙会有什么直接影响？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "直接影响有三点：第一，您的邮箱和机场注册密码已泄露，如果其他重要网站使用相同账号密码，将面临‘撞库’风险；第二，您的机场订阅链接（Token）已公开，黑客可以免费盗取并消耗您的套餐流量；第三，如果机场记录了您的历史节点连接日志，您的部分本地公网真实 IP 可能存在被动暴漏风险。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "如何判断我所使用的机场是否遭到了该 0-Day 漏洞波及？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "如果您的机场出现以下特征，极大概率已被入侵：1. 官网突然长期进入‘维护’状态且无管理公告；2. 订阅链接导入客户端后返回 500 错误或提示‘账号已被冻结’；3. Telegram 官方客服突然解散或注销，部分用户收到要求补缴费用的钓鱼私聊。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "既然数据库已经泄露，现在修改机场密码有用吗？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "在机场数据库被黑客‘脱库’之后，单纯在机场官网修改密码无法挽回已经被黑客下载好的历史数据。目前最重要的操作是：立即修改您在其他重要网站（如 Gmail、支付宝、交易所）上与该机场相同的邮箱和密码，做好密码隔离，并在机场后台重置订阅链接（Reset Token）。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -183,6 +151,33 @@
       font-size: 0.9rem;
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-27",
+    "description":  "云梯指南2026年7月27日安全红色预警：因某主流开源机场前端面板存在高危未授权远程代码执行（RCE）零日漏洞，导致全球超过100家大中型机场的后台数据库被勒索黑客整体打包窃取。本文将深度解析该0-Day漏洞的入侵链路、泄露数据影响面，并为受影响的普通机场用户提供紧急密码隔离与客户端防钓鱼安全指南。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "安全警示：某开源机场面板爆发零日漏洞（0-Day），超百家机场数据库遭勒索脱库，用户订阅 Token 与真实 IP 泄露",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/airport-panel-0day-database-leak.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Header -->
@@ -231,15 +226,14 @@
           安全警示：某开源机场面板爆发零日漏洞（0-Day），超百家机场数据库遭勒索脱库，用户订阅 Token 与真实 IP 泄露
         </h1>
 
-        <!-- Article Metadata -->
-        <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
-          <span>✍️ 作者: 技术编辑部</span>
-          <span>⏱️ 阅读时长: 6 分钟</span>
-          <span>📅 发布于: 2026-07-27</span>
-          <span>🔄 更新于: 2026-07-27</span>
-        </div>
-
-        <div class="highlight-box red">
+<!-- Article Metadata -->
+      <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
+        <span>✍️ 作者: 技术编辑部</span>
+        <span>⏱️ 阅读时长: 6 分钟</span>
+        <span>📅 发布于: 2026-07-27</span>
+        <span>🔄 更新于: 2026-08-01</span>
+      </div>
+<div class="highlight-box red">
           <h3 style="color: #ff4d4f; margin-top: 0;">🚨 紧急安全红色预警</h3>
           <p style="margin-bottom: 0;">
             2026 年 7 月 27 日，云梯指南安全响应中心（SRC）发出紧急警告：目前广泛应用于网络代理中转行业的<strong>某款开源机场前端控制面板（以 PHP-Laravel 为底层的面板系统）爆发了高危未授权远程代码执行（RCE）零日漏洞</strong>。截至今日，已有超过 100 家大中型机场的服务器后台被黑客直接攻破，包含<strong>用户明文或 MD5 加密邮箱、密码哈希值、节点订阅 Token、以及历史连接日志（含公网真实 IP）</strong>在内的庞大数据库，正被黑客打包在暗网论坛兜售并向运营者发起比特币勒索。请所有科学上网用户即刻采取自救方案！

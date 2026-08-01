@@ -131,6 +131,33 @@
       padding: 0;
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-10",
+    "description":  "下一代网络代理平台 Sing-box 在 Windows 系统上的详细配置指南，包含 Hiddify Next 与 GUI.for.Singbox 图形化客户端抉择、JSON 订阅拉取步骤、本地 Wintun 驱动部署以开启网卡级 Tun 模式以及 DNS 防泄露策略。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "Sing-box Windows版配置：客户端选择、JSON订阅导入与Wintun模式网卡级接管深度调优",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/guides/sing-box-windows.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -155,16 +182,15 @@
         <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
           Sing-box Windows版配置
         </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 7 分钟</span>
+        <span>⏱️ 阅读时长: 8 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-        
-        <p>
+<p>
           在 2026 年的科学上网与网络分流生态中，随着旧版 Clash 内核停止维护，<strong>Sing-box</strong> 凭借其出色的 Go 语言底层架构，已经彻底确立了其作为下一代“通用代理工具核心”的统治地位。在 Windows 系统相对复杂的物理网络环境下（包含企业网域环境、UWP 应用代理限制、各种不遵循系统代理设置的命令行与第三方游戏客户端），Sing-box 不仅能支持 Vless (Reality)、Hysteria 2、TUIC v2 等尖端抗封锁协议，还能利用更先进的 <strong>Wintun 驱动</strong> 实现系统级的网卡重定向分流。
         </p>
         <p>

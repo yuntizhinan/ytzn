@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -39,30 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "为什么在图形界面打开了代理，终端命令行（Git/Pip/Npm）依然报 Timeout 超时？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "因为图形界面开启的“系统代理（System Proxy）”仅注册在 Windows Internet (WinINet) 或 macOS 系统 API 框架层，主要服务于 Chrome、Edge 等 GUI 浏览器。而 Git、Python pip、npm 和 curl 等命令行工具使用独立的底层 C/Socket 网络库，默认完全忽略系统代理设置，必须手动指定环境变量或代理参数。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "如何设置临时和全局终端环境变量来让命令行走代理？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "在 Windows PowerShell 中，可输入 `$env:HTTP_PROXY=\"http://127.0.0.1:7890\"; $env:HTTPS_PROXY=\"http://127.0.0.1:7890\"`；在 Linux/macOS Bash 终端中可输入 `export http_proxy=\"http://127.0.0.1:7890\"`；或对 Git 单独执行 `git config --global http.proxy http://127.0.0.1:7890`。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -184,6 +160,46 @@
       border-top: 1px solid var(--border-color);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "在 Windows 和 macOS 中，点击代理客户端的“系统代理（System Proxy）”开关，本质上只是向系统的全局网络设置注册了 HTTP/SOCKS5 端口（例如 `127.0.0.1:7890`）。 绝大多数带有图形界面的软件（如 Chrome、Edge、Spotify）在发起网络请求前，会自动向操作系统 API 查询系统代理配置。然而，像 `git.exe`、`python.exe (pip)`、`node.exe (npm)` 以及 `curl` 这样的命令行工具，设计初衷是运行在无图形界面的服务器终端，它们遵循 POSIX 规范或直接调用底层的 C Socket 库， 默认完全无视操作系统的 GUI 代理注册信息 。关于系统代理在不同层级的工作差异，可进一步阅读 系统代理工作机制与异常排查 。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "为什么命令行忽略“系统代理”设置？",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "命令行工具通常读取标准的环境变量 `HTTP_PROXY` 与 `HTTPS_PROXY`。必须确认本地客户端监听的 HTTP 混合端口（以 Clash 默认端口 7890 为例）：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "方法一：设置终端环境变量（HTTP/HTTPS Proxy）",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "针对最高频的 `git clone` 失败问题，可以在 Git 的全局全局配置文件（`.gitconfig`）中单独写入代理选项：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "方法二：配置 Git 专用代理规则",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "如果不希望每次打开终端都繁琐地输入环境变量或配置各个 CLI 工具，终极解决方案是开启客户端的 **TUN 模式（虚拟网卡模式）**。 TUN 模式直接在操作系统内核注册一个虚拟三层网卡，以最高的路由权值拦截全机所有的 IP 数据包。无论是什么命令行程序，无需任何代理配置即可自动被代理内核接管。关于 TUN 模式与 WFP 驱动拦截的深层技术原理，请参阅 TUN 模式与 WFP 驱动底层原理解析 。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "方法三：开启 TUN 模式实现全局无感接管",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -226,16 +242,15 @@
       <h1 style="font-size: 2.1rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
         为什么命令行 git clone/pip 连不上代理？终端环境变量与 CLI 代理配置指南
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 4 分钟</span>
+        <span>⏱️ 阅读时长: 5 分钟</span>
         <span>📅 发布于: 2026-07-25</span>
-        <span>🔄 更新于: 2026-07-25</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 36px; border-radius: var(--radius-md);">
+<article class="post-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 36px; border-radius: var(--radius-md);">
         <p>
           对于软件开发者、数据分析师和运维工程师而言，最常遭遇的技术尴尬莫过于：<strong>在桌面上打开了 Clash、V2RayN 或 Sing-box，浏览器访问 GitHub、HuggingFace 和 OpenAI 无比流畅，但在终端敲下 `git clone`、`pip install` 或 `npm install` 时，命令行却频繁报 `Fatal: unable to access: Failed to connect to github.com: Connection timed out` 错误。</strong>
         </p>

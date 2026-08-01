@@ -126,6 +126,62 @@
       transform: translateX(4px);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "传统的翻墙协议（如 VLESS over TCP、Shadowsocks、Trojan 等）绝大多数基于 TCP (传输控制协议) 。TCP 是一种“可靠传输”协议，其特点是：一旦网络发生丢包，发送端必须暂停后续数据发送，等待丢失的数据包重传成功（这被称为 队头阻塞 / Head-of-line blocking ）。 在跨国长途网络中，物理丢包极其常见。TCP 的拥塞控制算法（如 BBR 或 Cubic）一旦检测到丢包，就会误以为网络发生了拥堵，主动将数据发送速度削减一半甚至更多。这就导致哪怕你购买了千兆带宽，晚高峰丢包率只要达到 5%，实际握手和网页加载就会卡成“幻灯片”。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "传统 TCP 协议的“物理痛点”",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "为了解决 TCP 的弊端，谷歌开发了 QUIC (快速UDP网络连接) 协议（即 HTTP/3 的底层传输协议）。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "什么是 QUIC 与 UDP 加速？",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "Hysteria 2 是一款专门为了在“垃圾网络”中榨干带宽而设计的 UDP 协议。它最核心的黑科技是 自定义拥塞控制算法 ： 普通的网络协议在遇到丢包时会“减速让路”，而 Hysteria 2 却相反。它基于你设定的“期望下行/上行带宽”，使用一种非常激进的发送策略。即使丢包率高达 30%，它依然会以极高的速度强行往外发送 UDP 包。对于长距离传输（如连接美国、欧洲节点），Hysteria 2 的提速效果常常能达到传统 TCP 协议的 5 到 10 倍。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "Hysteria 2 (歇斯底里) 协议深度解析",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "相比于激进的 Hysteria 2， TUIC 协议则显得更为“优雅和标准”。它完全遵循 RFC 标准的 QUIC v1 协议规范：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "TUIC 协议深度解析",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "防火墙 (GFW) 近年来对传统的代理特征（如 Trojan 的 TLS 特征、Shadowsocks 的加密混淆等）进行了深度机器学习。而 Hysteria 2 和 TUIC 具备极佳的伪装能力：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "为什么它们的抗封锁性更强？",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "在实际翻墙过程中，我们建议根据自身情况选择：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "用户该如何选择与配置？",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -151,16 +207,15 @@
         <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
           什么是 Hysteria 2 与 TUIC 协议？为什么它们抗封锁性更强？
         </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
         <span>⏱️ 阅读时长: 5 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-        
-        <p>
+<p>
           在国际网络传输中，长距离、高丢包、高延迟是导致我们翻墙“卡顿”的硬伤。尤其在晚高峰（20:00 - 23:00）时段，运营商会对国际出口流量实施 QOS（服务质量控制）限速，导致传统的 TCP 代理协议速度断崖式下跌。
         </p>
         <p>

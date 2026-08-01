@@ -1,4 +1,30 @@
-﻿User-agent: *
+# Domestic AI & Search Engine Crawlers
+User-agent: Bytespider
+User-agent: Bytespider-AI
+User-agent: Baiduspider
+User-agent: Baiduspider-render
+User-agent: YisouSpider
+User-agent: Sogou web spider
+User-agent: 360Spider
+User-agent: DeepSeek-Bot
+Allow: /
+
+# International AI & Search Engine Crawlers
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-Web
+User-agent: Google-Extended
+User-agent: Applebot
+User-agent: Applebot-Extended
+User-agent: FacebookBot
+User-agent: PerplexityBot
+User-agent: Cohere-ai
+User-agent: OAI-SearchBot
+Allow: /
+
+# Global Crawler Rule
+User-agent: *
 Allow: /
 
 Sitemap: https://nodehub168.com/sitemap.xml

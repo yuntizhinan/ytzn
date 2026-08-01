@@ -126,6 +126,62 @@
       transform: translateX(4px);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "在 Windows 操作系统中，传统的代理程序是通过向注册表的特定路径写入配置，来通知系统及浏览器将流量转发至代理本地端口（默认如 7890 端口）。以下为造成代理指令失效的四大核心原因：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "系统代理未生效的四大底层原因",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "当遇到此故障时，请按照以下步骤逐一手动排查并重置网络环境：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "系统代理未生效的手动修复步骤",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "解决 UWP（微软商店）无法上网的步骤非常简单： 在 Clash Verge 客户端中，找到功能菜单中的“UWP 环回（UWP Loopback）”或“免代理限制（Exempt）”小工具。点击运行后，在弹出的列表中找到“Microsoft Store”或“Edge”，勾选并保存。您也可以下载第三方绿色软件 `EnableLoopback Utility`，一键点击“Exempt All（豁免全部）”并保存，即可彻底打通微软商店及各类内置应用的环回代理限制。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "UWP 应用回环限制与解除方法",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "如果您觉得手动修改注册表或处理杀毒软件冲突过于繁琐，最直接、彻底的降维打击手段就是 **在客户端中开启 TUN 模式**。 与传统的依赖写入系统注册表的 HTTP 代理不同，TUN 模式会在您的操作系统中直接安装一个虚拟的物理网卡。当开启 TUN 模式后，系统底层的网关路由表会被直接修改，所有的网络封包（不论是 TCP 还是 UDP 流量）都将无差别地在网络层被强行截获并转发给代理软件。 由于 TUN 模式不修改任何浏览器和 Internet 设置注册表，因此任何安全软件和浏览器扩展程序都无法对其进行封锁和干预，这对于解决游戏主机联机等场景大有裨益，可参考我们的 局域网代理共享设置 与 路由器网关配置自救 。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "终极解决手段：采用 TUN 虚拟网卡模式",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "在解决系统代理设置后，如果网页依然无法打开，我们需要排除是否为外部物理网路故障：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "排除网络物理性与账户层面故障",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "遇到系统代理未生效，请按照以下极简决策路径自救： 核对控制面板代理 IP/端口 → 检查并清理注册表残留 → 检查端口是否冲突 → 切换浏览器 SwitchyOmega 为“系统代理” → 开启 UWP 豁免 → 依然无效则在软件中一键开启“TUN 模式”。 掌握这套由浅入深的注册表与网关排查逻辑，能帮您解决大部分因本地环境紊乱导致的断网故障。在多平台设备调试中，如果对移动端策略分流感兴趣，也可进一步查阅 Loon 客户端指南 补充更多组分流设置技巧，提升您的整体上网体验。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "排障流程极简逻辑总结",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -151,16 +207,15 @@
         <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
           系统代理未生效修复
         </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 7 分钟</span>
+        <span>⏱️ 阅读时长: 8 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-        
-        <p>
+<p>
           在日常配置和使用科学上网软件（如 Clash Verge、v2rayN、Shadowsocks 等）时，很多用户会遭遇一种极其令人沮丧的网络状况：代理软件已成功打开，节点连通性测试一切正常，“系统代理（System Proxy）”开关也已经拨到了开启状态。
         </p>
         <p>

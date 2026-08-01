@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -39,30 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "为什么 Clash 测速显示 15ms 绿色数字，但切换过去后网页全打不开？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "因为客户端的“延迟测试”仅仅代表本地设备到中转入口服务器的物理 ICMP/HTTP 连通性（即所谓的入口延迟），并不代表中转服务器到境外落地节点乃至真实目标网站的代理通道是连通的。如果远端落地节点挂掉或代理软件 DNS 失败，入口测试依旧可能显示成功。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "如何测试出节点真正的真实代理延迟与下载速度？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "在客户端配置中，应将测速 URL（url-test）由默认的 `http://www.gstatic.com/generate_204` 改为海外实际网站（如 `https://cp.cloudflare.com/generate_204`），或者直接在浏览器中使用 Speedtest 发起真实带载带宽测试。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -184,6 +160,38 @@
       border-top: 1px solid var(--border-color);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "代理客户端在批量点击“测速”时，为了追求速度，默认执行的机制并不是完整的网页下载测试：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "揭秘测速原理：入口 RTT vs 完整端到端代理",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "在中转线路机场中，连接路径为：`本地设备 -&gt; 国内 BGP 入口 -&gt; 跨境专线 -&gt; 境外落地 IP`。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "故障原因一：中转到落地出口断连",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "在选择节点后打不开网页，也可能是客户端本地的 DNS 分流配置出问题。若代理客户端的远程 DNS 无法解析域名（如响应 SERVFAIL），哪怕代理 TCP 连接是畅通的，浏览器也无法拿到的目标网站 IP。关于 DNS 模式区别可参考 FakeIP 与 Redir-Host 模式配置 。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "故障原因三：客户端 DNS 解析陷入死锁",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -226,16 +234,15 @@
       <h1 style="font-size: 2.1rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
         节点测速显示成功且延迟低，但选中后完全无网？测试机制与故障排查
       </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 4 分钟</span>
+        <span>⏱️ 阅读时长: 3 分钟</span>
         <span>📅 发布于: 2026-07-25</span>
-        <span>🔄 更新于: 2026-07-25</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 36px; border-radius: var(--radius-md);">
+<article class="post-article" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 36px; border-radius: var(--radius-md);">
         <p>
           在使用 Clash Verge、V2RayN 或 Shadowrocket 时，许多用户常被客户端的测速数值欺骗：<strong>点击“延迟测试”后，节点列表弹出一排绿色的数值（如 12ms、45ms），看起来网络极佳；然而一旦切换选中该节点，打开网页却弹窗提示 `ERR_CONNECTION_RESET` 或无限加载超时。</strong>
         </p>

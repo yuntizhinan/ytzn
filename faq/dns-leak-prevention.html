@@ -126,6 +126,62 @@
       transform: translateX(4px);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "DNS (域名系统) 负责将类似 google.com 的英文网址转换为计算机能看懂的 IP 地址。在正常的代理流程中，你的代理客户端应该接管这个解析过程，通过远端安全的代理节点去获取正确的 IP。 然而，如果代理客户端配置不当，浏览器在发起加密代理连接之前，会先使用系统的网络设置向运营商（如中国电信、中国联通）的 DNS 发送查询请求。危害包括：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "什么是 DNS 泄露及其危害",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "检测 DNS 泄露的方法非常简单：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "如何检测自己的网络是否存在 DNS 泄露？",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "大部分 DNS 泄露是由代理软件在 “系统代理”模式 下的局限性造成的： 在系统代理（System Proxy）模式下，代理软件只接管支持代理协议的软件（如浏览器）的 HTTP/HTTPS/SOCKS 流量。而对于底层的 UDP 53 端口（DNS 默认端口）请求，系统代理是无法拦截的。 要彻底封堵此漏洞，必须使用 虚拟网卡拦截（TUN 模式） ，或者在代理软件的内置 DNS 模块中建立严格的解析分流分流规则（Fake-IP 模式或安全 DoH）。关于代理客户端如何根据域名和解析后的 IP 进行精细化流量分配，推荐深入查阅科普文章 Clash 与小火箭规则分流原理解析 。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "导致泄露的根本技术原因",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "如果你使用的是 Clash Verge Rev 等软件，可以通过修改或扩展配置文件中的 dns: 模块来防泄露： dns: enable: true enhanced-mode: fake-ip # 强烈推荐 Fake-IP 模式，浏览器只拿到虚拟 IP，绝不向本地发送真实查询 listen: 127.0.0.1:1053 nameserver: - 223.5.5.5 # 国内域名使用阿里 DNS 解析 - 119.29.29.29 fallback: - https://dns.cloudflare.com/dns-query # 国外域名强制使用加密 DoH 且通过代理节点解析 - https://dns.google/dns-query fallback-filter: geoip: true geoip-code: CN # 如果解析出来的 IP 不属于中国，则强制使用 fall...",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "Clash / Mihomo 内核防泄露黄金配置",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "Sing-box 的设计理念更加底层，其防泄露通过配置独立的 dns 字段和 route 规则来配合实现：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "Sing-box 内核防泄露分流配置",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "除了配置代理软件外，在浏览器端做两个小调整能起到双重保险作用： 确保上述配置生效后，您的网络冲浪环境将变得坚不可摧，彻底远离因 DNS 泄露带来的隐身隐患。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "浏览器与系统层级辅助设置",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -151,16 +207,15 @@
         <h1 style="font-size: 2.25rem; margin-bottom: 24px; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
           科学上网如何防止 DNS 泄露？保障真实 IP 隐私安全
         </h1>
-      
-      <!-- Article Metadata -->
+
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
         <span>⏱️ 阅读时长: 6 分钟</span>
         <span>📅 发布于: 2026-07-10</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-        
-        <p>
+<p>
           许多用户在使用代理软件上网时，常常会忽略一个严重的安全漏洞——<strong>DNS 泄露 (DNS Leak)</strong>。DNS 泄露是指：即使你的实际网页浏览流量已经通过加密代理节点发送，但你对网站域名的解析请求却依然通过本地宽带网络发往了国内运营商的默认 DNS 服务器。
         </p>
         <p>

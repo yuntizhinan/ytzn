@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "科学上网软件里的“延迟测试”和打游戏时说的“Ping值”是一回事吗？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "不是一回事。游戏中的 Ping 或者是 CMD 里的 Ping 是基于网络第三层（网络层）的 ICMP 协议包，代表数据包往返的纯粹物理时延。而 Clash、小火箭等科学上网客户端中默认的“延迟测试”是“真连接延迟（HTTP Latency）”，它实际上是用代理节点完整模拟了一次向 Google 或是 Github 网站发起 HTTP 请求握手并接收返回数据的过程，其中包含了 TCP、TLS 握手以及应用层处理的时间，因此比纯物理 Ping 更能反映真实的网页首屏响应表现。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "为什么有的美国节点真连接延迟 180ms，看 4K 视频却能秒开，速度甚至快过 30ms 的香港节点？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "因为看视频（尤其是大流量吞吐）主要依赖“稳定带宽的持续输出”，而不像网页小文件那样对首次握手时延高度敏感。如果美国服务器本身拥有大带宽并配置了优秀的 BBR 拥塞控制算法，即使 RTT（往返时延）达 180ms，随着 TCP 滑动窗口随着传输扩大，速度依然能跑满。反之，如果某些低端香港节点虽然物理距离近（延迟 30ms），但其服务器由于带宽超载导致丢包严重，且使用的是传统遇到丢包就断崖式减速的 TCP Cubic 算法，实际速度就会变得极慢。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "如何在本地设备上优化高延迟节点的首屏打开体验？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "一是在客户端设置中开启 TCP Fast Open (TCP快速打开)，这能让客户端在 TCP 握手的 SYN 包中直接携带第一批数据，省去一个 RTT 的握手时间；二是尽可能选用支持 QUIC 协议（如 TUIC v5, Hysteria 2）的节点，利用 QUIC 的 0-RTT 极速建连特性消除多次 TLS 握手开销；三是在浏览器中启用 HTTP/3 功能。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -246,6 +214,33 @@
       color: var(--accent-cyan);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-19",
+    "description":  "深度科普计算机网络中 ICMP Ping 延迟、TCP/TLS 握手延迟与实际带宽吞吐率的底层联系。为您解答为什么机场节点延迟低但首屏加载慢的谜题，并介绍谷歌 BBR 拥塞控制算法以及客户端调优方法。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "为什么 Ping 延迟 20ms 网页依然转圈？深度解析握手延迟、BBR 算法与实际吞吐率",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/handshake-latency-vs-speed.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -289,17 +284,14 @@
         为什么 Ping 延迟 20ms 网页依然转圈？深度解析握手延迟、BBR 算法与实际吞吐率
       </h1>
 
-      
-      
-      <!-- Article Metadata -->
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 8 分钟</span>
+        <span>⏱️ 阅读时长: 7 分钟</span>
         <span>📅 发布于: 2026-07-19</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <p>
           在选择科学上网（翻墙）节点时，90% 用户的衡量标准都极为简单粗暴：“哪个节点延迟低，我就选哪个”。如果看到香港节点测试延迟只有 20ms，就会欣喜地设为常驻；如果看到美国节点延迟有 200ms，就会避而远之。
         </p>

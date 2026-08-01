@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -102,6 +102,38 @@
       font-size: 0.9rem;
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context":  "https://schema.org",
+    "mainEntity":  [
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "游戏客户端与常规 Web 网页的底层通信架构存在巨大差异：",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "为什么普通系统代理无法完美加速联机游戏？",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "在桌面客户端（如 Clash Verge Rev、Clash Nyanpasu 或 Sing-box）中，务必在设置中开启 TUN Mode (虚拟网卡模式) 。TUN 模式会创建一个虚拟的三层网卡，参与系统内核路由分发，强行捕捉并接管游戏发出的全部 UDP 数据包。（详见 机场 UDP 转发与 FullCone NAT 详解 ）。 并非所有机场节点都适合游戏加速。必须挑选明确标注支持 FullCone UDP / QUIC 转发 的专线节点（可参考 什么是 IPLC 专线 ）。IPLC 专线具备端到端恒定低延迟与零丢包特性，能显著消除游戏中的丢包跳帧。 如果需要加速 PS5 或 Switch，可在电脑端代理软件中开启 Allow LAN (允许局域网连接) ，并在游戏主机的网络设置中将 HTTP/HTTPS 代理填写为电脑的局域网 IP 与端口（默认端口通常为 7890 ，详细可看 局域...",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "打造低延迟极速联机的三大优化步骤",
+                           "@type":  "Question"
+                       },
+                       {
+                           "acceptedAnswer":  {
+                                                  "text":  "游戏加速的核心三要素是： 开启客户端 TUN 模式 + 选购支持 FullCone UDP 的 IPLC 专线 + 保证链路零丢包 。遵循以上配置，您即可将联机 NAT 类型提升至开放状态（NAT1/NAT2），尽情畅享低延迟联机对战。",
+                                                  "@type":  "Answer"
+                                              },
+                           "name":  "总结",
+                           "@type":  "Question"
+                       }
+                   ],
+    "@type":  "FAQPage"
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <header class="site-header">
@@ -135,15 +167,14 @@
           【游戏加速】开启代理后 Steam / PS5 / Switch 无法联机或提示 NAT 类型受限？TUN 模式与 FullCone UDP 配置排障
         </h1>
 
-        <!-- Article Metadata -->
-        <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
-          <span>✍️ 作者: 技术编辑部</span>
-          <span>⏱️ 阅读时长: 3 分钟</span>
-          <span>📅 发布于: 2026-07-24</span>
-          <span>🔄 更新于: 2026-07-24</span>
-        </div>
-
-        <p>
+<!-- Article Metadata -->
+      <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
+        <span>✍️ 作者: 技术编辑部</span>
+        <span>⏱️ 阅读时长: 3 分钟</span>
+        <span>📅 发布于: 2026-07-24</span>
+        <span>🔄 更新于: 2026-08-01</span>
+      </div>
+<p>
           许多玩家在使用通用科学上网客户端加速 Steam 游戏、Apex 英雄、绝地求生或在 PS5、Switch 游戏主机联机时，经常遇到<strong>组队匹配超时、游戏内语音无声、或者网络测试提示 NAT3 (Strict / 严格)</strong> 等严重影响游戏体验的问题。
         </p>
         <p>

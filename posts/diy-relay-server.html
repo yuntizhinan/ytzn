@@ -39,38 +39,6 @@
   </script>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "为什么中转节点可以降低科学上网的延迟和抖动？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "国内宽带的公网国际出口网关在晚高峰时期极其拥堵，且伴随着高达 30% 以上的随机丢包。中转节点的原理是让你的客户端首先连接到网络环境优良的国内中转服务器（如国内BGP或高防单线机房），中转机房拥有专门优化的省际与跨境传输骨干网络，数据包从国内中转机发送到境外落地服务器的丢包率和抖动都远低于民用公网宽带，因此整体网络体验会大幅提升。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "什么是 NAT VPS？为什么适合用作自建中转？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "NAT VPS 是一种共享 IPv4 地址的轻量级虚拟服务器，商家通常只为每个用户分配一个共享 IP 下的十几个至几十个特定端口。因为没有独享 IPv4 的高昂成本，NAT VPS 的价格通常极低（年付仅需几十元人民币）。对于仅需要转发科学上网特定端口流量的用户来说，NAT VPS 是性价比最高的完美中转平台。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "中转国内服务器有被墙的风险吗？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "有。虽然中转节点由于数据包直接发往海外，被防火墙拦截的几率相对较低，但如果进行明文转发（如直接 TCP/UDP Port Forwarding），当流量规模较大或协议特征明显时，国内中转 VPS 的公网 IP 很容易被防火墙探测并予以封锁（即中转机无法访问海外落地机）。因此，使用 Gost 等工具对中转流量进行二次加密封包（如 Gost TLS 隧道模式）是非常必要的。"
-        }
-      }
-    ]
-  }
-  </script>
 
   <style>
     .post-article {
@@ -246,6 +214,33 @@
       color: var(--accent-cyan);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "inLanguage":  "zh-CN",
+    "datePublished":  "2026-07-19",
+    "description":  "详细指导新手用户如何租用国内廉价 NAT VPS 服务器，利用 Gost 隧道转发协议与极光中转面板（Aurora Admin）实现自建中转，大幅优化和降低科学上网节点在晚高峰时期的延迟与丢包率。",
+    "@type":  "TechArticle",
+    "dateModified":  "2026-08-01",
+    "headline":  "自建中转节点保姆级教程：利用 Gost 与极光面板实现机场节点低延迟加速",
+    "author":  {
+                   "name":  "技术编辑部",
+                   "@type":  "Organization"
+               },
+    "@context":  "https://schema.org",
+    "mainEntityOfPage":  {
+                             "@type":  "WebPage",
+                             "@id":  "https://nodehub168.com/posts/diy-relay-server.html"
+                         },
+    "publisher":  {
+                      "name":  "云梯指南",
+                      "logo":  {
+                                   "@type":  "ImageObject",
+                                   "url":  "https://nodehub168.com/assets/images/logo.svg"
+                               },
+                      "@type":  "Organization"
+                  }
+}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
   <!-- Navigation Header -->
@@ -289,17 +284,14 @@
         自建中转节点保姆级教程：利用 Gost 与极光面板实现机场节点低延迟加速
       </h1>
 
-      
-      
-      <!-- Article Metadata -->
+<!-- Article Metadata -->
       <div class="article-meta-info" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 12px;">
         <span>✍️ 作者: 技术编辑部</span>
-        <span>⏱️ 阅读时长: 10 分钟</span>
+        <span>⏱️ 阅读时长: 8 分钟</span>
         <span>📅 发布于: 2026-07-19</span>
-        <span>🔄 更新于: 2026-07-19</span>
+        <span>🔄 更新于: 2026-08-01</span>
       </div>
-
-      <article class="post-article">
+<article class="post-article">
         <p>
           对于需要流畅观看 4K 流媒体、跨境电商网络办公或是跨国在线游戏的深度“科学上网”用户来说，最令人头痛的不是带宽不够，而是<strong>延迟过高、抖动强烈以及随机丢包</strong>。在晚高峰时期（晚上 8 点至 11 点），由于国内三大运营商的国际出口带宽饱和，直连节点的速度会断崖式下跌，甚至直接超时断联。
         </p>
