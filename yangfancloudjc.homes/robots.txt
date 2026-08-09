@@ -1,0 +1,38 @@
+# 字节跳动 / 豆包 AI 爬虫
+User-agent: Bytespider
+Allow: /
+
+# 百度 / 文心一言 & 搜索引擎
+User-agent: Baiduspider
+Allow: /
+
+# 阿里 / 通义千问 & 夸克搜索
+User-agent: YisouSpider
+Allow: /
+
+# 搜狗搜索
+User-agent: Sogou web spider
+Allow: /
+
+# 360 智脑 / 奇虎搜索
+User-agent: 360Spider
+Allow: /
+
+# 智能通用 AI 抓取 Agent（如 Perplexity、各类大模型联网代理等）
+User-agent: Bytespider-AI
+User-agent: DeepSeek-Bot
+User-agent: ChatGPT-User
+User-agent: Claude-Web
+Allow: /
+
+# 常规搜索引擎
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: *
+Allow: /
+
+Sitemap: https://yangfancloudjc.homes/sitemap.xml

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>客户端配置教程中心 - 2026 机场推荐与网络工具指南</title>
+  <meta name="description" content="提供全平台科学上网代理客户端配置教程，包括Clash Verge, Shadowrocket, Stash, Sing-box等工具的一键配置与规则过滤配置。">
+  <link rel="stylesheet" href="index.css">
+  <script src="main.js" defer></script>
+</head>
+<body>
+
+  <!-- FIXED NAVIGATION HEADER -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="index.html" class="logo-wrapper">
+        <img src="assets/logo.png" alt="机场推荐Logo" class="logo">
+      </a>
+      
+      <!-- Hamburger Menu for Mobile -->
+      <button class="burger" aria-label="Toggle Navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- Main Navigation Menu -->
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">首页</a></li>
+        <li class="nav-item">
+          <a href="reviews.html" class="nav-link has-dropdown">
+            机场评测
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item"><a href="reviews.html" class="dropdown-link">全部评测文章</a></li>
+            <li class="dropdown-item"><a href="reviews.html?filter=premium" class="dropdown-link">高端机场深度评测</a></li>
+            <li class="dropdown-item"><a href="reviews.html?filter=speed" class="dropdown-link">速度与带宽实测</a></li>
+            <li class="dropdown-item"><a href="reviews.html?filter=stability" class="dropdown-link">稳定性与SLA报告</a></li>
+          </ul>
+        </li>
+        <li class="nav-item active">
+          <a href="tutorials.html" class="nav-link has-dropdown">
+            教程
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item"><a href="tutorials.html?platform=windows" class="dropdown-link">Windows 教程</a></li>
+            <li class="dropdown-item"><a href="tutorials.html?platform=mac" class="dropdown-link">macOS 教程</a></li>
+            <li class="dropdown-item"><a href="tutorials.html?platform=ios" class="dropdown-link">iPhone / iOS 教程</a></li>
+            <li class="dropdown-item"><a href="tutorials.html?platform=android" class="dropdown-link">Android 安卓教程</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="ranking.html" class="nav-link has-dropdown">
+            排行榜
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item"><a href="ranking.html?rank=comprehensive" class="dropdown-link">2026综合推荐榜</a></li>
+            <li class="dropdown-item"><a href="ranking.html?rank=speed" class="dropdown-link">速度最快机场榜</a></li>
+            <li class="dropdown-item"><a href="ranking.html?rank=value" class="dropdown-link">高性价比机场榜</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="knowledge.html" class="nav-link has-dropdown">
+            知识库
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item"><a href="knowledge.html#vpn" class="dropdown-link">VPN 与 代理区别</a></li>
+            <li class="dropdown-item"><a href="knowledge.html#vps" class="dropdown-link">VPS 节点搭建指南</a></li>
+            <li class="dropdown-item"><a href="knowledge.html#protocols" class="dropdown-link">网络协议解析 (SS/Trojan)</a></li>
+            <li class="dropdown-item"><a href="knowledge.html#dns" class="dropdown-link">DNS 泄露与防范</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- SUBPAGE HERO -->
+  <section class="subpage-hero">
+    <div class="container">
+      <h1 style="font-size: 2.75rem; margin-bottom: 0.5rem;">客户端使用教程中心</h1>
+      <p style="color: var(--text-muted); font-size: 1.1rem;">支持 Clash Verge、Sing-box、小火箭、圈X及多端路由的订阅导入指南</p>
+    </div>
+  </section>
+
+  <!-- MAIN TUTORIALS ARCHIVE -->
+  <div class="container" style="padding: 50px 2rem;">
+    <!-- Windows Segment -->
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; border-left: 4px solid #00f2fe; padding-left: 0.75rem;">Windows 平台</h2>
+    <div class="tutorial-grid" style="margin-bottom: 3.5rem;">
+      <div class="tutorial-card">
+        <div class="tutorial-icon">verge</div>
+        <h4>Clash Verge 配置指南</h4>
+        <p>适合 Windows 10/11 的现代界面客户端，支持自定义合并配置文件，支持中文路径。</p>
+        <a href="post-detail.html?id=clash-verge-win" class="tutorial-link">查看配置步骤</a>
+      </div>
+      <div class="tutorial-card">
+        <div class="tutorial-icon">sing</div>
+        <h4>Sing-box GUI 指南</h4>
+        <p>轻量快速，多协议支持广泛。本文提供适合新手的图形客户端配置图文说明。</p>
+        <a href="post-detail.html?id=singbox-win" class="tutorial-link">查看配置步骤</a>
+      </div>
+      <div class="tutorial-card">
+        <div class="tutorial-icon">cfw</div>
+        <h4>Clash for Windows 经典配置</h4>
+        <p>介绍经典 CFW 的汉化、代理规则设置、TUN虚拟网卡模式的开启方法。</p>
+        <a href="post-detail.html?id=cfw-win" class="tutorial-link">查看配置步骤</a>
+      </div>
+    </div>
+
+    <!-- macOS Segment -->
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; border-left: 4px solid #b176ff; padding-left: 0.75rem;">macOS 平台</h2>
+    <div class="tutorial-grid" style="margin-bottom: 3.5rem;">
+      <div class="tutorial-card">
+        <div class="tutorial-icon">verge</div>
+        <h4>Clash Verge for Mac</h4>
+        <p>苹果 M 系列芯片及 Intel 平台完美兼容，含一键系统代理设置教程与分流规则。</p>
+        <a href="post-detail.html?id=clash-verge-mac" class="tutorial-link">查看配置步骤</a>
+      </div>
+      <div class="tutorial-card">
+        <div class="tutorial-icon">clashx</div>
+        <h4>ClashX / ClashX Pro 安装</h4>
+        <p>支持原生托管订阅，Pro 版支持增强网卡模式以代理终端和网络游戏。</p>
+        <a href="post-detail.html?id=clashx-mac" class="tutorial-link">查看配置步骤</a>
+      </div>
+      <div class="tutorial-card">
+        <div class="tutorial-icon">loon</div>
+        <h4>Loon Mac 配置流程</h4>
+        <p>针对 Mac 系统的 Loon 安装，支持一键载入 iOS 的代理策略组和分流规则。</p>
+        <a href="post-detail.html?id=loon-mac" class="tutorial-link">查看配置步骤</a>
+      </div>
+    </div>
+
+    <!-- iOS Segment -->
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; border-left: 4px solid #ff9f43; padding-left: 0.75rem;">iPhone / iOS 平台</h2>
+    <div class="tutorial-grid" style="margin-bottom: 3.5rem;">
+      <div class="tutorial-card">
+        <div class="tutorial-icon">rocket</div>
+        <h4>Shadowrocket 小火箭使用</h4>
+        <p>全能代理工具，图文教你如何配置多条订阅、扫码添加单节点与自定义拦截策略。</p>
+        <a href="post-detail.html?id=shadowrocket-ios" class="tutorial-link">查看配置步骤</a>
+      </div>
+      <div class="tutorial-card">
+        <div class="tutorial-icon">quantum</div>
+        <h4>Quantumult X (圈X) 高级配置</h4>
+        <p>支持 Rewrite、Mitm、网络重写的进阶教程，包含一键规则托管脚本和 UI 设置。</p>
+        <a href="post-detail.html?id=quantumultx-ios" class="tutorial-link">查看配置步骤</a>
+      </div>
+      <div class="tutorial-card">
+        <div class="tutorial-icon">stash</div>
+        <h4>Stash 订阅导入</h4>
+        <p>Clash ruleset 的 iOS 对应版，最优雅的 Clash 客户端移植，教你一键同步规则。</p>
+        <a href="post-detail.html?id=stash-ios" class="tutorial-link">查看配置步骤</a>
+      </div>
+    </div>
+
+    <!-- Android Segment -->
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; border-left: 4px solid #2ecc71; padding-left: 0.75rem;">Android 平台</h2>
+    <div class="tutorial-grid">
+      <div class="tutorial-card">
+        <div class="tutorial-icon">cfa</div>
+        <h4>Clash for Android 配置</h4>
+        <p>一键载入 YAML 订阅文件，针对局域网代理共享与本地应用绕过的精细配置教程。</p>
+        <a href="post-detail.html?id=cfa-android" class="tutorial-link">查看配置步骤</a>
+      </div>
+      <div class="tutorial-card">
+        <div class="tutorial-icon">v2rayng</div>
+        <h4>v2rayNG 简易配置</h4>
+        <p>支持 V2ray 订阅及单节点批量导入。讲解如何修改分流模式、测试节点延迟。</p>
+        <a href="post-detail.html?id=v2rayng-android" class="tutorial-link">查看配置步骤</a>
+      </div>
+      <div class="tutorial-card">
+        <div class="tutorial-icon">singbox</div>
+        <h4>Sing-box Android 原生版</h4>
+        <p>低消耗、支持 Hysteria 与 TUIC 协议，介绍如何使用 JSON/URL 托管配置文件导入节点。</p>
+        <a href="post-detail.html?id=singbox-android" class="tutorial-link">查看配置步骤</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer" style="margin-top: 80px;">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0; text-align: center;">
+        <p>&copy; 2026 机场推荐与网络工具指南. All Rights Reserved. 本站服务仅限用于合法的学术研究与外贸跨境办公。</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
