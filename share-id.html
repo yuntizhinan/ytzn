@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日共享 Apple ID - 外区 Apple ID 账号免费分享</title>
+  <meta name="description" content="每日更新共享 Apple ID 账号池，免费下载美区、港区等外区专属应用。">
+  <link rel="stylesheet" href="index.css">
+  <script src="main.js" defer></script>
+  <style>
+    /* Styling for the share ID page */
+    .id-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .id-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .id-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .id-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .id-card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .status-badge {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+    }
+    .info-group {
+      margin-bottom: 15px;
+    }
+    .info-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .info-row {
+      display: flex;
+      gap: 10px;
+    }
+    .info-value {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 12px;
+      border-radius: 6px;
+      color: #cbd5e1;
+      font-family: monospace;
+      font-size: 0.9rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .copy-btn {
+      background: var(--bg-secondary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .unlock-banner {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+    }
+    .unlock-text {
+      color: #fbbf24;
+      font-size: 0.95rem;
+    }
+    .unlock-btn {
+      background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.2s;
+    }
+    .unlock-btn:hover {
+      transform: translateY(-2px);
+    }
+    .alert-box {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid #ef4444;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+    .alert-title {
+      color: #f87171;
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    .alert-box ul {
+      color: #fca5a5;
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 1000;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FIXED NAVIGATION HEADER -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="index.html" class="logo-wrapper">
+        <img src="assets/logo.png" alt="机场推荐Logo" class="logo">
+      </a>
+      
+      <!-- Hamburger Menu for Mobile -->
+      <button class="burger" aria-label="Toggle Navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- Main Navigation Menu -->
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">首页</a></li>
+        <li class="nav-item">
+          <a href="reviews.html" class="nav-link has-dropdown">
+            机场评测
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item"><a href="reviews.html" class="dropdown-link">全部评测文章</a></li>
+            <li class="dropdown-item"><a href="reviews.html?filter=premium" class="dropdown-link">高端机场深度评测</a></li>
+            <li class="dropdown-item"><a href="reviews.html?filter=speed" class="dropdown-link">速度与带宽实测</a></li>
+            <li class="dropdown-item"><a href="reviews.html?filter=stability" class="dropdown-link">稳定性与SLA报告</a></li>
+          </ul>
+        </li>
+        <li class="nav-item active">
+          <a href="share-id.html" class="nav-link">外区ID</a>
+        </li>
+        <li class="nav-item">
+          <a href="tutorials.html" class="nav-link has-dropdown">
+            教程
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item"><a href="tutorials.html?platform=windows" class="dropdown-link">Windows 教程</a></li>
+            <li class="dropdown-item"><a href="tutorials.html?platform=mac" class="dropdown-link">macOS 教程</a></li>
+            <li class="dropdown-item"><a href="tutorials.html?platform=ios" class="dropdown-link">iPhone / iOS 教程</a></li>
+            <li class="dropdown-item"><a href="tutorials.html?platform=android" class="dropdown-link">Android 安卓教程</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="ranking.html" class="nav-link has-dropdown">
+            排行榜
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item"><a href="ranking.html?rank=comprehensive" class="dropdown-link">2026综合推荐榜</a></li>
+            <li class="dropdown-item"><a href="ranking.html?rank=speed" class="dropdown-link">速度最快机场榜</a></li>
+            <li class="dropdown-item"><a href="ranking.html?rank=value" class="dropdown-link">高性价比机场榜</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="knowledge.html" class="nav-link has-dropdown">
+            知识库
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item"><a href="knowledge.html#vpn" class="dropdown-link">VPN 与 代理区别</a></li>
+            <li class="dropdown-item"><a href="knowledge.html#vps" class="dropdown-link">VPS 节点搭建指南</a></li>
+            <li class="dropdown-item"><a href="knowledge.html#protocols" class="dropdown-link">网络协议解析 (SS/Trojan)</a></li>
+            <li class="dropdown-item"><a href="knowledge.html#dns" class="dropdown-link">DNS 泄露与防范</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- SUBPAGE HERO -->
+  <section class="subpage-hero">
+    <div class="container">
+      <h1 style="font-size: 2.75rem; margin-bottom: 0.5rem;">每日共享 Apple ID</h1>
+      <p style="color: var(--text-muted); font-size: 1.1rem;">免费共享账号池 · 一键登录 App Store 下载小火箭等外区应用</p>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main class="container" style="padding: 50px 2rem; max-width: 1000px;">
+    
+    <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+      <div style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; text-align: center;">
+        <p style="font-size: 2.5rem; font-weight: bold; color: #fff; margin-bottom: 5px; font-family: var(--font-title);">30</p>
+        <p style="font-size: 0.95rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">可用账号</p>
+      </div>
+      <div style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; text-align: center;">
+        <p style="font-size: 2.5rem; font-weight: bold; color: #fff; margin-bottom: 5px; font-family: var(--font-title);">08-11</p>
+        <p style="font-size: 0.95rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">今日更新</p>
+      </div>
+    </div>
+    
+    <div style="background: rgba(14, 165, 233, 0.1); border-left: 4px solid #0ea5e9; border-radius: 8px; padding: 20px; margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+      <div>
+        <h3 style="color: #38bdf8; font-size: 1.15rem; margin-bottom: 8px;">🔔 账号更新第一时间知道</h3>
+        <p style="color: #bae6fd; font-size: 0.95rem; line-height: 1.5;">共享 ID 随时可能失效换新，订阅 TG 频道，每早 8 点账号池更新自动推送。</p>
+      </div>
+      <a href="#" style="background: #0ea5e9; color: #fff; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: background 0.3s; white-space: nowrap;">订阅频道</a>
+    </div>
+
+    <div class="alert-box">
+      <div class="alert-title">⚠️ 使用共享 ID 前必读</div>
+      <ul>
+        <li>共享账号是<strong>多人公用</strong>，随时可能被改密或锁定，<strong>仅用于下载 App，别做其它用途</strong>。</li>
+        <li><strong>防锁机：</strong>只在「App Store」里登录下载，<strong>切勿在「设置 → 顶部 Apple ID」整机登录</strong>（整机登录可能被远程锁定/抹除）。</li>
+        <li><strong>用完退出：</strong>下载完立即在 App Store 退回自己的 ID；已装好的 App 照常使用，不受影响。</li>
+      </ul>
+    </div>
+
+    <div class="unlock-banner" id="unlockBanner">
+      <div class="unlock-text">
+        <span style="font-size: 1.2rem; margin-right: 8px;">🔒</span> 账号密码已隐藏，阅读安全须知后即可解锁查看
+      </div>
+      <button class="unlock-btn" id="unlockBtn">🔓 解锁查看账号密码</button>
+    </div>
+
+    <div class="id-grid">
+      <!-- Cards will be populated here -->
+    </div>
+
+    </main>
+
+    <section class="container" style="max-width: 900px; margin: 20px auto 60px; padding: 0 2rem;">
+      <div style="padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);">
+        <h2 style="font-size: 1.8rem; margin-bottom: 30px; text-align: center; color: #fff;">常见问题</h2>
+        
+        <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: #00f2fe; font-size: 1.15rem; margin-bottom: 12px;">Q: 用共享 ID 会不会把手机锁了?</h3>
+          <p style="color: #cbd5e1; line-height: 1.7;">只要按本页做——只在「App Store」登录下载，用完退出，就没有锁机风险。锁机（激活锁）只发生在你把共享账号登录到「设置 → 顶部 Apple ID」整机的情况，那样对方能通过「查找」远程锁定，千万别这么做。</p>
+        </div>
+        
+        <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: #00f2fe; font-size: 1.15rem; margin-bottom: 12px;">Q: 为什么提示"需要验证码 / 双重认证"?</h3>
+          <p style="color: #cbd5e1; line-height: 1.7;">说明该账号临时开启了双重验证或正被占用，你收不到验证码。别纠结，直接换账号池里的下一个账号即可。</p>
+        </div>
+        
+        <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: #00f2fe; font-size: 1.15rem; margin-bottom: 12px;">Q: 我的照片、通讯录会泄露吗?</h3>
+          <p style="color: #cbd5e1; line-height: 1.7;">不会。只在 App Store 登录不会同步任何 iCloud 数据（照片/通讯录/备忘录）。前提仍是：不要在「设置」里整机登录。</p>
+        </div>
+        
+        <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: #00f2fe; font-size: 1.15rem; margin-bottom: 12px;">Q: 下载的 App 之后还能更新吗?</h3>
+          <p style="color: #cbd5e1; line-height: 1.7;">App 装好后打开使用不需要账号。更新时会要求当时下载用的 ID 密码——建议之后用自己的美区 Apple ID 覆盖，或临时登共享 ID 更新。App 本身不会因为退出账号而失效。</p>
+        </div>
+        
+        <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: #00f2fe; font-size: 1.15rem; margin-bottom: 12px;">Q: 下载好小火箭之后呢?</h3>
+          <p style="color: #cbd5e1; line-height: 1.7;">小火箭只是客户端"空壳"，还需要节点/机场才能上网。免费应急看<a href="#" style="color: #38bdf8; text-decoration: underline;">每日免费节点</a>，长期稳定、能看 Netflix / 稳用 ChatGPT 推荐<a href="post-detail.html?id=speedworld-2026" style="color: #38bdf8; text-decoration: underline;">速界机场</a>。</p>
+        </div>
+      </div>
+    </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p style="text-align: center; color: var(--text-muted);">&copy; 2026 机场推荐与网络工具指南. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const accounts = [
+      { id: "18603998568@163.com", pass: "248BmucceV" },
+      { id: "15879545777@163.com", pass: "4Kd6tTxWYD" },
+      { id: "13760110258@163.com", pass: "4XajTjx355" },
+      { id: "17775206526@163.com", pass: "k5DR5NEfr7" },
+      { id: "DannyHarveyittc@outlook.com", pass: "GPw7tGgQ37" },
+      { id: "13980189333@163.com", pass: "ECa6ms9AVB" },
+      { id: "2273167731@qq.com", pass: "9F6GVNtuR6" },
+      { id: "15668085691@163.com", pass: "Y4C5EcYbE4" }
+    ];
+
+    const grid = document.querySelector('.id-grid');
+    let unlocked = false;
+
+    function renderCards() {
+      grid.innerHTML = accounts.map((acc, index) => {
+        let displayId = "••••••••";
+        if (unlocked) {
+          displayId = acc.id;
+        } else {
+          const atIndex = acc.id.indexOf('@');
+          if(atIndex > 2) {
+             displayId = acc.id.substring(0, 2) + "••••••" + acc.id.substring(atIndex);
+          } else {
+             displayId = acc.id;
+          }
+        }
+        
+        const displayPass = unlocked ? acc.pass : "••••••••";
+        
+        return `
+          <div class="id-card">
+            <div class="id-card-header">
+              <span class="id-card-title">账号 ${index + 1}</span>
+              <div class="status-badge">
+                <div class="status-dot"></div>
+                可用
+              </div>
+            </div>
+            
+            <div class="info-group">
+              <div class="info-label">APPLE ID</div>
+              <div class="info-row">
+                <div class="info-value" id="id-val-${index}">${displayId}</div>
+                <button class="copy-btn" onclick="copyText('${acc.id}')">复制</button>
+              </div>
+            </div>
+            
+            <div class="info-group">
+              <div class="info-label">密码</div>
+              <div class="info-row">
+                <div class="info-value" id="pass-val-${index}">${displayPass}</div>
+                <button class="copy-btn" onclick="copyText('${acc.pass}')">复制</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    renderCards();
+
+    document.getElementById('unlockBtn').addEventListener('click', () => {
+      unlocked = true;
+      document.getElementById('unlockBanner').style.display = 'none';
+      renderCards();
+    });
+
+    function copyText(text) {
+      if (!unlocked) {
+        showToast('请先解锁查看账号密码');
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('复制成功！');
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
+        showToast('复制失败，请手动复制');
+      });
+    }
+
+    function showToast(msg) {
+      let toast = document.getElementById('toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast';
+        toast.className = 'toast';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
