@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>最新文章发布 - 2026 机场推荐与网络工具指南</title>
+  <meta name="description" content="本站提供2026年最新、最客观的机场评测与网络工具指南，涵盖稳定性、性价比、速度对比，助您选择最适合自己的网络代理与科学上网服务。">
+  <link rel="stylesheet" href="index.css">
+  <script src="main.js" defer></script>
+</head>
+<body>
+
+  <!-- FIXED NAVIGATION HEADER -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="index.html" class="logo-wrapper">
+        <img src="assets/logo.png" alt="机场推荐Logo" class="logo" id="main-logo">
+      </a>
+      
+      <!-- Hamburger Menu for Mobile -->
+      <button class="burger" aria-label="Toggle Navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- Main Navigation Menu -->
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">首页</a>
+        </li>
+        <li class="nav-item">
+          <a href="reviews.html" class="nav-link has-dropdown">
+            机场评测
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="reviews.html" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                全部评测文章
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=premium" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                高端机场深度评测
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=speed" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                速度与带宽实测
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=stability" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                稳定性与SLA报告
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="share-id.html" class="nav-link">外区ID</a>
+        </li>
+        <li class="nav-item">
+          <a href="tutorials.html" class="nav-link has-dropdown">
+            教程
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=windows" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                Windows 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=mac" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                macOS 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=ios" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                iPhone / iOS 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=android" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M4 4h16v12H4zM12 16v4M8 20h8"></path></svg>
+                Android 安卓教程
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="ranking.html" class="nav-link has-dropdown">
+            排行榜
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=comprehensive" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                2026综合推荐榜
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=speed" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                速度最快机场榜
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=value" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                高性价比机场榜
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="knowledge.html" class="nav-link has-dropdown">
+            知识库
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="knowledge.html#vpn" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                VPN 与 代理区别
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#vps" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                VPS 节点搭建指南
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#protocols" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                网络协议解析 (SS/Trojan)
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#dns" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                DNS 泄露与防范
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="tags.html" class="nav-link">标签</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT WRAPPER -->
+  <div class="main-wrapper">
+    <div class="left-column">
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <h2>最新文章发布</h2>
+            <p>这里收录了本站最新的所有文章与评测，按发布时间从上至下排列。</p>
+          </div>
+          <div class="reviews-container">
+
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-primary">教程指南</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-08-11</span>
+                </div>
+                <h3 class="review-title"><a href="post-detail.html?id=us-apple-id-register-2026">从零开始注册美区 Apple ID 进阶指南：保姆级注册教程 (2026 最新)</a></h3>
+                <p class="review-summary">注册美区 Apple ID 的流程自 2025 年以来整体稳定，但苹果不时微调界面和验证策略。本教程针对 2026 年最新版注册页面进行了逐步骤实测，确保每一步指引都与当前界面一致。目前苹果官方依然允许使用中国手机号 (+86) 注册美区 ID。只要方法对，全程不需要梯子，也不需要国外信用卡。</p>
+              </div>
+              <div class="review-actions" style="align-self: flex-start; margin-top: 1rem;">
+                <a href="post-detail.html?id=us-apple-id-register-2026" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读全文</a>
+              </div>
+            </div>
+
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-primary">实用资源</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-08-11</span>
+                </div>
+                <h3 class="review-title"><a href="post-detail.html?id=apple-id-share">2026最新免费美区Apple ID共享账号 | Shadowrocket/小火箭下载 | iOS美区账号每日更新</a></h3>
+                <p class="review-summary">每日为您更新最新可用的免费美区 Apple ID 共享账号，无缝下载 Shadowrocket 等各种美区专属应用，避免账号被锁，享受完整的 iOS 生态体验。</p>
+              </div>
+              <div class="review-actions" style="align-self: flex-start; margin-top: 1rem;">
+                <a href="post-detail.html?id=apple-id-share" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读全文</a>
+              </div>
+            </div>
+
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-orange">高性价比</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-08-11</span>
+                </div>
+                <h3 class="review-title"><a href="reviews/xxyun.html">2026 XXYUN机场评测：9.99元100G老牌BGP专线机场推荐</a></h3>
+                <p class="review-summary">XXYUN机场怎么样？本文实测XXYUN机场速度、稳定性与流媒体解锁能力，月付仅9.99元享100G流量、全BGP中转+三网优化，老牌运营两年稳定，支持Netflix/Disney+/ChatGPT，附9折优惠券。</p>
+              </div>
+              <div class="review-actions" style="align-self: flex-start; margin-top: 1rem;">
+                <a href="reviews/xxyun.html" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读全文</a>
+              </div>
+            </div>
+
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-orange">高性价比</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-08-10</span>
+                </div>
+                <h3 class="review-title"><a href="reviews/flybit.html">flybit机场评测：15元128G高性价比｜解锁ChatGPT</a></h3>
+                <p class="review-summary">Flybit机场（飞云）以15元128G的超高性价比横空出世，成为2026年机场圈的一匹黑马。本文深度评测其在晚高峰的网络表现、流媒体解锁能力，以及对ChatGPT等原生AI平台的完美支持……</p>
+              </div>
+              <div class="review-actions" style="align-self: flex-start; margin-top: 1rem;">
+                <a href="reviews/flybit.html" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读全文</a>
+              </div>
+            </div>
+
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-secondary">IEPL 专线</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-08-08</span>
+                </div>
+                <h3 class="review-title"><a href="post-detail.html?id=speedworld-2026">速界机场2026 晚高峰稳定性测速测评</a></h3>
+                <p class="review-summary">作为在2026年受到关注的订阅制节点服务，速界机场主要宣传IEPL国际专线与多端客户端兼容。本次评测从线路质量、套餐资费、节点可用性以及流媒体AI解锁等多个维度进行了客观测评，并深度剖析其防跑路风险建议……</p>
+              </div>
+              <div class="review-actions" style="align-self: flex-start; margin-top: 1rem;">
+                <a href="post-detail.html?id=speedworld-2026" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读全文</a>
+              </div>
+            </div>
+
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-primary">直连 / 中转</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-08-05</span>
+                </div>
+                <h3 class="review-title"><a href="post-detail.html?id=jilianyun-2026">极连云机场深度测评：全IPLC专线与不限设备的高性价比出海解析</a></h3>
+                <p class="review-summary">作为2026年翻墙工具有力新星，极连云采用多线BGP中转。本次评测在晚高峰极限负载期间，针对其网速丢包率、全场景流媒体及前沿AI解锁进行了实操测试，提供真实可靠的对比选购反馈……</p>
+              </div>
+              <div class="review-actions" style="align-self: flex-start; margin-top: 1rem;">
+                <a href="post-detail.html?id=jilianyun-2026" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读全文</a>
+              </div>
+            </div>
+
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-orange">大带宽 BGP</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-08-02</span>
+                </div>
+                <h3 class="review-title"><a href="post-detail.html?id=edge">边缘机场深度测评：企业级专线与多入口中转分析</a></h3>
+                <p class="review-summary">从线路质量、套餐价格、节点覆盖、客户端配置、流媒体与AI工具解锁等维度对边缘机场进行深度测评，并提供最新注册优惠与官网链接。</p>
+              </div>
+              <div class="review-actions" style="align-self: flex-start; margin-top: 1rem;">
+                <a href="post-detail.html?id=edge" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读全文</a>
+              </div>
+            </div>
+
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-green">BGP 中转</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-08-02</span>
+                </div>
+                <h3 class="review-title"><a href="post-detail.html?id=kuaili">快狸机场深度评测</a></h3>
+                <p class="review-summary">快狸机场是一款性能优秀的平价大带宽中转优化机场，全线搭载原生 Vless 协议，提供极致的数据吞吐上限，支持多设备并发与流媒体/AI工具解锁。</p>
+              </div>
+              <div class="review-actions" style="align-self: flex-start; margin-top: 1rem;">
+                <a href="post-detail.html?id=kuaili" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读全文</a>
+              </div>
+            </div>
+
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-secondary">新手入门</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-08-01</span>
+                </div>
+                <h3 class="review-title"><a href="post-detail.html?id=recommend-guide">2026年稳定高速机场推荐指南</a></h3>
+                <p class="review-summary">新手购买机场前必须知道的避坑常识，包括专线与中转的区别。</p>
+              </div>
+              <div class="review-actions" style="align-self: flex-start; margin-top: 1rem;">
+                <a href="post-detail.html?id=recommend-guide" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读全文</a>
+              </div>
+            </div>
+
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-primary">选型指南</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-07-28</span>
+                </div>
+                <h3 class="review-title"><a href="post-detail.html?id=how-to-choose">机场怎么选择？教你三步挑出好节点</a></h3>
+                <p class="review-summary">通过本地网络测试、目标用途（看视频还是打游戏）来选择最适合自己的机场。</p>
+              </div>
+              <div class="review-actions" style="align-self: flex-start; margin-top: 1rem;">
+                <a href="post-detail.html?id=how-to-choose" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读全文</a>
+              </div>
+            </div>
+
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-orange">客户端教程</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-07-25</span>
+                </div>
+                <h3 class="review-title"><a href="post-detail.html?id=clash-tutorial">Clash 全平台配置与订阅导入教程</a></h3>
+                <p class="review-summary">支持 Clash Verge、Clash for Windows、Clash Meta 各分支配置教程。</p>
+              </div>
+              <div class="review-actions" style="align-self: flex-start; margin-top: 1rem;">
+                <a href="post-detail.html?id=clash-tutorial" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读全文</a>
+              </div>
+            </div>
+
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-green">PC专题</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-07-20</span>
+                </div>
+                <h3 class="review-title"><a href="post-detail.html?id=win-client">Windows客户端最佳实践与下载导航</a></h3>
+                <p class="review-summary">盘点 Windows 平台上最好用的代理客户端，从老牌内核到最新内核。</p>
+              </div>
+              <div class="review-actions" style="align-self: flex-start; margin-top: 1rem;">
+                <a href="post-detail.html?id=win-client" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读全文</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div> <!-- End Left Column -->
+
+    <!-- RIGHT STICKY COLUMN -->
+    <aside class="right-column">
+      <div class="sticky-sidebar">
+        <div class="profile-widget">
+          <!-- Logo with transparency -->
+          <img src="assets/logo.png" alt="云梯指南" class="profile-logo">
+          
+          <!-- Contacts row -->
+          <div class="profile-contacts">
+            <a href="https://t.me/lsq_168" target="_blank" rel="noopener" class="contact-btn" title="Telegram 频道">
+              <svg viewBox="0 0 24 24" width="20" height="20"><path d="M9.78 18.65l.28-4.28 7.68-6.92c.34-.3-.07-.46-.52-.18L7.68 12.2 3.52 10.9c-.9-.28-.92-.9.2-1.34l16.29-6.28c.75-.28 1.4.17 1.15 1.25l-2.77 13.06c-.2.95-.77 1.18-1.56.73l-4.22-3.11-2.03 1.95c-.23.23-.42.42-.85.42z"/></svg>
+            </a>
+            <a href="mailto:liuajie_ok@proton.me" class="contact-btn" title="邮件联系">
+              <svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </a>
+          </div>
+          
+          <!-- Directory grid buttons -->
+          <div class="directory-grid">
+            <a href="tags.html" class="dir-btn">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              <span>标签</span>
+            </a>
+            <a href="tutorials.html" class="dir-btn">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+              <span>分类</span>
+            </a>
+            <a href="ranking.html" class="dir-btn">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span>归档</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div> <!-- End Main Layout Wrapper -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-logo-desc">
+          <img src="assets/logo.png" alt="Logo" class="footer-logo">
+          <p class="footer-desc">致力于提供最专业、客观的机场评测与科学上网客户端配置教程，为您的高速上网体验保驾护航。</p>
+        </div>
+        <div class="footer-col">
+          <h5>热门导航</h5>
+          <ul class="footer-links">
+            <li><a href="reviews.html">机场评测</a></li>
+            <li><a href="tutorials.html">使用教程</a></li>
+            <li><a href="ranking.html">综合排行榜</a></li>
+            <li><a href="knowledge.html">网络知识库</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>实用链接</h5>
+          <ul class="footer-links">
+            <li><a href="tutorials.html?platform=windows">Windows 客户端下载</a></li>
+            <li><a href="tutorials.html?platform=ios">iOS 必备小火箭</a></li>
+            <li><a href="knowledge.html#dns">DNS 解析泄露检测</a></li>
+            <li><a href="knowledge.html#protocols">代理协议标准</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>关于本站</h5>
+          <ul class="footer-links">
+            <li><a href="#">免责声明</a></li>
+            <li><a href="#">隐私权政策</a></li>
+            <li><a href="#">关于我们</a></li>
+            <li><a href="#">联系我们</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 机场推荐与网络工具指南. All Rights Reserved. 本站服务仅限用于合法的学术研究与外贸跨境办公。</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
