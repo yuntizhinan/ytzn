@@ -14,6 +14,14 @@ bottom_part = bottom_match.group(1)
 
 articles = [
   {
+    "date": "2026-08-16",
+    "badge": "系统教程",
+    "badge_class": "badge-primary",
+    "title": "华为鸿蒙怎么装 Google Play?2026 HarmonyOS 谷歌商店安装教程(含纯血鸿蒙)",
+    "link": "post-detail.html?id=hongmeng-google-play-2026",
+    "summary": "华为鸿蒙安装 Google Play 完全教程：深入解析缺乏 GMS 授权与纯血鸿蒙底层架构，详解华为应用市场官方 GSpace / GBox / 出境易环境容器免 Root 安装配置，含图文指引、消息推送保活与关键排错。"
+  },
+  {
     "date": "2026-08-12",
     "badge": "排查指南",
     "badge_class": "badge-primary",

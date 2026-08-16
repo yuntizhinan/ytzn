@@ -16,6 +16,20 @@ $middlePart = @"
             <div class="review-item" style="width: 100%;">
               <div class="review-info">
                 <div class="review-meta">
+                  <span class="badge badge-primary">系统教程</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-08-16</span>
+                </div>
+                <h3 class="review-title"><a href="post-detail.html?id=hongmeng-google-play-2026">华为鸿蒙怎么装 Google Play?2026 HarmonyOS 谷歌商店安装教程(含纯血鸿蒙)</a></h3>
+                <p class="review-summary">华为鸿蒙安装 Google Play 完全教程：深入解析缺乏 GMS 授权与纯血鸿蒙底层架构，详解华为应用市场官方 GSpace / GBox / 出境易环境容器免 Root 安装配置，含图文指引、消息推送保活与关键排错。</p>
+              </div>
+              <div class="review-actions" style="align-self: flex-start; margin-top: 1rem;">
+                <a href="post-detail.html?id=hongmeng-google-play-2026" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读全文</a>
+              </div>
+            </div>
+
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
                   <span class="badge badge-orange">高性价比</span>
                   <span style="font-size: 0.85rem; color: var(--text-muted);">发布时间: 2026-08-11</span>
                 </div>
