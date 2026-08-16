@@ -1,14 +1,11 @@
 import re
-import json
 
 with open('index.html', 'r', encoding='utf-8') as f:
     html = f.read()
 
-# Extract from top to left-column start
 top_match = re.search(r'([\s\S]*?<div class="left-column">)', html)
 top_part = top_match.group(1)
 
-# Extract from right-column to bottom
 bottom_match = re.search(r'(<!-- RIGHT STICKY COLUMN -->\s*<aside class="right-column">[\s\S]*)', html)
 bottom_part = bottom_match.group(1)
 
@@ -20,6 +17,30 @@ articles = [
     "title": "华为鸿蒙怎么装 Google Play?2026 HarmonyOS 谷歌商店安装教程(含纯血鸿蒙)",
     "link": "post-detail.html?id=hongmeng-google-play-2026",
     "summary": "华为鸿蒙安装 Google Play 完全教程：深入解析缺乏 GMS 授权与纯血鸿蒙底层架构，详解华为应用市场官方 GSpace / GBox / 出境易环境容器免 Root 安装配置，含图文指引、消息推送保活与关键排错。"
+  },
+  {
+    "date": "2026-08-15",
+    "badge": "教程指南",
+    "badge_class": "badge-primary",
+    "title": "安卓手机安装 Google Play！2026 谷歌三件套安装保姆级教程(全品牌)",
+    "link": "post-detail.html?id=android-google-play-2026",
+    "summary": "全面测试 2026 年最新小米、红米、OPPO、vivo、荣耀、一加、真我等品牌系统，总结先查系统自带开关、后免 Root 手动安全安装的完全避坑指引。"
+  },
+  {
+    "date": "2026-08-15",
+    "badge": "教程指南",
+    "badge_class": "badge-primary",
+    "title": "Telegram 怎么注册?2026 国内 TG 注册完整教程(+86 收不到验证码解决方法)",
+    "link": "post-detail.html?id=telegram-register-2026",
+    "summary": "针对 2026 年最新 Telegram 官方风控机制深度实测，总结出 +86 手机号 100% 成功接收验证码的 4 大破局方案，并提供 iOS / Android / PC 保姆级注册图文指引与账号防封设置。"
+  },
+  {
+    "date": "2026-08-15",
+    "badge": "实用资源",
+    "badge_class": "badge-primary",
+    "title": "2026最新免费美区Apple ID共享账号 | Shadowrocket/小火箭下载 | iOS美区账号每日更新",
+    "link": "share-id.html",
+    "summary": "每日为您更新最新可用的免费美区 Apple ID 共享账号（今日已更新 30 个可用账号池），无缝下载 Shadowrocket 等各种美区专属应用，避免账号被锁，享受完整的 iOS 生态体验。"
   },
   {
     "date": "2026-08-12",
@@ -150,4 +171,5 @@ new_html = new_html.replace('<title>2026 机场推荐与网络工具指南 - 稳
 
 with open('latest-articles.html', 'w', encoding='utf-8') as f:
     f.write(new_html)
-print('created latest-articles.html')
+
+print('build.py completed successfully!')
