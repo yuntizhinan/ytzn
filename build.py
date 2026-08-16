@@ -12,6 +12,14 @@ bottom_part = bottom_match.group(1)
 articles = [
   {
     "date": "2026-08-16",
+    "badge": "协议技术",
+    "badge_class": "badge-primary",
+    "title": "2026年机场节点协议怎么选？Shadowsocks vs VLESS Reality vs Hysteria 2 vs TUIC 深度对比与科学选型指南",
+    "link": "protocol-selection-2026.html",
+    "summary": "深入剖析 2026 GFW 最新 DPI 深度包检测与 AI 特征指纹识别演进，科学对比 Shadowsocks 2022、VLESS Reality、Hysteria 2 与 TUIC v5 四大主流协议底层原理、抗封锁能力与三大运营商选型匹配。"
+  },
+  {
+    "date": "2026-08-16",
     "badge": "系统教程",
     "badge_class": "badge-primary",
     "title": "华为鸿蒙怎么装 Google Play?2026 HarmonyOS 谷歌商店安装教程(含纯血鸿蒙)",
@@ -41,6 +49,14 @@ articles = [
     "title": "2026最新免费美区Apple ID共享账号 | Shadowrocket/小火箭下载 | iOS美区账号每日更新",
     "link": "share-id.html",
     "summary": "每日为您更新最新可用的免费美区 Apple ID 共享账号（今日已更新 30 个可用账号池），无缝下载 Shadowrocket 等各种美区专属应用，避免账号被锁，享受完整的 iOS 生态体验。"
+  },
+  {
+    "date": "2026-08-14",
+    "badge": "进阶教程",
+    "badge_class": "badge-primary",
+    "title": "从零开始注册美区 Apple ID 进阶指南：保姆级注册教程 (2026 最新)",
+    "link": "post-detail.html?id=us-apple-id-register-2026",
+    "summary": "不用信用卡、无需国外手机号！2026 年最新手把手教你零门槛注册属于自己的纯净美区 Apple ID，解决免税区地址填写、账单地址生成与独立充值购买小火箭教程。"
   },
   {
     "date": "2026-08-12",
@@ -79,7 +95,7 @@ articles = [
     "badge": "直连 / 中转",
     "badge_class": "badge-primary",
     "title": "极连云机场深度测评：全IPLC专线与不限设备的高性价比出海解析",
-    "link": "post-detail.html?id=jilianyun-2026",
+    "link": "reviews/jilianyun.html",
     "summary": "作为2026年翻墙工具有力新星，极连云采用多线BGP中转。本次评测在晚高峰极限负载期间，针对其网速丢包率、全场景流媒体及前沿AI解锁进行了实操测试，提供真实可靠的对比选购反馈……"
   },
   {
