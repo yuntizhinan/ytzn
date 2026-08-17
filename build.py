@@ -11,6 +11,14 @@ bottom_part = bottom_match.group(1)
 
 articles = [
   {
+    "date": "2026-08-17",
+    "badge": "AI 实用指南",
+    "badge_class": "badge-primary",
+    "title": "2026 最新Claude AI 完全攻略:注册、桌面应用与玩法全解",
+    "link": "post-detail.html?id=claude-ai-jiaocheng-2026",
+    "summary": "Anthropic Claude AI 2026 全景教程：模型家族选型（Opus 4.8 / Sonnet 5 / Haiku 4.5 / Fable 5）、100万 Token 上下文窗口、桌面版 MCP 本地连接器、终端 Agent 编程工具 Claude Code，以及中国大陆用户访问线路与干净 IP 避风控指南。"
+  },
+  {
     "date": "2026-08-16",
     "badge": "协议技术",
     "badge_class": "badge-primary",
@@ -43,7 +51,7 @@ articles = [
     "summary": "针对 2026 年最新 Telegram 官方风控机制深度实测，总结出 +86 手机号 100% 成功接收验证码的 4 大破局方案，并提供 iOS / Android / PC 保姆级注册图文指引与账号防封设置。"
   },
   {
-    "date": "2026-08-15",
+    "date": "2026-08-17",
     "badge": "实用资源",
     "badge_class": "badge-primary",
     "title": "2026最新免费美区Apple ID共享账号 | Shadowrocket/小火箭下载 | iOS美区账号每日更新",
