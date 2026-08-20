@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -160,6 +160,19 @@
       transform: translateY(0);
     }
   </style>
+  <style>
+    :root {
+      --bg-main: #000000 !important;
+      --bg-card: #000000 !important;
+    }
+    body, main, section, .id-card, div[style*="background"] {
+      background-color: #000000 !important;
+      background-image: none !important;
+    }
+    * {
+      color: #ffffff !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -244,6 +257,7 @@
   <section class="subpage-hero">
     <div class="container">
       <h1 style="font-size: 2.75rem; margin-bottom: 0.5rem;">每日共享 Apple ID</h1>
+      <p style="color: var(--accent-orange); font-size: 1.05rem; font-weight: 500; margin-bottom: 0.5rem;">📅 文章每日更新日期：2026年08月20日</p>
       <p style="color: var(--text-muted); font-size: 1.1rem;">免费共享账号池 · 一键登录 App Store 下载小火箭等外区应用</p>
     </div>
   </section>
