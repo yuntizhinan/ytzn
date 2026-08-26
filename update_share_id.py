@@ -2,6 +2,7 @@ import urllib.request
 import re
 import os
 import datetime
+import sys
 
 url = "https://www.jichangcha.com/share-id/"
 req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
@@ -10,38 +11,33 @@ try:
         html = response.read().decode('utf-8')
 except Exception as e:
     print("Error fetching URL:", e)
-    exit(1)
+    sys.exit(1)
 
-# Extract accounts
-# Look for something like: <div class="..."> <span>账号:</span> xxx </div> <span>密码:</span> yyy
-# Let's see the structure from before.
-# In the previous session, I extracted them successfully. Let's just grab the emails and passwords.
-matches = re.findall(r'([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+).*?密码.*?([a-zA-Z0-9]{8,15})', html, re.DOTALL | re.IGNORECASE)
+# Extract accounts based on data-reveal attribute
+matches = re.findall(r'<code[^>]*data-reveal="([^"]+@[^"]+)"[^>]*>.*?密码.*?<code[^>]*data-reveal="([^"]+)"', html, re.DOTALL)
 
-# The matches might be messy, let's refine it. 
-# Another common pattern:
-# We know the ID is an email, and the password is an alphanumeric string.
-accounts = []
-for m in re.finditer(r'([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)', html):
-    email = m.group(1)
-    # find the next password nearby
-    sub = html[m.end():m.end()+100]
-    pass_match = re.search(r'([a-zA-Z0-9]{8,15})', re.sub(r'[^a-zA-Z0-9]', ' ', sub).split('密码')[-1])
-    if pass_match:
-        # Avoid false positives like dates or standard words
-        accounts.append({"id": email, "pass": pass_match.group(1).strip()})
-
-# Deduplicate
 unique_accounts = []
 seen = set()
-for a in accounts:
-    if a['id'] not in seen:
-        seen.add(a['id'])
-        unique_accounts.append(a)
+
+for email, password in matches:
+    if email not in seen:
+        seen.add(email)
+        unique_accounts.append({"id": email, "pass": password})
+
+if not unique_accounts:
+    print("No accounts found with primary regex. Trying fallback...")
+    reveals = re.findall(r'data-reveal="([^"]+)"', html)
+    for i in range(len(reveals) - 1):
+        if '@' in reveals[i] and '@' not in reveals[i+1]:
+            email = reveals[i]
+            password = reveals[i+1]
+            if email not in seen:
+                seen.add(email)
+                unique_accounts.append({"id": email, "pass": password})
 
 if not unique_accounts:
     print("No accounts found!")
-    exit(1)
+    sys.exit(1)
 
 # Limit to 30
 unique_accounts = unique_accounts[:30]
@@ -73,4 +69,32 @@ content = re.sub(r'📅 文章每日更新日期：\d{4}年\d{2}月\d{2}日', f'
 with open(file_path, "w", encoding="utf-8") as f:
     f.write(content)
 
-print("share-id.html updated successfully!")
+# Update date in apple-id.html as well
+apple_id_path = os.path.join(base_dir, "apple-id.html")
+with open(apple_id_path, "r", encoding="utf-8") as f:
+    apple_content = f.read()
+
+apple_content = re.sub(r'📅 文章每日更新日期：\d{4}年\d{2}月\d{2}日', f'📅 文章每日更新日期：{current_date}', apple_content)
+
+with open(apple_id_path, "w", encoding="utf-8") as f:
+    f.write(apple_content)
+
+# Update date in articles.json
+import json
+articles_json_path = os.path.join(base_dir, "articles.json")
+try:
+    with open(articles_json_path, "r", encoding="utf-8") as f:
+        articles_data = json.load(f)
+    
+    current_date_iso = datetime.datetime.now().strftime("%Y-%m-%d")
+    for item in articles_data.get("articles", []):
+        if item.get("link") == "share-id.html":
+            item["date"] = current_date_iso
+            break
+            
+    with open(articles_json_path, "w", encoding="utf-8") as f:
+        json.dump(articles_data, f, ensure_ascii=False, indent=2)
+except Exception as e:
+    print(f"Failed to update articles.json: {e}")
+
+print("share-id.html, apple-id.html, and articles.json dates updated successfully!")

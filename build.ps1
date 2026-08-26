@@ -174,7 +174,7 @@ $middlePart = @"
 "@
 
 $newHtml = $topPart + $middlePart + $bottomPart
-$newHtml = $newHtml -replace '<title>2026 机场推荐与网络工具指南 - 稳定高速的科学上网网络服务推荐</title>', '<title>最新文章发布 - 2026 机场推荐与网络工具指南</title>'
+$newHtml = $newHtml -replace '<title>2026年最新机场推荐与网络代理工具指南 - 稳定高速科学上网服务全评测</title>', '<title>最新文章发布 - 2026 机场推荐与网络工具指南</title>'
 
 Set-Content -Path 'latest-articles.html' -Value $newHtml -Encoding UTF8
 Write-Host "Created latest-articles.html successfully"
