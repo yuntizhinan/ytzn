@@ -4,7 +4,7 @@
 # 使用方法: 在网站部署后运行此脚本
 
 $key = "b3fa631b41824faf80150280746ebd2f"
-$host = "nodehub168.com"
+$siteHost = "nodehub168.com"
 $keyLocation = "https://nodehub168.com/$key.txt"
 
 $urls = @(
@@ -17,6 +17,7 @@ $urls = @(
     "https://nodehub168.com/tags.html",
     "https://nodehub168.com/latest-articles.html",
     "https://nodehub168.com/share-id.html",
+    "https://nodehub168.com/apple-id.html",
     "https://nodehub168.com/apple-id-guide.html",
     "https://nodehub168.com/post-detail.html",
     "https://nodehub168.com/protocol-selection-2026.html",
@@ -30,7 +31,7 @@ $urls = @(
 )
 
 $body = @{
-    host        = $host
+    host        = $siteHost
     key         = $key
     keyLocation = $keyLocation
     urlList     = $urls
