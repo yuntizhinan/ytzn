@@ -1,4 +1,4 @@
-﻿$allArticles = Get-Content 'full_articles_parsed.json' -Raw -Encoding UTF8 | ConvertFrom-Json
+$allArticles = Get-Content 'full_articles_parsed.json' -Raw -Encoding UTF8 | ConvertFrom-Json
 
 $html = Get-Content 'index.html' -Raw -Encoding UTF8
 $topMatch = [regex]::Match($html, '(?s)(.*?<div class="left-column">)')
@@ -16,6 +16,7 @@ foreach ($a in $allArticles) {
     
     $customTop = $topPart -replace '(?s)<title>.*?</title>', ("<title>" + $title + "</title>")
     $customTop = $customTop -replace '(?s)<link rel="canonical" href=".*?">', ("<link rel=`"canonical`" href=`"" + $canonical + "`">")
+    $customTop = $customTop -replace '(?s)<meta name="description" content=".*?">', ''
     
     $catUrl = "https://nodehub168.com/"
     if ($a.category -match "Clash") { $catUrl = "https://nodehub168.com/tutorials/" }

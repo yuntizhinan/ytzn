@@ -1,24 +1,24 @@
 ﻿$urls = @(
-    "https://nodehub168.com/tutorials/clash-verge-guide.html",
-    "https://nodehub168.com/tutorials/clash-verge-download.html",
-    "https://nodehub168.com/knowledge/what-is-dns.html",
-    "https://nodehub168.com/knowledge/vpn-vs-proxy.html",
-    "https://nodehub168.com/ai/chatgpt-guide.html"
+    "https://nodehub168.com/tutorials/clash-verge-guide",
+    "https://nodehub168.com/tutorials/clash-verge-download",
+    "https://nodehub168.com/knowledge/what-is-dns",
+    "https://nodehub168.com/knowledge/vpn-vs-proxy",
+    "https://nodehub168.com/ai/chatgpt-guide"
 )
 
 $results = @()
-$titles = @()
-$descriptions = @()
 
 foreach ($url in $urls) {
     Write-Host "Fetching $url ..."
     try {
-        $response = Invoke-WebRequest -Uri $url -UseBasicParsing -MaximumRedirection 0 -ErrorAction Stop
+        $response = Invoke-WebRequest -Uri $url -UseBasicParsing -ErrorAction Stop
         $status = $response.StatusCode
+        $finalUrl = $response.BaseResponse.ResponseUri.AbsoluteUri
         $html = $response.Content
     } catch {
         $status = $_.Exception.Response.StatusCode.value__
         if ($null -eq $status) { $status = "Error" }
+        $finalUrl = if ($_.Exception.Response) { $_.Exception.Response.ResponseUri.AbsoluteUri } else { "" }
         $html = ""
         Write-Host "Error fetching $url"
     }
@@ -53,25 +53,21 @@ foreach ($url in $urls) {
 
     $hasArticleSchema = $html -match '"@type":\s*"Article"'
     $hasBreadcrumbSchema = $html -match '"@type":\s*"BreadcrumbList"'
-    
     $hasOrgAuthor = $html -match '"@type":\s*"Organization"'
     
     $doubleLazy = $html -match 'loading="lazy".*?loading="lazy"'
-
     $localPaths = $html -match 'C:\\|D:\\|/home/|/Users/'
-
     $headCount = ([regex]::Matches($html, '<head>')).Count
     $bodyCount = ([regex]::Matches($html, '<body>')).Count
 
     $res = [PSCustomObject]@{
-        URL = $url
+        InitialURL = $url
+        FinalURL = $finalUrl
         Status = $status
         Title = $title
         TitleLength = $title.Length
-        TitleCount = $titleCount
-        Desc = $desc
         DescLength = $desc.Length
-        DescCount = $descCount
+        Desc = $desc
         Canonical = $canonical
         H1Count = $h1Count
         H1 = $h1Content
@@ -79,6 +75,7 @@ foreach ($url in $urls) {
         OGCount = $ogCount
         ArticleSchema = $hasArticleSchema
         BreadcrumbSchema = $hasBreadcrumbSchema
+        OrgAuthor = $hasOrgAuthor
         DoubleLazy = $doubleLazy
         LocalPaths = $localPaths
         HeadCount = $headCount
