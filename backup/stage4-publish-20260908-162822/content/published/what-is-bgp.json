@@ -1,0 +1,9 @@
+﻿{
+    "author":  "云梯指南编辑团队",
+    "slug":  "what-is-bgp",
+    "content":  "\u003cp\u003e\u003cstrong\u003e摘要：\u003c/strong\u003e 选购机场时常听到“BGP中转”，它究竟是什么意思？本文用最通俗的语言解释 BGP 路由协议原理，以及 BGP 机场相比直连机场的核心优势。\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003e最后更新：\u003c/strong\u003e 2026-09-08\u003c/p\u003e\n\n\u003ch2\u003e一、主题介绍：什么是 BGP？\u003c/h2\u003e\n\u003cp\u003eBGP（Border Gateway Protocol，边界网关协议）是互联网的核心路由协议，负责在不同自治系统（如电信、联通、移动的数据中心）之间交换路由信息。\u003c/p\u003e\n\n\u003ch2\u003e二、为什么机场要使用 BGP\u003c/h2\u003e\n\u003cp\u003e在国内，电信、联通、移动之间的跨网访问往往延迟较高。如果机场在国内拥有一台 BGP 入口服务器，意味着这台服务器同时接入了三家运营商的网络。当您连接这台入口机器时，系统会根据您的宽带自动选择最快的线路，这就是所谓的“三网优化”。\u003c/p\u003e\n\n\u003ch2\u003e三、BGP 机场的工作原理 (详细步骤)\u003c/h2\u003e\n\u003cp\u003e1. 您的电脑（无论是电信还是移动）连接到国内的 BGP 中转服务器。\u003cbr\u003e\n2. 因为是 BGP 智能路由，连接非常迅速且不丢包。\u003cbr\u003e\n3. 这台 BGP 服务器再通过隧道，将流量穿透出海，送达到国外的落地服务器。\u003cbr\u003e\n4. 国外服务器再去访问 Google 或 Netflix 网站。\u003c/p\u003e\n\n\u003ch2\u003e四、BGP 中转与 IEPL/IPLC 的区别\u003c/h2\u003e\n\u003cp\u003eBGP 中转依然走的是“公网”出海，在极晚高峰可能受到公网拥堵（QoS）影响。而 \u003ca href=\"/knowledge/bgp-iplc-iepl.html\"\u003eIPLC/IEPL\u003c/a\u003e 是企业级内网专线，完全不过墙。但 BGP 的成本远低于专线，因此性价比更高。\u003c/p\u003e\n\n\u003ch2\u003e五、BGP 机场的优点与缺点\u003c/h2\u003e\n\u003cp\u003e\u003cstrong\u003e优点：\u003c/strong\u003e 价格适中，比直连线路稳定许多，能够自适应各种宽带（不再有“移动墙中墙”烦恼）。\u003cbr\u003e\n\u003cstrong\u003e缺点：\u003c/strong\u003e 在极其敏感的时期，公网出海段仍有被封锁入口 IP 的风险。\u003c/p\u003e\n\n\u003ch2\u003e六、常见问题 FAQ\u003c/h2\u003e\n\u003cp\u003e\u003cstrong\u003eQ: BGP 机场适合打游戏吗？\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003eA: 虽然 BGP 延迟较低，但如果是竞技类对战游戏，仍推荐使用专线（IPLC）机场，BGP 更适合看流媒体和刷网页。\u003c/p\u003e\n\n\u003ch2\u003e七、总结\u003c/h2\u003e\n\u003cp\u003eBGP 机场是目前主流用户性价比最高的选择。如果您对网络稳定性有一定要求，同时预算在每月 15-30 元，BGP 中转机场是您的不二之选。\u003c/p\u003e",
+    "date":  "2026-09-08",
+    "category":  "网络知识",
+    "title":  "BGP机场是什么",
+    "newPath":  "/airports/what-is-bgp.html"
+}

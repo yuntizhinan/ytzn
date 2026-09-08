@@ -1,0 +1,9 @@
+﻿{
+    "author":  "云梯指南编辑团队",
+    "slug":  "what-is-dns",
+    "content":  "\u003cp\u003e\u003cstrong\u003e摘要：\u003c/strong\u003e DNS 就像是互联网的“电话簿”，它将复杂的 IP 地址转化为人类可读的域名。了解 DNS 是排查网络故障和防止 DNS 污染的第一步。\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003e最后更新：\u003c/strong\u003e 2026-09-08\u003c/p\u003e\n\n\u003ch2\u003e一、什么是 DNS？\u003c/h2\u003e\n\u003cp\u003eDNS 全称是 Domain Name System (域名系统)。当您在浏览器中输入 \u003ccode\u003egoogle.com\u003c/code\u003e 时，您的电脑并不知道它在哪，而是向 DNS 服务器发问：“google.com 的 IP 地址是多少？” DNS 服务器会回答：“它的 IP 是 142.250.190.46”。然后电脑才能与之建立连接。\u003c/p\u003e\n\n\u003ch2\u003e二、为什么科学上网必须懂 DNS\u003c/h2\u003e\n\u003cp\u003e国内常见的防火墙阻断手段之一就是 \u003cstrong\u003eDNS 污染\u003c/strong\u003e。当您查询某个被屏蔽的网站时，国内的 DNS 服务器会故意返回一个错误的（或是随机的）IP 地址，导致您永远无法打开该网站。\u003c/p\u003e\n\n\u003ch2\u003e三、DNS 泄露 (DNS Leak) 是什么？\u003c/h2\u003e\n\u003cp\u003e当您使用代理软件翻墙时，本应通过远程代理服务器解析 DNS。但如果配置错误，您的电脑依然通过本地运营商（如电信、联通）的 DNS 查询敏感网站，这就导致了您的访问记录被运营商截获，俗称“DNS 泄露”。\u003c/p\u003e\n\n\u003ch2\u003e四、如何防范 DNS 污染与泄露\u003c/h2\u003e\n\u003cp\u003e1. \u003cstrong\u003e使用安全 DNS：\u003c/strong\u003e 将系统或浏览器的 DNS 更改为国外的公共安全 DNS（如 Google 的 \u003ccode\u003e8.8.8.8\u003c/code\u003e 或 Cloudflare 的 \u003ccode\u003e1.1.1.1\u003c/code\u003e，支持 DoH 更好）。\u003c/p\u003e\n\u003cp\u003e2. \u003cstrong\u003e在代理软件中开启 Fake-IP：\u003c/strong\u003e 像 Clash 等高级软件支持 Fake-IP 模式，它会直接劫持本地 DNS 请求，将解析任务完全交给远端机场服务器，从而彻底免疫本地 DNS 污染。\u003c/p\u003e\n\n\u003ch2\u003e五、常见问题 FAQ\u003c/h2\u003e\n\u003cp\u003e\u003cstrong\u003eQ: 为什么我修改了电脑的 DNS 还是无法翻墙？\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003eA: 因为如果该网站不仅遭到了 DNS 污染，其真实 IP 更是被直接阻断（黑洞路由），那就必须借助 VPN 或机场节点的代理通道才能跨越。\u003c/p\u003e\n\n\u003ch2\u003e六、总结\u003c/h2\u003e\n\u003cp\u003eDNS 是网络连接的第一环。掌握 DNS 原理不仅能帮您解决 \u003ca href=\"/help/dns-failed.html\"\u003eDNS解析失败\u003c/a\u003e 的常见报错，还能让您的网络冲浪更加安全和私密。\u003c/p\u003e",
+    "date":  "2026-09-08",
+    "category":  "网络知识",
+    "title":  "什么是DNS",
+    "newPath":  "/knowledge/what-is-dns.html"
+}

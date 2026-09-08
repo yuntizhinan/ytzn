@@ -1,0 +1,570 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="indexnow-verification" content="b3fa631b41824faf80150280746ebd2f">
+  <title>2026最新免费美区Apple ID共享账号 | Shadowrocket/小火箭下载 | iOS美区账号每日更新</title>
+  <meta name="description" content="每日实时更新免费共享 Apple ID 账号池，支持美区、港区等多地区外区账号，免费下载 Shadowrocket 小火箭、Quantumult X 等海外专属应用。账号均经过验证可用，安全稳定。">
+  <meta name="keywords" content="机场推荐, 机场测评, 机场评测, 科学上网, VPN搭建指南, 外区免费ID, 便宜vpn机场, vpn专线, vpn机场推荐, vpn机场, 国内美区机场vpn, 科学联网vpn, vpn机场美区, 边缘机场, 翻墙机场, iepl专线机场, 中转机场, clash深港专线, webrtc泄漏防范">
+  <link rel="canonical" href="https://nodehub168.com/share-id.html">
+  <link rel="stylesheet" href="index.css">
+  <script src="main.js" defer></script>
+  <style>
+    /* Styling for the share ID page */
+    .id-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .id-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .id-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .id-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .id-card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .status-badge {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+    }
+    .info-group {
+      margin-bottom: 15px;
+    }
+    .info-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .info-row {
+      display: flex;
+      gap: 10px;
+    }
+    .info-value {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 12px;
+      border-radius: 6px;
+      color: #cbd5e1;
+      font-family: monospace;
+      font-size: 0.9rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .copy-btn {
+      background: var(--bg-secondary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .unlock-banner {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+    }
+    .unlock-text {
+      color: #fbbf24;
+      font-size: 0.95rem;
+    }
+    .unlock-btn {
+      background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.2s;
+    }
+    .unlock-btn:hover {
+      transform: translateY(-2px);
+    }
+    .alert-box {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid #ef4444;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+    .alert-title {
+      color: #f87171;
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    .alert-box ul {
+      color: #fca5a5;
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 1000;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FIXED NAVIGATION HEADER -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="index.html" class="logo-wrapper">
+        <img src="assets/logo.png" alt="机场推荐Logo" class="logo" id="main-logo">
+      </a>
+      
+      <!-- Hamburger Menu for Mobile -->
+      <button class="burger" aria-label="Toggle Navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- Main Navigation Menu -->
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">首页</a>
+        </li>
+        <li class="nav-item">
+          <a href="reviews.html" class="nav-link has-dropdown">
+            机场评测
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="reviews.html" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                全部评测文章
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=premium" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                高端机场深度评测
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=speed" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                速度与带宽实测
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=stability" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                稳定性与SLA报告
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="tutorials.html" class="nav-link has-dropdown">
+            教程
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=windows" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                Windows 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=mac" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                macOS 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=ios" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                iPhone / iOS 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=android" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M4 4h16v12H4zM12 16v4M8 20h8"></path></svg>
+                Android 安卓教程
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="apple-id.html" class="nav-link">外区ID</a>
+        </li>
+        <li class="nav-item">
+          <a href="ranking.html" class="nav-link has-dropdown">
+            排行榜
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=comprehensive" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                2026综合推荐榜
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=speed" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                速度最快机场榜
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=value" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                高性价比机场榜
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="knowledge.html" class="nav-link has-dropdown">
+            知识库
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="latest-articles.html" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                最新文章发布
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#vpn" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                VPN 与 代理区别
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#vps" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                VPS 节点搭建指南
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#protocols" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                网络协议解析 (SS/Trojan)
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#dns" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                DNS 泄露与防范
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="apple-id-guide.html" class="dropdown-link" style="color:var(--accent-cyan);">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                注册美区 Apple ID
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="tags.html" class="nav-link">标签</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+    </div>
+    
+    <div style="background: rgba(14, 165, 233, 0.1); border-left: 4px solid #0ea5e9; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+      <h3 style="color: #38bdf8; font-size: 1.15rem; margin-bottom: 8px;">🔔 账号更新提醒</h3>
+      <p style="color: #bae6fd; font-size: 0.95rem; line-height: 1.5; margin: 0;">共享 ID 随时可能失效换新，本站每日上午定期检测并维护账号池可用性，请收藏本页随时获取最新可借用账号。</p>
+    </div>
+
+    <div class="alert-box">
+      <div class="alert-title">⚠️ 使用共享 ID 前必读</div>
+      <ul>
+        <li>共享账号是<strong>多人公用</strong>，随时可能被改密或锁定，<strong>仅用于下载 App，别做其它用途</strong>。</li>
+        <li><strong>防锁机：</strong>只在「App Store」里登录下载，<strong>切勿在「设置 → 顶部 Apple ID」整机登录</strong>（整机登录可能被远程锁定/抹除）。</li>
+        <li><strong>用完退出：</strong>下载完立即在 App Store 退回自己的 ID；已装好的 App 照常使用，不受影响。</li>
+        <li><strong>长期独享：</strong>若需独立安全账号，可参考 <a href="apple-id-guide.html" style="color: #38bdf8; text-decoration: underline; font-weight: 600;">从零开始注册美区 Apple ID 保姆级教程 (2026 最新)</a> 自行注册。</li>
+      </ul>
+    </div>
+
+    <div class="unlock-banner" id="unlockBanner">
+      <div class="unlock-text">
+        <span style="font-size: 1.2rem; margin-right: 8px;">🔒</span> 账号密码已隐藏，阅读安全须知后即可解锁查看
+      </div>
+      <button class="unlock-btn" id="unlockBtn">🔓 解锁查看账号密码</button>
+    </div>
+
+    <div class="id-grid">
+      <!-- Cards will be populated here -->
+    </div>
+
+    </main>
+
+    <section class="container" style="max-width: 900px; margin: 20px auto 60px; padding: 0 2rem;">
+      <div style="padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);">
+        <h2 style="font-size: 1.8rem; margin-bottom: 30px; text-align: center; color: #fff;">常见问题</h2>
+        
+        <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: #00f2fe; font-size: 1.15rem; margin-bottom: 12px;">Q: 用共享 ID 会不会把手机锁了?</h3>
+          <p style="color: #cbd5e1; line-height: 1.7;">只要按本页做——只在「App Store」登录下载，用完退出，就没有锁机风险。锁机（激活锁）只发生在你把共享账号登录到「设置 → 顶部 Apple ID」整机的情况，那样对方能通过「查找」远程锁定，千万别这么做。如需独立安全的专属账号，建议参考 <a href="apple-id-guide.html" style="color: #38bdf8; text-decoration: underline;">美区 Apple ID 注册教程</a>。</p>
+        </div>
+        
+        <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: #00f2fe; font-size: 1.15rem; margin-bottom: 12px;">Q: 为什么提示"需要验证码 / 双重认证"?</h3>
+          <p style="color: #cbd5e1; line-height: 1.7;">说明该账号临时开启了双重验证或正被占用，你收不到验证码。别纠结，直接换账号池里的下一个账号即可；若需长期稳定使用，建议注册专属 <a href="apple-id-guide.html" style="color: #38bdf8; text-decoration: underline;">美区 Apple ID</a>。</p>
+        </div>
+        
+        <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: #00f2fe; font-size: 1.15rem; margin-bottom: 12px;">Q: 我的照片、通讯录会泄露吗?</h3>
+          <p style="color: #cbd5e1; line-height: 1.7;">不会。只在 App Store 登录不会同步任何 iCloud 数据（照片/通讯录/备忘录）。前提仍是：不要在「设置」里整机登录。更多网络隐私防范知识请查阅 <a href="knowledge.html" style="color: #38bdf8; text-decoration: underline;">网络安全知识库</a>。</p>
+        </div>
+        
+        <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: #00f2fe; font-size: 1.15rem; margin-bottom: 12px;">Q: 下载的 App 之后还能更新吗?</h3>
+          <p style="color: #cbd5e1; line-height: 1.7;">App 装好后打开使用不需要账号。更新时会要求当时下载用的 ID 密码——建议之后用自己的美区 Apple ID 覆盖，或临时登共享 ID 更新。App 本身不会因为退出账号而失效。</p>
+        </div>
+
+        <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: #00f2fe; font-size: 1.15rem; margin-bottom: 12px;">Q: 共享账号经常失效，如何拥有属于自己的独享美区 Apple ID？</h3>
+          <p style="color: #cbd5e1; line-height: 1.7;">由于共享账号使用人数较多，若您需要长期稳定使用，建议参考本站保姆级注册教程：<a href="apple-id-guide.html" style="color: #38bdf8; text-decoration: underline;">从零开始注册美区 Apple ID 进阶指南 (2026 最新)</a>，无需国外信用卡，几分钟即可注册完成。</p>
+        </div>
+        
+        <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: #00f2fe; font-size: 1.15rem; margin-bottom: 12px;">Q: 下载好小火箭之后呢?</h3>
+          <p style="color: #cbd5e1; line-height: 1.7;">小火箭只是客户端"空壳"，还需要节点/机场才能上网。可以参考<a href="tutorials.html?platform=ios" style="color: #38bdf8; text-decoration: underline;">iPhone / iOS 小火箭安装配置教程</a>；免费应急看<a href="latest-articles.html" style="color: #38bdf8; text-decoration: underline;">每日免费节点</a>，长期稳定、能看 Netflix / 稳用 ChatGPT 推荐查看<a href="ranking.html" style="color: #38bdf8; text-decoration: underline;">2026最新机场排行榜</a>、<a href="reviews.html" style="color: #38bdf8; text-decoration: underline;">机场深度评测</a> 与 <a href="reviews/connection-issues.html" style="color: #38bdf8; text-decoration: underline;">机场连不上排查指南</a>。</p>
+        </div>
+
+        <!-- 站内相关推荐与资源导航 -->
+        <div style="margin-top: 40px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 25px;">
+          <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+            <span>🔗</span> 站内相关推荐与资源导航
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+            <a href="apple-id-guide.html" style="display: block; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); padding: 12px 16px; border-radius: 8px; color: #38bdf8; text-decoration: none; font-size: 0.95rem;">
+              📘 <strong>美区 Apple ID 注册教程</strong>
+              <span style="display: block; color: var(--text-muted); font-size: 0.8rem; margin-top: 4px;">免信用卡，几分钟打造个人独享账号</span>
+            </a>
+            <a href="tutorials.html?platform=ios" style="display: block; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); padding: 12px 16px; border-radius: 8px; color: #38bdf8; text-decoration: none; font-size: 0.95rem;">
+              📱 <strong>iOS / iPhone 小火箭使用教程</strong>
+              <span style="display: block; color: var(--text-muted); font-size: 0.8rem; margin-top: 4px;">Shadowrocket 节点导入与规则设置</span>
+            </a>
+            <a href="ranking.html" style="display: block; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); padding: 12px 16px; border-radius: 8px; color: #38bdf8; text-decoration: none; font-size: 0.95rem;">
+              🏆 <strong>2026 稳定高速机场排行榜</strong>
+              <span style="display: block; color: var(--text-muted); font-size: 0.8rem; margin-top: 4px;">综合选型，精选优质 BGP / IEPL 专线</span>
+            </a>
+            <a href="reviews/connection-issues.html" style="display: block; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); padding: 12px 16px; border-radius: 8px; color: #38bdf8; text-decoration: none; font-size: 0.95rem;">
+              🛠️ <strong>机场突然连不上排查指南</strong>
+              <span style="display: block; color: var(--text-muted); font-size: 0.8rem; margin-top: 4px;">10 大常见断连原因与快速解决方案</span>
+            </a>
+            <a href="latest-articles.html" style="display: block; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); padding: 12px 16px; border-radius: 8px; color: #38bdf8; text-decoration: none; font-size: 0.95rem;">
+              📰 <strong>最新文章与每日免费节点</strong>
+              <span style="display: block; color: var(--text-muted); font-size: 0.8rem; margin-top: 4px;">实时资讯、使用心得与免费节点汇总</span>
+            </a>
+            <a href="knowledge.html" style="display: block; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); padding: 12px 16px; border-radius: 8px; color: #38bdf8; text-decoration: none; font-size: 0.95rem;">
+              💡 <strong>翻墙与网络代理知识库</strong>
+              <span style="display: block; color: var(--text-muted); font-size: 0.8rem; margin-top: 4px;">协议解析、VPN与代理区别等深度科普</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p style="text-align: center; color: var(--text-muted);">&copy; 2026 机场推荐与网络工具指南. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const accounts = [
+        { id: "quodonnell@gmail.com", pass: "Dd10096da" },
+        { id: "david7zksmunoz@hotmail.com", pass: "x5Qt9ch9m9" },
+        { id: "DeborazpiHarr967@icloud.com", pass: "VG7j2eeg4C" },
+        { id: "jarvarisrivetteuf3409@gmail.com", pass: "44s41NP3MD5pf3" },
+        { id: "jy359840651@163.com", pass: "Dd1927013" },
+        { id: "15126273420@163.com", pass: "rFs4qrF95X" },
+        { id: "kwopigk3809@163.com", pass: "Dd128c2e6" },
+        { id: "jyvqvepn475@163.com", pass: "TDvU2c8Yw9Qr" },
+        { id: "KevizpiMe644@icloud.com", pass: "jBh1Vj8EH3" },
+        { id: "1961368389@qq.com", pass: "SaaErQeY7D" },
+        { id: "rowenawoodard246042b@icloud.com", pass: "BgW5juwnAt" },
+        { id: "MirandzpiHugh848@icloud.com", pass: "spkV7Q52C1" },
+        { id: "bradtnrosalbav39153@gmail.com", pass: "6jRNZT41Bm" },
+        { id: "orprobeso50@outlook.com", pass: "6EJG1crZbk" },
+        { id: "13760254546@163.com", pass: "ezhE91jZeu" },
+        { id: "lambertruth282@gmail.com", pass: "2fCnKFRFKR" },
+        { id: "PerezBettyzzd@gmail.com", pass: "98uXd9NR7w" },
+        { id: "pamela53chadwickmjj@outlook.com", pass: "ef6BRTCpTj" },
+        { id: "vgilesgh42@gmail.com", pass: "4HWwRkya6B" },
+        { id: "18660308500@163.com", pass: "7vZdrkBZGe" },
+        { id: "ancq61nufio@gmail.com", pass: "Ma3ZMvZu2w" },
+        { id: "13416639286@163.com", pass: "phMzvJ1ksq" },
+        { id: "tieshamorwaywi6420@gmail.com", pass: "6ZRcWustJ4" },
+        { id: "robertwang380@gmail.com", pass: "fgKXq3uWA6" },
+        { id: "stevensnjjt1@gmail.com", pass: "FP5a6bmVH4" },
+        { id: "madelyncravenlgzx5364@gmail.com", pass: "vN151Vd7Dy" },
+        { id: "owengkmkmoreno@hotmail.com", pass: "9dEHlMCu0026" },
+        { id: "miastnley@gmail.com", pass: "Dd13c8e6d" },
+        { id: "niuguadan31016@hotmail.com", pass: "nMF#Bhs0" },
+        { id: "qian2007495zhan@163.com", pass: "CkMNTrafY8" }
+      ];
+
+    const grid = document.querySelector('.id-grid');
+    let unlocked = false;
+
+    function renderCards() {
+      grid.innerHTML = accounts.map((acc, index) => {
+        let displayId = "••••••••";
+        if (unlocked) {
+          displayId = acc.id;
+        } else {
+          const atIndex = acc.id.indexOf('@');
+          if(atIndex > 2) {
+             displayId = acc.id.substring(0, 2) + "••••••" + acc.id.substring(atIndex);
+          } else {
+             displayId = acc.id;
+          }
+        }
+        
+        const displayPass = unlocked ? acc.pass : "••••••••";
+        
+        return `
+          <div class="id-card">
+            <div class="id-card-header">
+              <span class="id-card-title">账号 ${index + 1}</span>
+              <div class="status-badge">
+                <div class="status-dot"></div>
+                可用
+              </div>
+            </div>
+            
+            <div class="info-group">
+              <div class="info-label">APPLE ID</div>
+              <div class="info-row">
+                <div class="info-value" id="id-val-${index}">${displayId}</div>
+                <button class="copy-btn" onclick="copyText('${acc.id}')">复制</button>
+              </div>
+            </div>
+            
+            <div class="info-group">
+              <div class="info-label">密码</div>
+              <div class="info-row">
+                <div class="info-value" id="pass-val-${index}">${displayPass}</div>
+                <button class="copy-btn" onclick="copyText('${acc.pass}')">复制</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    renderCards();
+
+    document.getElementById('unlockBtn').addEventListener('click', () => {
+      unlocked = true;
+      document.getElementById('unlockBanner').style.display = 'none';
+      renderCards();
+    });
+
+    function copyText(text) {
+      if (!unlocked) {
+        showToast('请先解锁查看账号密码');
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('复制成功！');
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
+        showToast('复制失败，请手动复制');
+      });
+    }
+
+    function showToast(msg) {
+      let toast = document.getElementById('toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast';
+        toast.className = 'toast';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
+
+
+
+

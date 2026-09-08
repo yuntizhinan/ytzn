@@ -1,0 +1,402 @@
+﻿[
+    {
+        "keyword":  "2026机场推荐",
+        "cluster":  "airports",
+        "priority":  "high",
+        "intent":  "recommendation",
+        "url":  "/airports/2026-recommend.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "2026稳定机场推荐",
+        "cluster":  "airports",
+        "priority":  "high",
+        "intent":  "recommendation",
+        "url":  "/airports/stable-recommend.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "2026高性价比机场推荐",
+        "cluster":  "airports",
+        "priority":  "high",
+        "intent":  "recommendation",
+        "url":  "/airports/cost-effective-recommend.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "便宜机场推荐",
+        "cluster":  "airports",
+        "priority":  "medium",
+        "intent":  "recommendation",
+        "url":  "/airports/cheap-recommend.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "月付机场推荐",
+        "cluster":  "airports",
+        "priority":  "medium",
+        "intent":  "recommendation",
+        "url":  "/airports/monthly-recommend.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "高速机场推荐",
+        "cluster":  "airports",
+        "priority":  "medium",
+        "intent":  "recommendation",
+        "url":  "/airports/highspeed-recommend.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "IPLC机场是什么意思",
+        "cluster":  "airports",
+        "priority":  "medium",
+        "intent":  "knowledge",
+        "url":  "/airports/what-is-iplc.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "IEPL机场是什么意思",
+        "cluster":  "airports",
+        "priority":  "medium",
+        "intent":  "knowledge",
+        "url":  "/airports/what-is-iepl.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "BGP机场是什么",
+        "cluster":  "airports",
+        "priority":  "medium",
+        "intent":  "knowledge",
+        "url":  "/airports/what-is-bgp.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "机场怎么选择",
+        "cluster":  "airports",
+        "priority":  "high",
+        "intent":  "guide",
+        "url":  "/airports/how-to-choose.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Clash Verge使用教程",
+        "cluster":  "clash",
+        "priority":  "high",
+        "intent":  "guide",
+        "url":  "/tutorials/clash-verge-guide.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Clash Verge下载安装教程",
+        "cluster":  "clash",
+        "priority":  "high",
+        "intent":  "guide",
+        "url":  "/tutorials/clash-verge-download.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Clash Verge如何导入订阅",
+        "cluster":  "clash",
+        "priority":  "high",
+        "intent":  "guide",
+        "url":  "/tutorials/clash-verge-import.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Clash Verge如何更新订阅",
+        "cluster":  "clash",
+        "priority":  "medium",
+        "intent":  "guide",
+        "url":  "/tutorials/clash-verge-update.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Clash Verge节点添加方法",
+        "cluster":  "clash",
+        "priority":  "medium",
+        "intent":  "guide",
+        "url":  "/tutorials/clash-verge-add-node.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Clash Verge代理模式怎么选择",
+        "cluster":  "clash",
+        "priority":  "high",
+        "intent":  "guide",
+        "url":  "/tutorials/clash-verge-proxy-mode.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Clash Verge TUN模式怎么开启",
+        "cluster":  "clash",
+        "priority":  "high",
+        "intent":  "guide",
+        "url":  "/tutorials/clash-verge-tun.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Clash Verge节点连接失败怎么办",
+        "cluster":  "clash",
+        "priority":  "high",
+        "intent":  "problem",
+        "url":  "/help/clash-verge-failed.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Clash Verge timeout怎么办",
+        "cluster":  "clash",
+        "priority":  "high",
+        "intent":  "problem",
+        "url":  "/help/clash-verge-timeout.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Clash Verge无法联网怎么办",
+        "cluster":  "clash",
+        "priority":  "high",
+        "intent":  "problem",
+        "url":  "/help/clash-verge-no-internet.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Sing-box Windows使用教程",
+        "cluster":  "clash",
+        "priority":  "high",
+        "intent":  "guide",
+        "url":  "/tutorials/singbox-windows-guide.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Sing-box如何导入配置",
+        "cluster":  "clash",
+        "priority":  "medium",
+        "intent":  "guide",
+        "url":  "/tutorials/singbox-import.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Shadowrocket添加节点教程",
+        "cluster":  "clash",
+        "priority":  "high",
+        "intent":  "guide",
+        "url":  "/tutorials/shadowrocket-add-node.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Shadowrocket如何导入订阅",
+        "cluster":  "clash",
+        "priority":  "high",
+        "intent":  "guide",
+        "url":  "/tutorials/shadowrocket-import.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "v2rayNG使用教程",
+        "cluster":  "clash",
+        "priority":  "high",
+        "intent":  "guide",
+        "url":  "/tutorials/v2rayng-guide.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "ChatGPT使用教程",
+        "cluster":  "ai",
+        "priority":  "high",
+        "intent":  "guide",
+        "url":  "/ai/chatgpt-guide.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "ChatGPT连接失败怎么办",
+        "cluster":  "ai",
+        "priority":  "high",
+        "intent":  "problem",
+        "url":  "/help/chatgpt-failed.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Claude使用教程",
+        "cluster":  "ai",
+        "priority":  "high",
+        "intent":  "guide",
+        "url":  "/ai/claude-guide.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Claude连接失败怎么办",
+        "cluster":  "ai",
+        "priority":  "high",
+        "intent":  "problem",
+        "url":  "/help/claude-failed.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Gemini使用教程",
+        "cluster":  "ai",
+        "priority":  "medium",
+        "intent":  "guide",
+        "url":  "/ai/gemini-guide.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Gemini无法访问怎么办",
+        "cluster":  "ai",
+        "priority":  "medium",
+        "intent":  "problem",
+        "url":  "/help/gemini-failed.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Cursor使用教程",
+        "cluster":  "ai",
+        "priority":  "high",
+        "intent":  "guide",
+        "url":  "/ai/cursor-guide.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Perplexity使用教程",
+        "cluster":  "ai",
+        "priority":  "medium",
+        "intent":  "guide",
+        "url":  "/ai/perplexity-guide.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "VPN和代理有什么区别",
+        "cluster":  "knowledge",
+        "priority":  "medium",
+        "intent":  "knowledge",
+        "url":  "/knowledge/vpn-vs-proxy.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "什么是DNS",
+        "cluster":  "knowledge",
+        "priority":  "medium",
+        "intent":  "knowledge",
+        "url":  "/knowledge/what-is-dns.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "DNS污染是什么",
+        "cluster":  "knowledge",
+        "priority":  "high",
+        "intent":  "knowledge",
+        "url":  "/knowledge/dns-pollution.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "什么是IP地址",
+        "cluster":  "knowledge",
+        "priority":  "low",
+        "intent":  "knowledge",
+        "url":  "/knowledge/what-is-ip.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "IPv4和IPv6有什么区别",
+        "cluster":  "knowledge",
+        "priority":  "low",
+        "intent":  "knowledge",
+        "url":  "/knowledge/ipv4-vs-ipv6.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "TCP和UDP有什么区别",
+        "cluster":  "knowledge",
+        "priority":  "medium",
+        "intent":  "knowledge",
+        "url":  "/knowledge/tcp-vs-udp.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "BGP / IPLC / IEPL有什么区别",
+        "cluster":  "knowledge",
+        "priority":  "high",
+        "intent":  "knowledge",
+        "url":  "/knowledge/bgp-iplc-iepl.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "机场节点连接失败怎么办",
+        "cluster":  "help",
+        "priority":  "high",
+        "intent":  "problem",
+        "url":  "/help/airport-failed.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "机场节点timeout怎么办",
+        "cluster":  "help",
+        "priority":  "high",
+        "intent":  "problem",
+        "url":  "/help/airport-timeout.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "机场订阅链接打不开怎么办",
+        "cluster":  "help",
+        "priority":  "high",
+        "intent":  "problem",
+        "url":  "/help/airport-sub-failed.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "机场订阅更新失败怎么办",
+        "cluster":  "help",
+        "priority":  "high",
+        "intent":  "problem",
+        "url":  "/help/airport-sub-update-failed.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Clash节点全部失败怎么办",
+        "cluster":  "help",
+        "priority":  "high",
+        "intent":  "problem",
+        "url":  "/help/clash-all-failed.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Clash连接成功但无法上网怎么办",
+        "cluster":  "help",
+        "priority":  "high",
+        "intent":  "problem",
+        "url":  "/help/clash-connected-no-internet.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "DNS解析失败怎么办",
+        "cluster":  "help",
+        "priority":  "high",
+        "intent":  "problem",
+        "url":  "/help/dns-failed.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "代理连接成功但网页打不开怎么办",
+        "cluster":  "help",
+        "priority":  "high",
+        "intent":  "problem",
+        "url":  "/help/proxy-connected-no-web.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "Google打不开怎么办",
+        "cluster":  "help",
+        "priority":  "medium",
+        "intent":  "problem",
+        "url":  "/help/google-failed.html",
+        "status":  "planned"
+    },
+    {
+        "keyword":  "ChatGPT Access Denied 1020怎么办",
+        "cluster":  "help",
+        "priority":  "medium",
+        "intent":  "problem",
+        "url":  "/help/chatgpt-1020.html",
+        "status":  "planned"
+    }
+]

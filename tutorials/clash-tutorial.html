@@ -1,0 +1,386 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="indexnow-verification" content="b3fa631b41824faf80150280746ebd2f">
+  <title>Clash 全平台配置与订阅导入教程 - 云梯指南</title>
+  <meta name="description" content="云梯指南为您提供2026年最新、最客观的机场推荐与网络代理工具全方位评测。我们深度测试各节点服务的稳定性、性价比、专线质量、流媒体解锁及晚高峰速度对比。无论您是追求低延迟的游戏玩家、高效的外贸工作者，还是需要稳定观看Netflix的影视爱好者，都能在这里快速找到最适合您的科学上网服务与翻墙方案。">
+  <meta name="keywords" content="机场推荐, 机场测评, 机场评测, 科学上网, VPN搭建指南, 外区免费ID, 便宜vpn机场, vpn专线, vpn机场推荐, vpn机场, 国内美区机场vpn, 科学联网vpn, vpn机场美区, 边缘机场, 翻墙机场, iepl专线机场, 中转机场, clash深港专线, webrtc泄漏防范">
+  <link rel="canonical" href="https://nodehub168.com/tutorials/clash-tutorial.html">
+  <link rel="stylesheet" href="index.css">
+  <script src="main.js" defer></script>
+  <meta name="robots" content="index, follow">
+<meta name="description" content="Clash 全平台配置与订阅导入教程，由云梯指南编辑部为您带来详细解读。">
+<meta property="og:title" content="Clash 全平台配置与订阅导入教程" />
+<meta property="og:description" content="Clash 全平台配置与订阅导入教程，由云梯指南编辑部为您带来详细解读。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://nodehub168.com/tutorials/clash-tutorial.html" />
+<meta property="og:site_name" content="云梯指南" />
+<meta name="robots" content="index, follow">
+<script type="application/ld+json">
+{"author":{"name":"云梯指南编辑部","@type":"Organization"},"description":"Clash 全平台配置与订阅导入教程，由云梯指南编辑部为您带来详细解读。","@context":"https://schema.org","datePublished":"2026-07-25T08:00:00+08:00","@type":"Article","headline":"Clash 全平台配置与订阅导入教程","dateModified":"2026-07-25T08:00:00+08:00"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","itemListElement":[{"position":1,"name":"首页","item":"https://nodehub168.com/","@type":"ListItem"},{"position":2,"name":"客户端教程","item":"https://nodehub168.com/tutorials/","@type":"ListItem"},{"position":3,"name":"Clash 全平台配置与订阅导入教程","item":"https://nodehub168.com/tutorials/clash-tutorial.html","@type":"ListItem"}],"@type":"BreadcrumbList"}
+</script>
+</head>
+<body>
+
+  <!-- FIXED NAVIGATION HEADER -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="index.html" class="logo-wrapper">
+        <img src="assets/logo.png" alt="机场推荐Logo" class="logo" id="main-logo">
+      </a>
+      
+      <!-- Hamburger Menu for Mobile -->
+      <button class="burger" aria-label="Toggle Navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- Main Navigation Menu -->
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">首页</a>
+        </li>
+        <li class="nav-item">
+          <a href="reviews.html" class="nav-link has-dropdown">
+            机场评测
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="reviews.html" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                全部评测文章
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=premium" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                高端机场深度评测
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=speed" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                速度与带宽实测
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=stability" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                稳定性与SLA报告
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="tutorials.html" class="nav-link has-dropdown">
+            教程
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=windows" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                Windows 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=mac" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                macOS 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=ios" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                iPhone / iOS 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=android" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M4 4h16v12H4zM12 16v4M8 20h8"></path></svg>
+                Android 安卓教程
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="apple-id.html" class="nav-link">外区ID</a>
+        </li>
+        <li class="nav-item">
+          <a href="ranking.html" class="nav-link has-dropdown">
+            排行榜
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=comprehensive" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                2026综合推荐榜
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=speed" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                速度最快机场榜
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=value" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                高性价比机场榜
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="knowledge.html" class="nav-link has-dropdown">
+            知识库
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="latest-articles.html" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                最新文章发布
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#vpn" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                VPN 与 代理区别
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#vps" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                VPS 节点搭建指南
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#protocols" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                网络协议解析 (SS/Trojan)
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#dns" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                DNS 泄露与防范
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="apple-id-guide.html" class="dropdown-link" style="color:var(--accent-cyan);">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                注册美区 Apple ID
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="tags.html" class="nav-link">标签</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT WRAPPER -->
+  <div class="main-wrapper">
+    <div class="left-column">
+<article class="post-article" style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+  <div class="breadcrumb" style="margin-bottom: 16px; font-size: 0.9rem; color: var(--text-muted);">
+    <a href="/">首页</a> &gt; <a href="https://nodehub168.com/tutorials/">客户端教程</a> &gt; <span style="color: var(--accent-cyan); font-weight: 500;">Clash 全平台配置与订阅导入教程</span>
+  </div>
+  <h1 id="article-title-main" style="font-size: 2.5rem; line-height: 1.3; margin-bottom: 24px; color: var(--text-main);">
+    Clash 全平台配置与订阅导入教程
+  </h1>
+  <div class="article-meta" style="display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; margin-bottom: 24px; color: var(--text-muted); font-size: 0.9rem;">
+    <span>作者: </span>
+    <span>更新于: 2026-07-25</span>
+  </div>
+  
+            <img loading="lazy" src="assets/clash_tutorial_banner.png" alt="Clash 全平台配置指南" style="width:100%; border-radius:12px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #cbd5e1;">在经历了多年的网络环境演变与代理协议更迭后，<strong>Clash（及其衍生内核如 Clash Meta / Mihomo）</strong>依然是 2026 年毫无争议的代理界“王者”。它凭借着极其强大的分流规则（Rule Providers）、优异的性能占用控制，以及对 Hysteria2、Vless Reality 等最新协议的完美支持，成为了高端科学上网玩家和办公人群的标配。然而，对于很多刚刚接触科学上网的新手来说，面对各种客户端、配置（Profiles）、代理组（Proxy Groups）以及不同的路由模式，难免会感到一头雾水。本篇超过 2500 字的《Clash 全平台配置与订阅导入教程》将作为您的“终极保姆级指南”，手把手带您在 Windows、macOS、Android 和 iOS 上完成所有设置，实现真正的“无感分流上网”。</p>
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #cbd5e1;">如果您还没有购买可靠的节点订阅，请务必先查阅我们的 <a href="post-detail.html?id=recommend-guide" style="color: #00f2fe; text-decoration: underline;">《2026年稳定高速机场推荐指南》</a> 和最新的 <a href="ranking.html" style="color: #00f2fe; text-decoration: underline;">机场排行榜</a>，因为“好马配好鞍”，一个优质的机场是所有配置生效的前提。</p>
+
+            <h2 style="border-bottom: 2px solid #00f2fe; padding-bottom: 10px; margin-top: 40px;">一、核心概念科普：玩转 Clash 的三个关键词</h2>
+            <p>在开始动手操作之前，我们需要先弄懂三个贯穿所有平台客户端的核心概念：</p>
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 25px; margin: 25px 0; border-left: 4px solid #8b5cf6;">
+              <ul style="color: #a0aec0; margin-bottom: 0;">
+                <li style="margin-bottom: 15px;"><strong style="color: #c4b5fd;">1. 订阅链接 (Subscription Link)：</strong> 相当于您的“通行证”。它是机场后台提供的一串以 <code>http</code> 或 <code>https</code> 开头的网址，里面包含了成百上千个服务器节点的IP、端口和密码信息。<strong>请极其妥善地保管此链接，绝不可泄露给他人，否则您的流量将被瞬间盗刷。</strong></li>
+                <li style="margin-bottom: 15px;"><strong style="color: #c4b5fd;">2. 配置文件 (Profiles)：</strong> 当你把订阅链接粘贴进软件并点击更新时，软件会从该链接下载一个后缀为 <code>.yaml</code> 的文本文件，这就是配置文件。它不仅包含了节点，还包含了机场主为您写好的分流规则（例如：访问百度不走代理，访问 YouTube 走代理）。</li>
+                <li><strong style="color: #c4b5fd;">3. 路由模式 (Routing Mode)：</strong> 绝大多数情况下，请<strong>永远保持在“规则模式 (Rule)”</strong>。在此模式下，软件会自动判断当前访问的网站是国内还是国外，实现国内直连加速、国外科学上网的无缝体验；如果选择“全局 (Global)”，则所有流量（包括看国内爱奇艺、打王者荣耀）都会绕道国外，不仅卡顿还会白白浪费珍贵的机场流量；“直连 (Direct)”则等于关闭了翻墙功能。</li>
+              </ul>
+            </div>
+
+            <h2 style="border-bottom: 2px solid #00f2fe; padding-bottom: 10px; margin-top: 40px;">二、Windows 电脑端配置指南：首推 Clash Verge Rev</h2>
+            <p>在 2026 年，曾经老旧的 Clash for Windows (CFW) 已经彻底退出了历史舞台，取而代之的是采用全新 UI 和更强大 Meta 内核的 <strong>Clash Verge Rev</strong>。它是目前 Windows 平台上体验最好、颜值最高的代理客户端。</p>
+
+            <h3 style="color: #00f2fe; margin-top: 25px;">详细导入步骤：</h3>
+            <ol style="line-height: 1.8; color: #a0aec0;">
+              <li><strong>下载与安装：</strong> 前往 GitHub 官方仓库或通过本站提供的镜像链接，下载最新版的 <code>Clash.Verge_x.x.x_x64-setup.exe</code>，一路点击“下一步”完成安装并打开软件。</li>
+              <li><strong>获取订阅：</strong> 登录您的机场官网控制台，寻找“一键订阅”或“复制 Clash 订阅链接”按钮，点击复制。</li>
+              <li><strong>导入配置：</strong> 在 Clash Verge 界面中，点击左侧导航栏的 <strong>配置 (Profiles)</strong>。在顶部的输入框中 <code>粘贴</code> 刚刚复制的订阅链接，然后点击右侧蓝色的 <strong>导入 (Import)</strong> 按钮。</li>
+              <li><strong>激活配置：</strong> 导入成功后，列表里会多出一个带有机场名字的文件。<strong>重要：必须用鼠标左键点击一下该文件</strong>，使其变为蓝色高亮（或打勾）状态，这才代表选中并激活了该配置。</li>
+              <li><strong>开启代理：</strong> 点击左侧导航栏的 <strong>设置 (Settings)</strong>，找到 <strong>系统代理 (System Proxy)</strong> 并将其开关打开。如果需要让所有软件（如 Telegram PC版、游戏平台）都走代理，可以开启更底层的 <strong>TUN 模式 (TUN Mode)</strong>，但需要授予管理员权限。</li>
+              <li><strong>选择节点：</strong> 点击左侧 <strong>代理 (Proxies)</strong> 面板，在上方确认模式为 <strong>规则 (Rule)</strong>。展开“节点选择”或“手动切换”策略组，挑选一个低延迟的节点即可（不知如何挑选？请看 <a href="post-detail.html?id=how-to-choose" style="color: #00f2fe;">《教你三步挑出好节点》</a>）。</li>
+            </ol>
+
+            <h2 style="border-bottom: 2px solid #00f2fe; padding-bottom: 10px; margin-top: 40px;">三、macOS 苹果电脑端配置指南</h2>
+            <p>对于 Mac 用户，由于 M 系列芯片（Apple Silicon）的普及，客户端生态有了很大变化。我们强烈推荐使用与 Windows 端一脉相承的 <strong>Clash Verge (Mac版)</strong> 或者界面极为原生优雅的付费软件 <strong>Stash for Mac</strong>。</p>
+
+            <h3 style="color: #00f2fe; margin-top: 25px;">以 Clash Verge (Mac) 为例的配置流程：</h3>
+            <ul style="line-height: 1.8; color: #a0aec0;">
+              <li><strong>下载对应版本：</strong> 请务必确认你的 Mac 是 Intel 芯片还是 M 芯片。M1/M2/M3 等芯片必须下载 <code>aarch64.dmg</code> 版本，Intel 芯片下载 <code>x64.dmg</code> 版本。</li>
+              <li><strong>安装与授权：</strong> 将应用拖入“应用程序”文件夹。首次打开如果提示“文件已损坏或无法验证开发者”，请进入系统“系统设置 -> 隐私与安全性”，向下拉找到并点击“仍要打开”。</li>
+              <li><strong>导入与启动：</strong> 操作逻辑与 Windows 完全一致。进入 <strong>Profiles</strong> 粘贴链接导入 -> 选中该配置 -> 进入 <strong>Settings</strong> 打开 <strong>System Proxy</strong> -> 进入 <strong>Proxies</strong> 选择具体线路节点。</li>
+              <li><strong>菜单栏快捷操作：</strong> 在 Mac 屏幕顶部右上角的菜单栏中，会出现一个可爱的小猫咪图标。你可以点击它，快速进行节点切换、模式更改（Rule/Global）或一键退出。</li>
+            </ul>
+
+            <h2 style="border-bottom: 2px solid #00f2fe; padding-bottom: 10px; margin-top: 40px;">四、Android 安卓端：多元化生态的终极选择</h2>
+            <p>安卓生态相对开放，目前最流行的客户端有三款：经典开源的 <strong>Clash for Android (CFA)</strong>（部分修改版支持 Meta 内核）、冲浪板 <strong>Surfboard</strong>，以及新生代的轻量级霸主 <strong>sing-box</strong>。</p>
+
+            <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 25px; margin: 25px 0;">
+              <h3 style="margin-top: 0; color: #10b981;">📱 Clash for Android (Meta版) 极速配置指南</h3>
+              <ol style="line-height: 1.8; color: #cbd5e1;">
+                <li>安装软件后打开，点击 <strong>配置 (Profiles)</strong>。</li>
+                <li>点击右上角的 <strong>+</strong> 号，选择 <strong>从 URL 导入 (Import from URL)</strong>。</li>
+                <li>在 <strong>URL</strong> 一栏粘贴机场订阅链接，名称可以随便填（如“我的机场”），然后点击右上角的“保存”图标。</li>
+                <li>等待下载完成后退回到主界面，点击灰色的 <strong>“已停止 (Tap to Start)”</strong> 按钮。如果是首次使用，系统会弹出建立 VPN 连接的权限请求，请点击“允许”。</li>
+                <li>点击 <strong>代理 (Proxies)</strong> 选项卡进入节点列表，展开对应的策略组进行节点切换。在安卓系统下拉通知栏中，可以随时查看流量消耗和进行快捷开关。</li>
+              </ol>
+            </div>
+            <p><em>注：如果您的机场不支持最新的 Meta 协议，导致导入报错，建议您在机场后台尝试一键导入到 <strong>v2rayNG</strong> 或 <strong>Surfboard</strong>。</em></p>
+
+            <h2 style="border-bottom: 2px solid #00f2fe; padding-bottom: 10px; margin-top: 40px;">五、iOS 苹果端配置指南：Shadowrocket (小火箭) 称王</h2>
+            <p>由于苹果 App Store 的严格审核机制，iOS 端无法下载开源的 Clash。目前统治 iOS 生态的当属大名鼎鼎的 <strong>Shadowrocket（俗称小火箭，售价 $2.99）</strong>，以及完美兼容 Clash 配置文件的 <strong>Stash（售价 $3.99）</strong>。</p>
+            <p><strong>前置条件：</strong>由于国区 App Store 下架了所有的代理软件，您必须拥有一个<strong>非中国大陆区（如美区、港区）的 Apple ID</strong>，才能在商店中搜索并购买这些软件。许多优秀的机场会在购买套餐后提供共享的海外 Apple ID 供用户免费下载。</p>
+
+            <h3 style="color: #00f2fe; margin-top: 25px;">Shadowrocket (小火箭) 导入流程：</h3>
+            <ol style="line-height: 1.8; color: #a0aec0;">
+              <li><strong>一键导入（最推荐）：</strong> 在手机 Safari 浏览器中登录机场后台，找到“一键导入 Shadowrocket”按钮，点击后系统会自动唤醒小火箭，并提示“是否添加节点配置”，点击确定即可。</li>
+              <li><strong>手动导入（如果一键失败）：</strong> 复制机场提供的“订阅链接”。打开小火箭，点击右上角的 <strong>+</strong> 号。在“类型”中选择 <strong>Subscribe (订阅)</strong>。将链接粘贴到“URL”框中，点击右上角的“完成”。</li>
+              <li><strong>更新订阅：</strong> 回到首页，向右滑动刚添加的订阅名称，点击 <strong>更新 (Update)</strong>，此时会拉取最新的服务器列表。</li>
+              <li><strong>开启与全局路由：</strong> 在首页选择一个节点（前面会出现黄色小圆点）。点击最上方“未连接”右侧的开关。首次开启需输入 iPhone 锁屏密码允许安装 VPN 配置文件。<strong>特别注意：在下方的“全局路由 (Global Routing)”选项中，务必选择“配置 (Config)”</strong>，这等同于 Clash 的 Rule 模式；千万不要选“代理 (Proxy)”，否则会导致国内App（如微信、淘宝）无法加载图片。</li>
+            </ol>
+
+            <h2 style="border-bottom: 2px solid #00f2fe; padding-bottom: 10px; margin-top: 40px;">六、终极 FAQ：疑难杂症排查与解决</h2>
+            <p>在配置过程中，新手极易遇到一些“拦路虎”，以下是本站技术团队总结的最常见问题及解决办法：</p>
+            <ul style="line-height: 1.8; color: #a0aec0;">
+              <li><strong style="color: #ef4444;">Q1: 为什么订阅导入成功了，节点列表也有，但是依然上不去外网？</strong><br>
+                <strong>排查 1：</strong> 请检查你电脑/手机的<strong>系统时间是否极其准确</strong>。Clash 底层的 Vmess 和 Trojan 协议对时间校验要求极高，误差超过 1 分钟就会导致认证失败。请前往系统设置强制开启“自动同步网络时间”。<br>
+                <strong>排查 2：</strong> 检查是否被其它杀毒软件（如 360、火绒）拦截了系统代理修改。请将 Clash 添加到杀软白名单。<br>
+                <strong>排查 3：</strong> 尝试在软件中点击“延迟测试”，如果所有节点全是 <code>Timeout</code>，说明机场域名可能在当地被 DNS 污染了，请尝试在手机流量下重新更新订阅。</li>
+              <li><strong style="color: #ef4444;">Q2: 开启代理后，国外的能上，但国内的某些特殊软件（如原神、企业内部OA）却断网了？</strong><br>
+                这通常是因为有些不规范的软件不走系统的 HTTP 代理协议。解决方案是：在 Clash Verge 的设置中开启 <strong>TUN 模式</strong>，这将接管电脑的整个虚拟网卡，强制所有软件的流量都经过 Clash 规则引擎过滤。</li>
+              <li><strong style="color: #ef4444;">Q3: 为什么看 Netflix 时总是提示使用了代理工具？我明明选了解锁节点啊。</strong><br>
+                可能是发生了 <strong>DNS 泄露 (DNS Leak)</strong>。当你在浏览器里输入 netflix.com 时，虽然流量走了代理，但 DNS 解析却是由你本地运营商（如中国电信）完成的，Netflix 的风控系统察觉到了异常。解决方法：在浏览器的设置中关闭“安全 DNS”，或者在客户端的高级设置中启用“远程 DNS 解析”。</li>
+            </ul>
+
+            <h2 style="border-bottom: 2px solid #00f2fe; padding-bottom: 10px; margin-top: 40px;">结语</h2>
+            <p>网络代理的配置本质上就是“一条链接、一次更新、一个开关”。只要您不折不扣地按照上述图文步骤执行，理清了“订阅、配置、规则模式”的铁三角关系，无论在哪个平台都能如鱼得水。如果您已经成功配置完毕，赶快打开 YouTube 测试一下您的网速吧！想获取更多进阶玩法和极客网络知识，欢迎随时访问我们的 <a href="knowledge.html" style="color: #00f2fe;">知识库</a> 频道。</p>
+          
+  <div class='related-articles'><h3>相关阅读</h3><ul><li><a href='/tutorials/clash-verge-win.html'>Windows 平台 Clash Verge 配置指南 (含图文)</a></li><li><a href='/tutorials/singbox-win.html'>Windows 平台 Sing-box GUI 指南 (含图文)</a></li><li><a href='/tutorials/cfw-win.html'>Clash for Windows 经典配置指南 (含图文)</a></li><li><a href='/tutorials/clash-verge-mac.html'>Clash Verge for Mac 配置指南 (含图文)</a></li><li><a href='/tutorials/clashx-mac.html'>ClashX / ClashX Pro 安装与配置指南 (含图文)</a></li></ul></div>
+</article>
+
+</div><!-- End Left Column -->
+<!-- RIGHT STICKY COLUMN -->
+    <aside class="right-column">
+      <div class="sticky-sidebar">
+        <div class="profile-widget">
+          <!-- Logo with transparency -->
+          <img src="assets/logo.png" alt="云梯指南" class="profile-logo">
+          
+          <!-- Contacts row -->
+          <div class="profile-contacts">
+            <a href="mailto:liuajie_ok@proton.me" class="contact-btn" title="邮件联系">
+              <svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </a>
+          </div>
+          
+          <!-- Directory grid buttons -->
+          <div class="directory-grid">
+            <a href="tags.html" class="dir-btn">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              <span>标签</span>
+            </a>
+            <a href="tutorials.html" class="dir-btn">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+              <span>分类</span>
+            </a>
+            <a href="ranking.html" class="dir-btn">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span>归档</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div> <!-- End Main Layout Wrapper -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-logo-desc">
+          <img src="assets/logo.png" alt="Logo" class="footer-logo">
+          <p class="footer-desc">致力于提供最专业、客观的机场评测与科学上网客户端配置教程，为您的高速上网体验保驾护航。</p>
+        </div>
+        <div class="footer-col">
+          <h5>热门导航</h5>
+          <ul class="footer-links">
+            <li><a href="reviews.html">机场评测</a></li>
+            <li><a href="tutorials.html">使用教程</a></li>
+            <li><a href="ranking.html">综合排行榜</a></li>
+            <li><a href="knowledge.html">网络知识库</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>实用链接</h5>
+          <ul class="footer-links">
+            <li><a href="tutorials.html?platform=windows">Windows 客户端下载</a></li>
+            <li><a href="tutorials.html?platform=ios">iOS 必备小火箭</a></li>
+            <li><a href="knowledge.html#dns">DNS 解析泄露检测</a></li>
+            <li><a href="knowledge.html#protocols">代理协议标准</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>关于本站</h5>
+          <ul class="footer-links">
+            <li><a href="#">免责声明</a></li>
+            <li><a href="#">隐私权政策</a></li>
+            <li><a href="#">关于我们</a></li>
+            <li><a href="#">联系我们</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 机场推荐与网络工具指南. All Rights Reserved. 本站服务仅限用于合法的学术研究与外贸跨境办公。</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
+
+
+
+
+
+

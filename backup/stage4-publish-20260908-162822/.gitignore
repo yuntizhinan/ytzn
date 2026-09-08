@@ -1,0 +1,6 @@
+reviews.zip
+*.zip
+*.tar.gz
+*.log
+.gemini/
+.agents/

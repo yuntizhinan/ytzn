@@ -1,0 +1,6 @@
+﻿User-agent: *
+Disallow: /content/drafts/
+Disallow: /backup/
+Allow: /
+
+Sitemap: https://nodehub168.com/sitemap.xml
