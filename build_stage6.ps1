@@ -1,4 +1,4 @@
-﻿$template = Get-Content 'post-detail.html' -Raw -Encoding UTF8
+$template = Get-Content 'post-detail.html' -Raw -Encoding UTF8
 $drafts = Get-ChildItem -Path content/drafts/stage5 -Filter *.json | ForEach-Object {
     Get-Content $_.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
 }
@@ -12,14 +12,14 @@ foreach ($d in $drafts) {
     }
     
     $html = $template
-    $html = $html -replace '(?s)<title>.*?</title>', ("<title>" + $title + "</title>")
-    $html = $html -replace '(?s)<link rel="canonical" href=".*?">', ("<link rel=`"canonical`" href=`"" + $canonical + "`">")
-    $html = $html -replace '(?s)<meta name="description" content=".*?">', ("<meta name=`"description`" content=`"" + $desc + "`">")
+    $html = $html -replace '(?s)<title>.*?</title>', "<title>$title</title>"
+    $html = $html -replace '(?s)<link rel="canonical" href=".*?">', "<link rel=`"canonical`" href=`"$canonical`">"
+    $html = $html -replace '(?s)<meta name="description" content=".*?">', "<meta name=`"description`" content=`"$desc`">"
     
-    $og = "<meta property=`"og:title`" content=`"" + $title + "`">`n" +
-          "<meta property=`"og:description`" content=`"" + $desc + "`">`n" +
+    $og = "<meta property=`"og:title`" content=`"$title`">`n" +
+          "<meta property=`"og:description`" content=`"$desc`">`n" +
           "<meta property=`"og:type`" content=`"article`">`n" +
-          "<meta property=`"og:url`" content=`"" + $canonical + "`">`n" +
+          "<meta property=`"og:url`" content=`"$canonical`">`n" +
           "<meta property=`"og:site_name`" content=`"云梯指南`">"
           
     $html = $html -replace '(?s)</head>', ("`n" + $og + "`n</head>")
@@ -62,9 +62,10 @@ foreach ($d in $drafts) {
     
     $html = $html -replace '(?s)</head>', ("`n" + $schemaHtml + "`n</head>")
     
-    $html = $html -replace '(?s)<article class="post-article">.*?</article>', ("<article class=`"post-article`">`n" + $d.content + "`n</article>")
+    $html = $html -replace '(?s)<section class="article-body" id="article-body-content">.*?</section>', "<section class=`"article-body`" id=`"article-body-content`">`n$($d.content)`n</section>"    
     
-    $crumbHtml = "<nav class=`"breadcrumb`"><a href=`"/`">首页</a> > <a href=`"" + $catUrl.Replace("https://nodehub168.com","") + "`">" + $d.category + "</a> > <span>" + $d.title + "</span></nav>"
+    $catUrlShort = $catUrl.Replace("https://nodehub168.com","")
+    $crumbHtml = "<nav class=`"breadcrumb`"><a href=`"/`">首页</a> > <a href=`"$catUrlShort`">$($d.category)</a> > <span>$($d.title)</span></nav>"
     $html = $html -replace '(?s)<nav class="breadcrumb">.*?</nav>', $crumbHtml
     
     $outPath = "c:\Users\PC\Desktop\落地页\nodehub168.com" + $d.newPath.Replace('/', '\')

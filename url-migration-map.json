@@ -15,6 +15,8 @@
     "post-detail.html?id=edge":  "/reviews/edge.html",
     "post-detail.html?id=loon-mac":  "/tutorials/loon-mac.html",
     "post-detail.html?id=clashx-mac":  "/tutorials/clashx-mac.html",
-    "post-detail.html?id=recommend-guide":  "/posts/recommend-guide.html",
+    "/posts/recommend-guide.html":  "/posts/recommend-guide.html",
     "post-detail.html?id=v2rayng-android":  "/tutorials/v2rayng-android.html"
 }
+
+
