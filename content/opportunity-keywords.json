@@ -1,0 +1,38 @@
+[
+  {
+    "query": "Clash Verge 怎么配置",
+    "impressions": null,
+    "clicks": null,
+    "position": null,
+    "related_url": null,
+    "search_intent": "新手引导/基础教程",
+    "recommended_action": "等待数据收集；若数据好则合并进指南或独立强化"
+  },
+  {
+    "query": "Clash Verge 导入配置",
+    "impressions": null,
+    "clicks": null,
+    "position": null,
+    "related_url": null,
+    "search_intent": "解决订阅导入操作的具体痛点",
+    "recommended_action": "监控当前页面的排名与曝光，适时增加图文详细度"
+  },
+  {
+    "query": "Clash Verge timeout",
+    "impressions": null,
+    "clicks": null,
+    "position": null,
+    "related_url": null,
+    "search_intent": "解决特定的网络连接报错",
+    "recommended_action": "在故障排除相关页面增加该词覆盖，或者建立单独长尾 FAQ 词条"
+  },
+  {
+    "query": "Clash Verge 节点连接失败",
+    "impressions": null,
+    "clicks": null,
+    "position": null,
+    "related_url": null,
+    "search_intent": "故障排除",
+    "recommended_action": "该页面目前已上线，待监控其初始索引和曝光数据"
+  }
+]
