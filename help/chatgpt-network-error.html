@@ -1,0 +1,379 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="indexnow-verification" content="b3fa631b41824faf80150280746ebd2f">
+  <title>ChatGPT 无法访问？Access Denied 与网络错误终极排查指南 - 云梯指南</title>
+  
+  <meta name="keywords" content="机场推荐, 机场测评, 机场评测, 科学上网, VPN搭建指南, 外区免费ID, 便宜vpn机场, vpn专线, vpn机场推荐, vpn机场, 国内美区机场vpn, 科学联网vpn, vpn机场美区, 边缘机场, 翻墙机场, iepl专线机场, 中转机场, clash深港专线, webrtc泄漏防范">
+  <link rel="canonical" href="https://nodehub168.com/help/chatgpt-network-error.html">
+  <link rel="stylesheet" href="index.css">
+  <script src="main.js" defer></script>
+  <meta name="robots" content="index, follow">
+<meta name="description" content="解决在开启代理状态下，特定流媒体/AI服务(ChatGPT)报错或拒绝访问的问题">
+<meta property="og:title" content="ChatGPT 无法访问？Access Denied 与网络错误终极排查指南" />
+<meta property="og:description" content="解决在开启代理状态下，特定流媒体/AI服务(ChatGPT)报错或拒绝访问的问题" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://nodehub168.com/help/chatgpt-network-error.html" />
+<meta property="og:site_name" content="云梯指南" />
+<meta name="robots" content="index, follow">
+<script type="application/ld+json">
+{"author":{"name":"云梯指南编辑部","@type":"Person"},"description":"解决在开启代理状态下，特定流媒体/AI服务(ChatGPT)报错或拒绝访问的问题","@context":"https://schema.org","datePublished":"2026-09-11T08:00:00+08:00","@type":"Article","headline":"ChatGPT 无法访问？Access Denied 与网络错误终极排查指南","dateModified":"2026-09-11T08:00:00+08:00"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","itemListElement":[{"position":1,"name":"首页","item":"https://nodehub168.com/","@type":"ListItem"},{"position":2,"name":"知识库","item":"https://nodehub168.com/knowledge.html","@type":"ListItem"},{"position":3,"name":"ChatGPT 无法访问？Access Denied 与网络错误终极排查指南","item":"https://nodehub168.com/help/chatgpt-network-error.html","@type":"ListItem"}],"@type":"BreadcrumbList"}
+</script>
+</head>
+<body>
+
+  <!-- FIXED NAVIGATION HEADER -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="index.html" class="logo-wrapper">
+        <img src="assets/logo.png" alt="机场推荐Logo" class="logo" id="main-logo">
+      </a>
+      
+      <!-- Hamburger Menu for Mobile -->
+      <button class="burger" aria-label="Toggle Navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- Main Navigation Menu -->
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">首页</a>
+        </li>
+        <li class="nav-item">
+          <a href="reviews.html" class="nav-link has-dropdown">
+            机场评测
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="reviews.html" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                全部评测文章
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=premium" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                高端机场深度评测
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=speed" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                速度与带宽实测
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=stability" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                稳定性与SLA报告
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="tutorials.html" class="nav-link has-dropdown">
+            教程
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=windows" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                Windows 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=mac" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                macOS 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=ios" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                iPhone / iOS 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=android" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M4 4h16v12H4zM12 16v4M8 20h8"></path></svg>
+                Android 安卓教程
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="apple-id.html" class="nav-link">外区ID</a>
+        </li>
+        <li class="nav-item">
+          <a href="ranking.html" class="nav-link has-dropdown">
+            排行榜
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=comprehensive" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                2026综合推荐榜
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=speed" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                速度最快机场榜
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=value" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                高性价比机场榜
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="knowledge.html" class="nav-link has-dropdown">
+            知识库
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="latest-articles.html" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                最新文章发布
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#vpn" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                VPN 与 代理区别
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#vps" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                VPS 节点搭建指南
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#protocols" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                网络协议解析 (SS/Trojan)
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#dns" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                DNS 泄露与防范
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="apple-id-guide.html" class="dropdown-link" style="color:var(--accent-cyan);">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                注册美区 Apple ID
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="tags.html" class="nav-link">标签</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT WRAPPER -->
+  <div class="main-wrapper">
+    <div class="left-column">
+<div class="container">
+  <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+    <a href="/index.html" style="color: inherit;">首页</a> &gt; <a href="/knowledge.html" style="color: inherit;">知识库</a> &gt; <span style="color: var(--accent-orange); font-weight: 500;">故障排查</span>
+  </nav>
+
+  <article class="post-article" style="background: var(--bg-card); padding: 40px; border-radius: 12px; box-shadow: var(--glass-shadow); border: 1px solid var(--border-color);">
+    <h1 style="font-size: 2.2rem; line-height: 1.3; margin-bottom: 16px; color: var(--text-primary);">ChatGPT 无法访问？Access Denied 与网络错误终极排查指南</h1>
+
+    <section class="quick-solution" style="background: rgba(14, 165, 233, 0.1); border-left: 4px solid #0ea5e9; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+      <h2 style="color: #38bdf8; font-size: 1.25rem; margin-bottom: 12px; border: none; padding: 0;">⚡ 快速解决 4 步走</h2>
+      <ol style="margin: 0 0 0 20px; color: #bae6fd; font-size: 0.95rem; line-height: 1.6;">
+        <li><strong>全局切换节点</strong>：立即在代理软件中切换到美国、日本或新加坡节点，并开启“全局模式 (Global)”以排除分流规则错误。</li>
+        <li><strong>清除浏览器缓存</strong>：按 <code>Ctrl + Shift + Delete</code> 清除 ChatGPT 域名下的 Cookie 与缓存，或直接使用无痕窗口测试。</li>
+        <li><strong>检查 WebRTC 泄漏</strong>：关闭浏览器，禁用任何可能泄露本地真实 IP 的插件。</li>
+        <li><strong>确认原生 IP</strong>：打开 IP 检测网站（如 ipinfo.io），查看当前节点是否被标记为数据中心 (Hosting) 且遭到 OpenAI 封控。</li>
+      </ol>
+    </section>
+
+    <h2>一、问题表现：你遇到的是哪种拦截？</h2>
+    <p>很多用户发现：平时看 YouTube 测速秒开，但一打开 ChatGPT 页面就报错。这往往不是你的网速问题，而是服务端的风控策略。常见的报错表现如下：</p>
+    <ul>
+      <li><strong>Error 1020 (Access Denied)</strong>：页面显示大大的 Cloudflare 拦截页面，提示禁止访问。</li>
+      <li><strong>Something went wrong</strong>：进入对话框后，输入问题点击发送，立刻弹出红色背景的错误提示，无法生成回答。</li>
+      <li><strong>Oops! You do not have an account</strong> 或频繁强制要求你完成图形验证码（验证你不是机器人）。</li>
+      <li><strong>无法加载服务</strong>：一直转圈卡在 `chatgpt.com` 首页，控制台显示网络超时。</li>
+    </ul>
+
+    <h2>二、原因分类：为什么会被阻断？</h2>
+    <p>ChatGPT 对访问者的 IP 纯净度要求极高，其屏蔽机制不断在升级：</p>
+    <ul>
+      <li><strong>IP 被风控 (IP Ban)</strong>：你所使用的机场节点属于大规模共享 IP。当同一个 IP 有成百上千个用户同时发送请求时，触发了 OpenAI 的反作弊机制，导致该 IP 暂时被限制访问。</li>
+      <li><strong>数据中心 IP 识别</strong>：部分廉价机场使用阿里云、AWS 等云厂商的公网 IP，这些 IP 被归类为机房 IP，极容易触发 Cloudflare 的严格质询。</li>
+      <li><strong>分流规则未命中</strong>：你使用的代理客户端分流规则过旧，没有覆盖 ChatGPT 最新的 API 域名（如 <code>chatgpt.com</code>, <code>oaistatic.com</code>），导致请求走直连而被 GFW 墙掉。</li>
+      <li><strong>浏览器环境指纹泄漏</strong>：浏览器的时区、语言、WebRTC 泄露了你的真实地理位置，被服务端比对后拒绝服务。</li>
+    </ul>
+
+    <h2>三、详细排查步骤与解决方案</h2>
+
+    <h3>步骤 1：排查节点 IP 纯净度</h3>
+    <p>这是导致 <code>Access Denied</code> 的常见原因之一。注意，Access Denied 不一定意味着 IP 被永久封禁，也可能是 Cloudflare 对部分高风险 ASN 开启了严格质询。你需要确认节点是否被判定为高风险。</p>
+    <ol>
+      <li>在代理开启状态下，访问 <code>https://scamalytics.com/</code> 或类似 IP 欺诈分查询工具。</li>
+      <li>如果该 IP 的 Fraud Score（欺诈分数）很高，或者明确被标记为 Proxy/VPN，那么建议在客户端中尝试切换其他节点。</li>
+      <li>建议寻找标有“原生 IP (Native IP)”或“住宅 IP (Residential IP)”的特殊流媒体解锁节点。</li>
+    </ol>
+
+    <h3>步骤 2：修正客户端分流规则</h3>
+    <p>如果你遇到的是无限加载而非被拒，可能是流量没有成功走代理：</p>
+    <ul>
+      <li>在 Clash Verge 中，前往 <code>Settings</code>，开启 <code>TUN 模式</code> 进行全局接管。</li>
+      <li>如果坚持使用规则分流，请确保你订阅的规则库包含了最新的 OpenAI 相关域名（包括 <code>chatgpt.com</code>、<code>openai.com</code>、<code>auth0.com</code>、<code>sentry.io</code> 以及用于 CDN 的 <code>oaistatic.com</code>）。</li>
+    </ul>
+
+    <h3>步骤 3：重置本地环境特征</h3>
+    <p>有时风控记录会缓存你的设备指纹：</p>
+    <ol>
+      <li>关闭当前浏览器标签。</li>
+      <li>在你的移动设备（手机）上安装 ChatGPT 官方 APP，使用相同的节点尝试登录。如果手机 APP 正常而电脑不行，大概率是电脑浏览器被风控标记。</li>
+      <li>在电脑上，清除所有有关 OpenAI 的 Cookie，或尝试下载另一个纯净的浏览器（如 Brave 或 Firefox）专门用于访问 AI 服务。</li>
+    </ol>
+
+    <h2>四、验证修复是否成功</h2>
+    <p>更换节点和环境后，请通过以下方式验证：</p>
+    <ul>
+      <li>访问 ChatGPT 登录页不再出现 Cloudflare 的五秒盾拦截。</li>
+      <li>能够成功输入账密并进入对话界面。</li>
+      <li>向 AI 发送测试问题“hello”，能立即获得回复，且不再弹出红色的 <code>Something went wrong</code>。</li>
+    </ul>
+
+    <h2>五、常见问题 (FAQ)</h2>
+    <div class="faq-section">
+      <h4>1. 购买 ChatGPT Plus 会减少封号或拦截概率吗？</h4>
+      <p>理论上，OpenAI 对 Plus 用户的网络风控稍微宽松一点，但如果你的 IP 极度劣质（如滥用发包），即使是 Plus 账号也有可能遇到 1020 拦截。</p>
+
+      <h4>2. 为什么昨晚这个节点还能用，今天早上就 Access Denied 了？</h4>
+      <p>因为共享节点的用户随时在变动。可能昨晚只有少数人用这个 IP，而今早有其他人在该节点上高频刷接口触发了封控，导致该 IP 突然被拔线。</p>
+
+      <h4>3. 使用专门的“ChatGPT 解锁节点”安全吗？</h4>
+      <p>优质机场提供的“流媒体/AI解锁”节点，通常是通过底层 DNS 劫持将访问 OpenAI 的流量转发到一台干净的解锁机上。这种方式体验较好，但建议谨慎发送过于敏感或包含隐私的对话内容。</p>
+    </div>
+
+    <h2>相关推荐</h2>
+    <ul>
+      <li><a href="/post-detail.html?id=claude-ai-jiaocheng-2026">Claude AI 注册与原生节点避风控完全指南</a></li>
+      <li><a href="/tutorials/clash-verge-config.html">Clash Verge 规则与 TUN 模式分流配置</a></li>
+      <li><a href="/help/dns-resolution-failed.html">代理环境下 DNS 解析失败与页面加载超时排障</a></li>
+      <li><a href="/reviews/flybit.html">实测支持 ChatGPT 解锁的高性价比机场推荐</a></li>
+    </ul>
+  </article>
+</div>
+</div><!-- End Left Column -->
+<!-- RIGHT STICKY COLUMN -->
+    <aside class="right-column">
+      <div class="sticky-sidebar">
+        <div class="profile-widget">
+          <!-- Logo with transparency -->
+          <img src="assets/logo.png" alt="云梯指南" class="profile-logo">
+          
+          <!-- Contacts row -->
+          <div class="profile-contacts">
+            <a href="mailto:liuajie_ok@proton.me" class="contact-btn" title="邮件联系">
+              <svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </a>
+          </div>
+          
+          <!-- Directory grid buttons -->
+          <div class="directory-grid">
+            <a href="tags.html" class="dir-btn">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              <span>标签</span>
+            </a>
+            <a href="tutorials.html" class="dir-btn">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+              <span>分类</span>
+            </a>
+            <a href="ranking.html" class="dir-btn">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span>归档</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div> <!-- End Main Layout Wrapper -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-logo-desc">
+          <img src="assets/logo.png" alt="Logo" class="footer-logo">
+          <p class="footer-desc">致力于提供最专业、客观的机场评测与科学上网客户端配置教程，为您的高速上网体验保驾护航。</p>
+        </div>
+        <div class="footer-col">
+          <h5>热门导航</h5>
+          <ul class="footer-links">
+            <li><a href="reviews.html">机场评测</a></li>
+            <li><a href="tutorials.html">使用教程</a></li>
+            <li><a href="ranking.html">综合排行榜</a></li>
+            <li><a href="knowledge.html">网络知识库</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>实用链接</h5>
+          <ul class="footer-links">
+            <li><a href="tutorials.html?platform=windows">Windows 客户端下载</a></li>
+            <li><a href="tutorials.html?platform=ios">iOS 必备小火箭</a></li>
+            <li><a href="knowledge.html#dns">DNS 解析泄露检测</a></li>
+            <li><a href="knowledge.html#protocols">代理协议标准</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>关于本站</h5>
+          <ul class="footer-links">
+            <li><a href="#">免责声明</a></li>
+            <li><a href="#">隐私权政策</a></li>
+            <li><a href="#">关于我们</a></li>
+            <li><a href="#">联系我们</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 机场推荐与网络工具指南. All Rights Reserved. 本站服务仅限用于合法的学术研究与外贸跨境办公。</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
+
+
+
+
+

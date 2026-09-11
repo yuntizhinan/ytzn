@@ -1,0 +1,400 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="indexnow-verification" content="b3fa631b41824faf80150280746ebd2f">
+  <title>Clash Verge Timeout 报错深度解决：ETIMEDOUT 与连接超时终极排查 - 云梯指南</title>
+  
+  <meta name="keywords" content="机场推荐, 机场测评, 机场评测, 科学上网, VPN搭建指南, 外区免费ID, 便宜vpn机场, vpn专线, vpn机场推荐, vpn机场, 国内美区机场vpn, 科学联网vpn, vpn机场美区, 边缘机场, 翻墙机场, iepl专线机场, 中转机场, clash深港专线, webrtc泄漏防范">
+  <link rel="canonical" href="https://nodehub168.com/help/clash-verge-timeout.html">
+  <link rel="stylesheet" href="index.css">
+  <script src="main.js" defer></script>
+  <meta name="robots" content="index, follow">
+<meta name="description" content="解决特定的 Clash Verge 连接超时日志报错 (ETIMEDOUT / timeout)">
+<meta property="og:title" content="Clash Verge Timeout 报错深度解决：ETIMEDOUT 与连接超时终极排查" />
+<meta property="og:description" content="解决特定的 Clash Verge 连接超时日志报错 (ETIMEDOUT / timeout)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://nodehub168.com/help/clash-verge-timeout.html" />
+<meta property="og:site_name" content="云梯指南" />
+<meta name="robots" content="index, follow">
+<script type="application/ld+json">
+{"author":{"name":"云梯指南编辑部","@type":"Person"},"description":"解决特定的 Clash Verge 连接超时日志报错 (ETIMEDOUT / timeout)","@context":"https://schema.org","datePublished":"2026-09-11T08:00:00+08:00","@type":"Article","headline":"Clash Verge Timeout 报错深度解决：ETIMEDOUT 与连接超时终极排查","dateModified":"2026-09-11T08:00:00+08:00"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","itemListElement":[{"position":1,"name":"首页","item":"https://nodehub168.com/","@type":"ListItem"},{"position":2,"name":"知识库","item":"https://nodehub168.com/knowledge.html","@type":"ListItem"},{"position":3,"name":"Clash Verge Timeout 报错深度解决：ETIMEDOUT 与连接超时终极排查","item":"https://nodehub168.com/help/clash-verge-timeout.html","@type":"ListItem"}],"@type":"BreadcrumbList"}
+</script>
+</head>
+<body>
+
+  <!-- FIXED NAVIGATION HEADER -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="index.html" class="logo-wrapper">
+        <img src="assets/logo.png" alt="机场推荐Logo" class="logo" id="main-logo">
+      </a>
+      
+      <!-- Hamburger Menu for Mobile -->
+      <button class="burger" aria-label="Toggle Navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- Main Navigation Menu -->
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">首页</a>
+        </li>
+        <li class="nav-item">
+          <a href="reviews.html" class="nav-link has-dropdown">
+            机场评测
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="reviews.html" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                全部评测文章
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=premium" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                高端机场深度评测
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=speed" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                速度与带宽实测
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="reviews.html?filter=stability" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                稳定性与SLA报告
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="tutorials.html" class="nav-link has-dropdown">
+            教程
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=windows" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                Windows 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=mac" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                macOS 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=ios" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                iPhone / iOS 教程
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="tutorials.html?platform=android" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M4 4h16v12H4zM12 16v4M8 20h8"></path></svg>
+                Android 安卓教程
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="apple-id.html" class="nav-link">外区ID</a>
+        </li>
+        <li class="nav-item">
+          <a href="ranking.html" class="nav-link has-dropdown">
+            排行榜
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=comprehensive" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                2026综合推荐榜
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=speed" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                速度最快机场榜
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="ranking.html?rank=value" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                高性价比机场榜
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="knowledge.html" class="nav-link has-dropdown">
+            知识库
+            <svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a href="latest-articles.html" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                最新文章发布
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#vpn" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                VPN 与 代理区别
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#vps" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                VPS 节点搭建指南
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#protocols" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                网络协议解析 (SS/Trojan)
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="knowledge.html#dns" class="dropdown-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                DNS 泄露与防范
+              </a>
+            </li>
+            <li class="dropdown-item">
+              <a href="apple-id-guide.html" class="dropdown-link" style="color:var(--accent-cyan);">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                注册美区 Apple ID
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="tags.html" class="nav-link">标签</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT WRAPPER -->
+  <div class="main-wrapper">
+    <div class="left-column">
+<div class="container">
+  <nav aria-label="Breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+    <a href="/index.html" style="color: inherit;">首页</a> &gt; <a href="/knowledge.html" style="color: inherit;">知识库</a> &gt; <span style="color: var(--accent-orange); font-weight: 500;">故障排查</span>
+  </nav>
+
+  <article class="post-article" style="background: var(--bg-card); padding: 40px; border-radius: 12px; box-shadow: var(--glass-shadow); border: 1px solid var(--border-color);">
+    <h1 style="font-size: 2.2rem; line-height: 1.3; margin-bottom: 16px; color: var(--text-primary);">Clash Verge Timeout 报错深度解决：ETIMEDOUT 与连接超时终极排查</h1>
+
+    <section class="quick-solution" style="background: rgba(14, 165, 233, 0.1); border-left: 4px solid #0ea5e9; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+      <h2 style="color: #38bdf8; font-size: 1.25rem; margin-bottom: 12px; border: none; padding: 0;">⚡ 快速解决 4 步走</h2>
+      <ol style="margin: 0 0 0 20px; color: #bae6fd; font-size: 0.95rem; line-height: 1.6;">
+        <li><strong>检查本地时间</strong>：确保系统时间和时区准确无误，误差超过 2 分钟会导致 TLS 握手触发 Timeout。</li>
+        <li><strong>更新并切换节点</strong>：在 Clash Verge 订阅列表点击“更新”，然后切换到非香港、非台湾的其他节点（如新加坡或美国）。</li>
+        <li><strong>关闭 TUN 模式并重启核心</strong>：进入“设置”，临时关闭 TUN 模式，点击“重启核心 (Restart Core)”，看系统代理模式是否恢复。</li>
+        <li><strong>更换网络环境</strong>：切换本地 Wi-Fi 为手机热点，排查是否为宽带运营商的墙中墙（如泉州白名单等）引起的 TCP 阻断。</li>
+      </ol>
+    </section>
+
+    <h2>一、问题表现：如何确认你遇到了 Timeout？</h2>
+    <p>在使用 Clash Verge 时，如果遇到 <code>Timeout</code> 相关的错误，通常并不是软件本身的崩溃，而是底层网络连通性受阻。常见的表现为：</p>
+    <ul>
+      <li><strong>节点测速全红</strong>：点击“延迟测试”后，所有节点全部显示 <code>Timeout</code>。</li>
+      <li><strong>连接日志报错</strong>：点击右下角“日志 (Logs)”面板，大量涌现 <code>dial tcp: connect: connection timed out</code> 或 <code>ETIMEDOUT</code>。</li>
+      <li><strong>网页无限加载</strong>：浏览器左下角提示“正在建立安全连接”或“正在解析主机”，等待很久后报错 `ERR_CONNECTION_TIMED_OUT`。</li>
+    </ul>
+
+    <h2>二、日志解读：常见错误代码的真正含义</h2>
+    <p>根据 Clash Verge 日志中出现的具体字眼，排查方向大不相同。请不要把所有的“连不上”都当成同一个问题：</p>
+    <table style="width:100%; border-collapse: collapse; margin-bottom: 20px;">
+      <thead>
+        <tr style="background: rgba(255,255,255,0.05); text-align: left;">
+          <th style="padding: 10px; border: 1px solid var(--border-color);">报错关键字</th>
+          <th style="padding: 10px; border: 1px solid var(--border-color);">技术含义</th>
+          <th style="padding: 10px; border: 1px solid var(--border-color);">可能原因</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 10px; border: 1px solid var(--border-color);"><code>ETIMEDOUT</code></td>
+          <td style="padding: 10px; border: 1px solid var(--border-color);">TCP 连接超时</td>
+          <td style="padding: 10px; border: 1px solid var(--border-color);">表示在规定时间内未收到服务器响应。可能是数据包在路由途中丢失、被防火墙拦截，或目标服务器无响应。</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border: 1px solid var(--border-color);"><code>TLS handshake timeout</code></td>
+          <td style="padding: 10px; border: 1px solid var(--border-color);">TLS 握手超时</td>
+          <td style="padding: 10px; border: 1px solid var(--border-color);">可能是 SNI 阻断、节点域名证书过期，或系统时间异常导致的证书校验失败等。</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border: 1px solid var(--border-color);"><code>connection reset by peer</code></td>
+          <td style="padding: 10px; border: 1px solid var(--border-color);">连接被重置</td>
+          <td style="padding: 10px; border: 1px solid var(--border-color);">连接被重置。可能是网络审查（如发送了 RST 包阻断）、服务器端主动断开，或链路不稳定。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>三、详细排查步骤：从本地到服务端</h2>
+
+    <h3>步骤 1：排查本地系统与网络</h3>
+    <p>很多时候，Timeout 报错并非机场问题，而是本地环境导致的阻断：</p>
+    <ul>
+      <li><strong>时间同步</strong>：前往 Windows 设置 -> 时间和语言，点击“立即同步”。TLS 握手对时间极其敏感。</li>
+      <li><strong>运营商层拦截</strong>：部分地区的移动或长城宽带存在“墙中墙”，会拦截未知 UDP 和非标准端口 TCP 流量。请使用手机数据网络开热点，连接后重启 Clash 核心进行测试。如果热点下正常，则说明是宽带运营商拦截。</li>
+    </ul>
+
+    <h3>步骤 2：排查 Clash Verge 软件配置</h3>
+    <p>如果配置被污染或缓存卡死，也会导致局部 Timeout：</p>
+    <ul>
+      <li><strong>重启内核</strong>：进入 <code>Settings</code> 面板，找到 Clash Core，点击右侧的重启按钮。</li>
+      <li><strong>重置系统代理</strong>：在 <code>Settings</code> 页面，临时将 <code>System Proxy</code> 关闭再重新打开。</li>
+      <li><strong>清理 DNS 缓存</strong>：在电脑终端中执行 <code>ipconfig /flushdns</code>，并清空浏览器的缓存数据。</li>
+    </ul>
+
+    <h3>步骤 3：排查节点与服务端状态</h3>
+    <p>如果只有部分节点 Timeout，大概率是机场服务器问题或 IP 遭到了封锁：</p>
+    <ul>
+      <li><strong>强制更新订阅</strong>：进入 <code>Profiles</code> 页面，右键点击你的订阅配置，选择 <code>Update</code>。有时机场更换了域名或端口，旧配置中的 IP 会导致 <code>ETIMEDOUT</code>。</li>
+      <li><strong>协议被识别</strong>：如果你在使用传统的 Shadowsocks 或 Vmess 且遇到 <code>connection reset</code>，说明协议可能已被 GFW 识别并封锁。此时应考虑更换提供新协议（如 Reality 或 Hysteria）的机场。</li>
+    </ul>
+
+    <h2>四、验证修复是否成功</h2>
+    <p>完成排查后，请进行以下测试：</p>
+    <ol>
+      <li>在 Clash Verge 的 Proxies 界面，点击右上角的测速图标。如果大部分节点从 <code>Timeout</code> 变成了带有毫秒数（如 <code>120ms</code>），则网络连通性已恢复。</li>
+      <li>打开浏览器，访问 <code>https://www.google.com/ncr</code>，如果能瞬间加载，证明系统代理正常。</li>
+      <li>查看 Logs 面板，确认不再大量滚动红色的 <code>dial tcp</code> 错误。</li>
+    </ol>
+
+    <h2>五、常见问题 (FAQ)</h2>
+    <div class="faq-section">
+      <h4>1. 为什么我的所有节点一瞬间全部 Timeout？</h4>
+      <p>如果同一时间所有节点测速全部超时，最可能的原因是本地网络断开、系统代理冲突（例如开了其他 VPN 未关）或者是机场域名遭到 DNS 污染。建议更新订阅或切换热点测试。</p>
+
+      <h4>2. Timeout 和 Connection Refused 有什么区别？</h4>
+      <p><code>Timeout (ETIMEDOUT)</code> 通常意味着数据包发出去后没有收到任何回应，犹如石沉大海，多为防火墙直接丢弃或 IP 被封。而 <code>Connection Refused (ECONNREFUSED)</code> 意味着服务器明确拒绝了连接，通常是因为对方服务器宕机或端口没开。</p>
+
+      <h4>3. 为什么只有网页加载 Timeout，但 Telegram 却能用？</h4>
+      <p>由于 Telegram 有自己的代理设置机制，而浏览器依赖系统代理或 TUN 模式。如果出现这种情况，请重点检查 Clash Verge 的 System Proxy 是否勾选，或者浏览器是否安装了代理插件（如 SwitchyOmega）并配置冲突。</p>
+
+      <h4>4. 更换机场能解决 Timeout 吗？</h4>
+      <p>如果是由于机场节点 IP 被批量封锁，或者使用了易被识别的老旧协议（导致被阻断），更换拥有专线（IEPL/IPLC）或抗封锁新协议的机场可能有助于改善或解决此问题。</p>
+    </div>
+
+    <h2>相关推荐</h2>
+    <ul>
+      <li><a href="/help/clash-verge-node-failed.html">Clash Verge 节点连接失败的通用排障指南</a></li>
+      <li><a href="/tutorials/clash-verge-config.html">Clash Verge 系统代理与规则配置教程</a></li>
+      <li><a href="/reviews/connection-issues.html">机场连不上？10大常见断连排查方法</a></li>
+      <li><a href="/tutorials/clash-verge-import-config.html">Clash Verge 订阅导入及更新方法</a></li>
+    </ul>
+  </article>
+</div>
+</div><!-- End Left Column -->
+<!-- RIGHT STICKY COLUMN -->
+    <aside class="right-column">
+      <div class="sticky-sidebar">
+        <div class="profile-widget">
+          <!-- Logo with transparency -->
+          <img src="assets/logo.png" alt="云梯指南" class="profile-logo">
+          
+          <!-- Contacts row -->
+          <div class="profile-contacts">
+            <a href="mailto:liuajie_ok@proton.me" class="contact-btn" title="邮件联系">
+              <svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </a>
+          </div>
+          
+          <!-- Directory grid buttons -->
+          <div class="directory-grid">
+            <a href="tags.html" class="dir-btn">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              <span>标签</span>
+            </a>
+            <a href="tutorials.html" class="dir-btn">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+              <span>分类</span>
+            </a>
+            <a href="ranking.html" class="dir-btn">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span>归档</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div> <!-- End Main Layout Wrapper -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-logo-desc">
+          <img src="assets/logo.png" alt="Logo" class="footer-logo">
+          <p class="footer-desc">致力于提供最专业、客观的机场评测与科学上网客户端配置教程，为您的高速上网体验保驾护航。</p>
+        </div>
+        <div class="footer-col">
+          <h5>热门导航</h5>
+          <ul class="footer-links">
+            <li><a href="reviews.html">机场评测</a></li>
+            <li><a href="tutorials.html">使用教程</a></li>
+            <li><a href="ranking.html">综合排行榜</a></li>
+            <li><a href="knowledge.html">网络知识库</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>实用链接</h5>
+          <ul class="footer-links">
+            <li><a href="tutorials.html?platform=windows">Windows 客户端下载</a></li>
+            <li><a href="tutorials.html?platform=ios">iOS 必备小火箭</a></li>
+            <li><a href="knowledge.html#dns">DNS 解析泄露检测</a></li>
+            <li><a href="knowledge.html#protocols">代理协议标准</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>关于本站</h5>
+          <ul class="footer-links">
+            <li><a href="#">免责声明</a></li>
+            <li><a href="#">隐私权政策</a></li>
+            <li><a href="#">关于我们</a></li>
+            <li><a href="#">联系我们</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 机场推荐与网络工具指南. All Rights Reserved. 本站服务仅限用于合法的学术研究与外贸跨境办公。</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
+
+
+
+
+

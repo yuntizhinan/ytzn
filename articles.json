@@ -1,9 +1,33 @@
 ﻿{
-  "header_title": "鏈€鏂版枃绔犲彂甯?,
-  "header_desc": "杩欓噷鏀跺綍浜嗘湰绔欐渶鏂扮殑鎵€鏈夋枃绔犱笌璇勬祴锛屾寜鍙戝竷鏃堕棿浠庝笂鑷充笅鎺掑垪銆?,
+  "header_title": "最新文章发布",
+  "header_desc": "这里收录了本站最新的所有文章与评测，按发布时间从上至下排列。",
   "btn_text": "闃呰鍏ㄦ枃",
   "date_prefix": "鍙戝竷鏃堕棿: ",
   "articles": [
+    {
+      "date": "2026-09-11",
+      "badge": "排障指南",
+      "badge_class": "badge-secondary",
+      "title": "ChatGPT 无法访问？Access Denied 与网络错误终极排查指南",
+      "link": "/help/chatgpt-network-error.html",
+      "summary": "解决在开启代理状态下，特定流媒体/AI服务(ChatGPT)报错或拒绝访问的问题"
+    },
+    {
+      "date": "2026-09-11",
+      "badge": "排障指南",
+      "badge_class": "badge-secondary",
+      "title": "代理环境下 DNS 解析失败排障指南：网页打不开怎么办？",
+      "link": "/help/dns-resolution-failed.html",
+      "summary": "排查因 DNS 配置或污染导致的节点已连上但无法打开网页的问题"
+    },
+    {
+      "date": "2026-09-11",
+      "badge": "排障指南",
+      "badge_class": "badge-secondary",
+      "title": "Clash Verge Timeout 报错深度解决：ETIMEDOUT 与连接超时终极排查",
+      "link": "/help/clash-verge-timeout.html",
+      "summary": "解决特定的 Clash Verge 连接超时日志报错 (ETIMEDOUT / timeout)"
+    },
     {
       "date": "2026-09-08",
       "badge": "绯荤粺鏁欑▼",
@@ -70,7 +94,7 @@
       "summary": "閽堝 2026 骞存渶鏂?Telegram 瀹樻柟椋庢帶鏈哄埗娣卞害瀹炴祴锛屾€荤粨鍑?+86 鎵嬫満鍙?100% 鎴愬姛鎺ユ敹楠岃瘉鐮佺殑 4 澶х牬灞€鏂规锛屽苟鎻愪緵 iOS / Android / PC 淇濆绾ф敞鍐屽浘鏂囨寚寮曚笌璐﹀彿闃插皝璁剧疆銆?
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-11",
       "badge": "瀹炵敤璧勬簮",
       "badge_class": "badge-primary",
       "title": "2026鏈€鏂板厤璐圭編鍖篈pple ID鍏变韩璐﹀彿 | Shadowrocket/灏忕伀绠笅杞?| iOS缇庡尯璐﹀彿姣忔棩鏇存柊",
@@ -175,5 +199,6 @@
     }
   ]
 }
+
 
 
