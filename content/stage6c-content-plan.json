@@ -1,0 +1,29 @@
+{
+  "01": {
+    "title": "Clash Verge Timeout 报错深度解决：ETIMEDOUT 与连接超时终极排查",
+    "primary_keyword": "Clash Verge timeout",
+    "secondary_keywords": ["Clash Verge ETIMEDOUT", "Clash Verge 连接超时", "Clash Verge 节点timeout", "代理软件 timeout"],
+    "search_intent": "解决特定的 Clash Verge 连接超时日志报错 (ETIMEDOUT / timeout)",
+    "reason": "填补 opportunity-keywords.json 中的长尾搜索需求；与宽泛的'节点连接失败'有明显意图区隔，专门针对具体底层报错日志进行深度排查。由于本地环境无法读取真实 GSC/BWT 数据 (No reliable search data available)，此词选自已知的主题群和搜索常态痛点。",
+    "target_url": "/help/clash-verge-timeout.html",
+    "status": "draft"
+  },
+  "02": {
+    "title": "代理环境下 DNS 解析失败排障指南：网页打不开怎么办？",
+    "primary_keyword": "DNS 解析失败",
+    "secondary_keywords": ["代理 DNS 污染", "翻墙后无法解析域名", "DNS 泄漏", "ERR_NAME_NOT_RESOLVED 代理"],
+    "search_intent": "排查因 DNS 配置或污染导致的节点已连上但无法打开网页的问题",
+    "reason": "从 topic-clusters.json 中的 DNS cluster 提取；填补当前站点对于 DNS 具体排错的文章空白，防止关键词内耗。因为无真实搜索数据 (No reliable search data available)，根据内容闭环需求选中。",
+    "target_url": "/help/dns-resolution-failed.html",
+    "status": "draft"
+  },
+  "03": {
+    "title": "ChatGPT 无法访问？Access Denied 与网络错误终极排查指南",
+    "primary_keyword": "ChatGPT 无法访问",
+    "secondary_keywords": ["ChatGPT Access Denied", "ChatGPT Error 1020", "ChatGPT 代理被屏蔽", "ChatGPT 节点不可用"],
+    "search_intent": "解决在开启代理状态下，特定流媒体/AI服务(ChatGPT)报错或拒绝访问的问题",
+    "reason": "从 topic-clusters.json 的 AI cluster 提取；与通用的节点排障区分开来，专门针对高价值的 AI 应用访问屏蔽（如 IP 纯净度、Cloudflare 拦截）提供解决方案。无真实搜索数据，但基于用户意图空白选择。",
+    "target_url": "/help/chatgpt-network-error.html",
+    "status": "draft"
+  }
+}

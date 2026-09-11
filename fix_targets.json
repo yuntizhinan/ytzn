@@ -1,0 +1,17 @@
+[
+    {
+        "html": "tutorials/clash-verge-config.html",
+        "json": "content/drafts/stage5/clash-verge-config.json",
+        "title": "Clash Verge 配置教程：系统代理、规则与故障排除"
+    },
+    {
+        "html": "tutorials/clash-verge-import-config.html",
+        "json": "content/drafts/stage5/clash-verge-import-config.json",
+        "title": "Clash Verge 导入配置教程：如何添加和使用代理配置"
+    },
+    {
+        "html": "help/clash-verge-node-failed.html",
+        "json": "content/drafts/stage5/clash-verge-node-failed.json",
+        "title": "Clash Verge 节点连接失败怎么办？常见原因与排查方案"
+    }
+]

@@ -1,0 +1,21 @@
+{
+  "stage": "6D",
+  "baseline_date": "2026-09-11",
+  "stage6c_pages": [
+    "/help/dns-resolution-failed.html",
+    "/help/chatgpt-network-error.html",
+    "/help/clash-verge-timeout.html"
+  ],
+  "data_source": {
+    "google_search_console": "unavailable_or_not_connected",
+    "bing_webmaster": "unavailable_or_not_connected"
+  },
+  "metrics": [
+    "indexed",
+    "impressions",
+    "clicks",
+    "ctr",
+    "average_position",
+    "queries"
+  ]
+}

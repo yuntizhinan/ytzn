@@ -1,0 +1,204 @@
+﻿{
+  "header_title": "鏈€鏂版枃绔犲彂甯?,
+  "header_desc": "杩欓噷鏀跺綍浜嗘湰绔欐渶鏂扮殑鎵€鏈夋枃绔犱笌璇勬祴锛屾寜鍙戝竷鏃堕棿浠庝笂鑷充笅鎺掑垪銆?,
+  "btn_text": "闃呰鍏ㄦ枃",
+  "date_prefix": "鍙戝竷鏃堕棿: ",
+  "articles": [
+    {
+      "date": "2026-09-11",
+      "badge": "排障指南",
+      "badge_class": "badge-secondary",
+      "title": "ChatGPT 无法访问？Access Denied 与网络错误终极排查指南",
+      "link": "/help/chatgpt-network-error.html",
+      "summary": "解决在开启代理状态下，特定流媒体/AI服务(ChatGPT)报错或拒绝访问的问题"
+    },
+    {
+      "date": "2026-09-11",
+      "badge": "排障指南",
+      "badge_class": "badge-secondary",
+      "title": "代理环境下 DNS 解析失败排障指南：网页打不开怎么办？",
+      "link": "/help/dns-resolution-failed.html",
+      "summary": "排查因 DNS 配置或污染导致的节点已连上但无法打开网页的问题"
+    },
+    {
+      "date": "2026-09-11",
+      "badge": "排障指南",
+      "badge_class": "badge-secondary",
+      "title": "Clash Verge Timeout 报错深度解决：ETIMEDOUT 与连接超时终极排查",
+      "link": "/help/clash-verge-timeout.html",
+      "summary": "解决特定的 Clash Verge 连接超时日志报错 (ETIMEDOUT / timeout)"
+    },
+    {
+      "date": "2026-09-08",
+      "badge": "绯荤粺鏁欑▼",
+      "badge_class": "badge-primary",
+      "title": "Clash Verge 閰嶇疆鏁欑▼锛氱郴缁熶唬鐞嗐€佽鍒欎笌鏁呴殰鎺掗櫎",
+      "link": "/tutorials/clash-verge-config.html",
+      "summary": "鏈枃涓烘偍鎻愪緵璇︾粏鐨?Clash Verge 閰嶇疆鏁欑▼銆傞噸鐐硅瑙ｇ郴缁熶唬鐞嗐€乀UN 妯″紡浠ュ強瑙勫垯銆丳roxies銆丷ules 鍜?DNS 鐨勮缃笌鎺掓煡甯歌涓嶉€氶棶棰樸€?
+    },
+    {
+      "date": "2026-09-08",
+      "badge": "绯荤粺鏁欑▼",
+      "badge_class": "badge-primary",
+      "title": "Clash Verge 瀵煎叆閰嶇疆鏁欑▼锛氬浣曟坊鍔犲拰浣跨敤浠ｇ悊閰嶇疆",
+      "link": "/tutorials/clash-verge-import-config.html",
+      "summary": "鏈枃璇︾粏浠嬬粛濡備綍鍦?Clash Verge 涓鍏ヨ闃呴摼鎺ヤ笌鏈湴閰嶇疆鏂囦欢銆傜伒娲绘帉鎻℃坊鍔犮€佷娇鐢ㄥ拰鏇存柊浠ｇ悊閰嶇疆鐨勬柟娉曪紝鏄繚鎸佽妭鐐瑰彲鐢ㄦ€х殑鏍稿績姝ラ锛屼篃鏄В鍐抽儴鍒嗚妭鐐硅繛鎺ラ敊璇殑鍩虹銆?
+    },
+    {
+      "date": "2026-09-08",
+      "badge": "鏁呴殰鎺掓煡",
+      "badge_class": "badge-secondary",
+      "title": "Clash Verge 鑺傜偣杩炴帴澶辫触鎬庝箞鍔烇紵甯歌鍘熷洜涓庢帓鏌ユ柟妗?,
+      "link": "/help/clash-verge-node-failed.html",
+      "summary": "鏈枃涓轰綘鎻愪緵绯荤粺鎬х殑 Clash Verge 鑺傜偣澶辫触锛圱imeout锛夋帓鏌ユ寚鍗椼€備粠鍩虹妫€鏌ャ€佺郴缁熷啿绐佸埌鏃ュ織鎺掓煡锛屼竴姝ユ鏁欎綘瀹氫綅骞惰В鍐宠妭鐐硅繛涓嶄笂鐨勭摱棰堛€?
+    },
+
+    {
+      "date": "2026-08-17",
+      "badge": "AI 瀹炵敤鎸囧崡",
+      "badge_class": "badge-primary",
+      "title": "2026 鏈€鏂癈laude AI 瀹屽叏鏀荤暐:娉ㄥ唽銆佹闈㈠簲鐢ㄤ笌鐜╂硶鍏ㄨВ",
+      "link": "post-detail.html?id=claude-ai-jiaocheng-2026",
+      "summary": "Anthropic Claude AI 2026 鍏ㄦ櫙鏁欑▼锛氭ā鍨嬪鏃忛€夊瀷锛圤pus 4.8 / Sonnet 5 / Haiku 4.5 / Fable 5锛夈€?00涓?Token 涓婁笅鏂囩獥鍙ｃ€佹闈㈢増 MCP 鏈湴杩炴帴鍣ㄣ€佺粓绔?Agent 缂栫▼宸ュ叿 Claude Code锛屼互鍙婁腑鍥藉ぇ闄嗙敤鎴疯闂嚎璺笌骞插噣 IP 閬块鎺ф寚鍗椼€?
+    },
+    {
+      "date": "2026-08-16",
+      "badge": "鍗忚鎶€鏈?,
+      "badge_class": "badge-primary",
+      "title": "2026骞存満鍦鸿妭鐐瑰崗璁€庝箞閫夛紵Shadowsocks vs VLESS Reality vs Hysteria 2 vs TUIC 娣卞害瀵规瘮涓庣瀛﹂€夊瀷鎸囧崡",
+      "link": "/posts/protocol-selection-2026.html",
+      "summary": "娣卞叆鍓栨瀽 2026 GFW 鏈€鏂?DPI 娣卞害鍖呮娴嬩笌 AI 鐗瑰緛鎸囩汗璇嗗埆婕旇繘锛岀瀛﹀姣?Shadowsocks 2022銆乂LESS Reality銆丠ysteria 2 涓?TUIC v5 鍥涘ぇ涓绘祦鍗忚搴曞眰鍘熺悊銆佹姉灏侀攣鑳藉姏涓庝笁澶ц繍钀ュ晢閫夊瀷鍖归厤銆?
+    },
+    {
+      "date": "2026-08-16",
+      "badge": "绯荤粺鏁欑▼",
+      "badge_class": "badge-primary",
+      "title": "鍗庝负楦胯挋鎬庝箞瑁?Google Play?2026 HarmonyOS 璋锋瓕鍟嗗簵瀹夎鏁欑▼(鍚函琛€楦胯挋)",
+      "link": "post-detail.html?id=hongmeng-google-play-2026",
+      "summary": "鍗庝负楦胯挋瀹夎 Google Play 瀹屽叏鏁欑▼锛氭繁鍏ヨВ鏋愮己涔?GMS 鎺堟潈涓庣函琛€楦胯挋搴曞眰鏋舵瀯锛岃瑙ｅ崕涓哄簲鐢ㄥ競鍦哄畼鏂?GSpace / GBox / 鍑哄鏄撶幆澧冨鍣ㄥ厤 Root 瀹夎閰嶇疆锛屽惈鍥炬枃鎸囧紩銆佹秷鎭帹閫佷繚娲讳笌鍏抽敭鎺掗敊銆?
+    },
+    {
+      "date": "2026-08-15",
+      "badge": "鏁欑▼鎸囧崡",
+      "badge_class": "badge-primary",
+      "title": "瀹夊崜鎵嬫満瀹夎 Google Play锛?026 璋锋瓕涓変欢濂楀畨瑁呬繚濮嗙骇鏁欑▼(鍏ㄥ搧鐗?",
+      "link": "post-detail.html?id=android-google-play-2026",
+      "summary": "鍏ㄩ潰娴嬭瘯 2026 骞存渶鏂板皬绫炽€佺孩绫炽€丱PPO銆乿ivo銆佽崳鑰€銆佷竴鍔犮€佺湡鎴戠瓑鍝佺墝绯荤粺锛屾€荤粨鍏堟煡绯荤粺鑷甫寮€鍏炽€佸悗鍏?Root 鎵嬪姩瀹夊叏瀹夎鐨勫畬鍏ㄩ伩鍧戞寚寮曘€?
+    },
+    {
+      "date": "2026-08-15",
+      "badge": "鏁欑▼鎸囧崡",
+      "badge_class": "badge-primary",
+      "title": "Telegram 鎬庝箞娉ㄥ唽?2026 鍥藉唴 TG 娉ㄥ唽瀹屾暣鏁欑▼(+86 鏀朵笉鍒伴獙璇佺爜瑙ｅ喅鏂规硶)",
+      "link": "post-detail.html?id=telegram-register-2026",
+      "summary": "閽堝 2026 骞存渶鏂?Telegram 瀹樻柟椋庢帶鏈哄埗娣卞害瀹炴祴锛屾€荤粨鍑?+86 鎵嬫満鍙?100% 鎴愬姛鎺ユ敹楠岃瘉鐮佺殑 4 澶х牬灞€鏂规锛屽苟鎻愪緵 iOS / Android / PC 淇濆绾ф敞鍐屽浘鏂囨寚寮曚笌璐﹀彿闃插皝璁剧疆銆?
+    },
+    {
+      "date": "2026-09-11",
+      "badge": "瀹炵敤璧勬簮",
+      "badge_class": "badge-primary",
+      "title": "2026鏈€鏂板厤璐圭編鍖篈pple ID鍏变韩璐﹀彿 | Shadowrocket/灏忕伀绠笅杞?| iOS缇庡尯璐﹀彿姣忔棩鏇存柊",
+      "link": "share-id.html",
+      "summary": "姣忔棩涓烘偍鏇存柊鏈€鏂板彲鐢ㄧ殑鍏嶈垂缇庡尯 Apple ID 鍏变韩璐﹀彿锛堜粖鏃ュ凡鏇存柊 30 涓彲鐢ㄨ处鍙锋睜锛夛紝鏃犵紳涓嬭浇 Shadowrocket 绛夊悇绉嶇編鍖轰笓灞炲簲鐢紝閬垮厤璐﹀彿琚攣锛屼韩鍙楀畬鏁寸殑 iOS 鐢熸€佷綋楠屻€?
+    },
+    {
+      "date": "2026-08-14",
+      "badge": "杩涢樁鏁欑▼",
+      "badge_class": "badge-primary",
+      "title": "浠庨浂寮€濮嬫敞鍐岀編鍖?Apple ID 杩涢樁鎸囧崡锛氫繚濮嗙骇娉ㄥ唽鏁欑▼ (2026 鏈€鏂?",
+      "link": "apple-id-guide.html",
+      "summary": "涓嶇敤淇＄敤鍗°€佹棤闇€鍥藉鎵嬫満鍙凤紒2026 骞存渶鏂版墜鎶婃墜鏁欎綘闆堕棬妲涙敞鍐屽睘浜庤嚜宸辩殑绾噣缇庡尯 Apple ID锛岃В鍐冲厤绋庡尯鍦板潃濉啓銆佽处鍗曞湴鍧€鐢熸垚涓庣嫭绔嬪厖鍊艰喘涔板皬鐏鏁欑▼銆?
+    },
+    {
+      "date": "2026-08-12",
+      "badge": "鎺掓煡鎸囧崡",
+      "badge_class": "badge-primary",
+      "title": "鏈哄満绐佺劧杩炰笉涓婏紵10涓師鍥犳帓鏌ュ拰瑙ｅ喅鏂规硶",
+      "link": "reviews/connection-issues.html",
+      "summary": "浣犳湁娌℃湁閬囧埌杩囪繖绉嶆儏鍐碉細鏄ㄥぉ杩樺ソ濂界敤鐨勭炕澧欐満鍦猴紝浠婂ぉ绐佺劧灏扁€滅舰宸モ€濊繛涓嶄笂浜嗭紵鏈枃涓轰綘璇︾粏姊崇悊2026骞存渶甯歌鐨?0涓繛涓嶄笂鍘熷洜锛屽苟鎻愪緵閽堝鎬х殑鎺掓煡鍜岃В鍐虫柟娉曘€?
+    },
+    {
+      "date": "2026-08-11",
+      "badge": "楂樻€т环姣?,
+      "badge_class": "badge-orange",
+      "title": "2026 XXYUN鏈哄満璇勬祴锛?.99鍏?00G鑰佺墝BGP涓撶嚎鏈哄満鎺ㄨ崘",
+      "link": "reviews/xxyun.html",
+      "summary": "XXYUN鏈哄満鎬庝箞鏍凤紵鏈枃瀹炴祴XXYUN鏈哄満閫熷害銆佺ǔ瀹氭€т笌娴佸獟浣撹В閿佽兘鍔涳紝鏈堜粯浠?.99鍏冧韩100G娴侀噺銆佸叏BGP涓浆+涓夌綉浼樺寲锛岃€佺墝杩愯惀涓ゅ勾绋冲畾锛屾敮鎸丯etflix/Disney+/ChatGPT锛岄檮9鎶樹紭鎯犲埜銆?
+    },
+    {
+      "date": "2026-08-10",
+      "badge": "楂樻€т环姣?,
+      "badge_class": "badge-orange",
+      "title": "flybit鏈哄満璇勬祴锛?5鍏?28G楂樻€т环姣旓綔瑙ｉ攣ChatGPT",
+      "link": "reviews/flybit.html",
+      "summary": "Flybit鏈哄満锛堥浜戯級浠?5鍏?28G鐨勮秴楂樻€т环姣旀í绌哄嚭涓栵紝鎴愪负2026骞存満鍦哄湀鐨勪竴鍖归粦椹€傛湰鏂囨繁搴﹁瘎娴嬪叾鍦ㄦ櫄楂樺嘲鐨勭綉缁滆〃鐜般€佹祦濯掍綋瑙ｉ攣鑳藉姏锛屼互鍙婂ChatGPT绛夊師鐢烝I骞冲彴鐨勫畬缇庢敮鎸佲€︹€?
+    },
+    {
+      "date": "2026-08-08",
+      "badge": "IEPL 涓撶嚎",
+      "badge_class": "badge-secondary",
+      "title": "閫熺晫鏈哄満2026 鏅氶珮宄扮ǔ瀹氭€ф祴閫熸祴璇?,
+      "link": "post-detail.html?id=speedworld-2026",
+      "summary": "浣滀负鍦?026骞村彈鍒板叧娉ㄧ殑璁㈤槄鍒惰妭鐐规湇鍔★紝閫熺晫鏈哄満涓昏瀹ｄ紶IEPL鍥介檯涓撶嚎涓庡绔鎴风鍏煎銆傛湰娆¤瘎娴嬩粠绾胯矾璐ㄩ噺銆佸椁愯祫璐广€佽妭鐐瑰彲鐢ㄦ€т互鍙婃祦濯掍綋AI瑙ｉ攣绛夊涓淮搴﹁繘琛屼簡瀹㈣娴嬭瘎锛屽苟娣卞害鍓栨瀽鍏堕槻璺戣矾椋庨櫓寤鸿鈥︹€?
+    },
+    {
+      "date": "2026-08-05",
+      "badge": "鐩磋繛 / 涓浆",
+      "badge_class": "badge-primary",
+      "title": "鏋佽繛浜戞満鍦烘繁搴︽祴璇勶細鍏↖PLC涓撶嚎涓庝笉闄愯澶囩殑楂樻€т环姣斿嚭娴疯В鏋?,
+      "link": "reviews/jilianyun.html",
+      "summary": "浣滀负2026骞寸炕澧欏伐鍏锋湁鍔涙柊鏄燂紝鏋佽繛浜戦噰鐢ㄥ绾緽GP涓浆銆傛湰娆¤瘎娴嬪湪鏅氶珮宄版瀬闄愯礋杞芥湡闂达紝閽堝鍏剁綉閫熶涪鍖呯巼銆佸叏鍦烘櫙娴佸獟浣撳強鍓嶆部AI瑙ｉ攣杩涜浜嗗疄鎿嶆祴璇曪紝鎻愪緵鐪熷疄鍙潬鐨勫姣旈€夎喘鍙嶉鈥︹€?
+    },
+    {
+      "date": "2026-08-02",
+      "badge": "澶у甫瀹?BGP",
+      "badge_class": "badge-orange",
+      "title": "杈圭紭鏈哄満娣卞害娴嬭瘎锛氫紒涓氱骇涓撶嚎涓庡鍏ュ彛涓浆鍒嗘瀽",
+      "link": "post-detail.html?id=edge",
+      "summary": "浠庣嚎璺川閲忋€佸椁愪环鏍笺€佽妭鐐硅鐩栥€佸鎴风閰嶇疆銆佹祦濯掍綋涓嶢I宸ュ叿瑙ｉ攣绛夌淮搴﹀杈圭紭鏈哄満杩涜娣卞害娴嬭瘎锛屽苟鎻愪緵鏈€鏂版敞鍐屼紭鎯犱笌瀹樼綉閾炬帴銆?
+    },
+    {
+      "date": "2026-08-02",
+      "badge": "BGP 涓浆",
+      "badge_class": "badge-green",
+      "title": "蹇嫺鏈哄満娣卞害璇勬祴",
+      "link": "post-detail.html?id=kuaili",
+      "summary": "蹇嫺鏈哄満鏄竴娆炬€ц兘浼樼鐨勫钩浠峰ぇ甯﹀涓浆浼樺寲鏈哄満锛屽叏绾挎惌杞藉師鐢?Vless 鍗忚锛屾彁渚涙瀬鑷寸殑鏁版嵁鍚炲悙涓婇檺锛屾敮鎸佸璁惧骞跺彂涓庢祦濯掍綋/AI宸ュ叿瑙ｉ攣銆?
+    },
+    {
+      "date": "2026-08-01",
+      "badge": "鏂版墜鍏ラ棬",
+      "badge_class": "badge-secondary",
+      "title": "2026骞寸ǔ瀹氶珮閫熸満鍦烘帹鑽愭寚鍗?,
+      "link": "/posts/recommend-guide.html",
+      "summary": "鏂版墜璐拱鏈哄満鍓嶅繀椤荤煡閬撶殑閬垮潙甯歌瘑锛屽寘鎷笓绾夸笌涓浆鐨勫尯鍒€?
+    },
+    {
+      "date": "2026-07-28",
+      "badge": "閫夊瀷鎸囧崡",
+      "badge_class": "badge-primary",
+      "title": "鏈哄満鎬庝箞閫夋嫨锛熸暀浣犱笁姝ユ寫鍑哄ソ鑺傜偣",
+      "link": "post-detail.html?id=how-to-choose",
+      "summary": "閫氳繃鏈湴缃戠粶娴嬭瘯銆佺洰鏍囩敤閫旓紙鐪嬭棰戣繕鏄墦娓告垙锛夋潵閫夋嫨鏈€閫傚悎鑷繁鐨勬満鍦恒€?
+    },
+    {
+      "date": "2026-07-25",
+      "badge": "瀹㈡埛绔暀绋?,
+      "badge_class": "badge-orange",
+      "title": "Clash 鍏ㄥ钩鍙伴厤缃笌璁㈤槄瀵煎叆鏁欑▼",
+      "link": "post-detail.html?id=clash-tutorial",
+      "summary": "鏀寔 Clash Verge銆丆lash for Windows銆丆lash Meta 鍚勫垎鏀厤缃暀绋嬨€?
+    },
+    {
+      "date": "2026-07-20",
+      "badge": "PC涓撻",
+      "badge_class": "badge-green",
+      "title": "Windows瀹㈡埛绔渶浣冲疄璺典笌涓嬭浇瀵艰埅",
+      "link": "post-detail.html?id=win-client",
+      "summary": "鐩樼偣 Windows 骞冲彴涓婃渶濂界敤鐨勪唬鐞嗗鎴风锛屼粠鑰佺墝鍐呮牳鍒版渶鏂板唴鏍搞€?
+    }
+  ]
+}
+
+
+

@@ -13,7 +13,7 @@
 - **Description**: 唯一。直接从正文的 `<p><strong>摘要：</strong>...` 字段提取。
 - **Canonical**: 每一篇都正确嵌入了唯一规范链接（如 `<link rel="canonical" href="https://nodehub168.com/tutorials/clash-verge-config.html">`），无跨文件引用错误。
 - **H1**: 每篇文章只有一个精准匹配的 `<h1>`。
-- **Schema**: 完美嵌入了 `@type = Article` (包含 `Organization` 作者) 以及动态的 `@type = BreadcrumbList` (包含分类路由映射)。
+- **Schema**: 完美嵌tutorials.html`入了 `@type = Article` (包含 `Organization` 作者) 以及动态的 `@type = BreadcrumbList` (包含分类路由映射)。
 - **Sitemap**: 已更新 `sitemap.xml`，新增了这 3 个 `https://nodehub168.com/xxx.html` URL。
 
 ## 3. 内链
@@ -24,7 +24,7 @@
   - `Clash Verge 导入配置` 包含出站内链: 1 个 (强关联节点失败排查教程)。
   - `Clash Verge 节点失败` 包含出站内链: 2 个 (分别链向配置教程、导入配置教程)。
 - **所属 Hub**: 
-  - 前两篇归属: `/tutorials.html` (Clash教程)
+  - 前两篇归属: `/ (Clash教程)
   - 第三篇归属: `/knowledge.html` (问题解决)
 
 ## 4. IndexNow
