@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -40,7 +40,7 @@
           </a>
           <ul class="dropdown-menu">
             <li class="dropdown-item"><a href="reviews.html" class="dropdown-link">全部评测文章</a></li>
-            <li class="dropdown-item"><a href="reviews/firefly.html" class="dropdown-link">Firefly机场2026测评</a></li>
+
             <li class="dropdown-item"><a href="reviews.html?filter=premium" class="dropdown-link">高端机场深度评测</a></li>
             <li class="dropdown-item"><a href="reviews.html?filter=speed" class="dropdown-link">速度与带宽实测</a></li>
             <li class="dropdown-item"><a href="reviews.html?filter=stability" class="dropdown-link">稳定性与SLA报告</a></li>
@@ -73,7 +73,6 @@
           </a>
           <ul class="dropdown-menu">
             <li class="dropdown-item"><a href="ranking.html#rank-7" class="dropdown-link">2026 机场推荐排行榜</a></li>
-            <li class="dropdown-item"><a href="reviews/firefly.html" class="dropdown-link" style="padding-left:1.8rem;">&#x21b3; #7 Firefly机场测评</a></li>
             <li class="dropdown-item"><a href="ranking.html?rank=comprehensive" class="dropdown-link">2026综合推荐榜</a></li>
             <li class="dropdown-item"><a href="ranking.html?rank=speed" class="dropdown-link">速度最快机场榜</a></li>
             <li class="dropdown-item"><a href="ranking.html?rank=value" class="dropdown-link">高性价比机场榜</a></li>
@@ -146,6 +145,57 @@
 
       <!-- REVIEWS LIST -->
       <main class="reviews-container" style="max-width: 100%; width: 100%;">
+            <!-- Card (九云机场) -- 置顶最新 -->
+            <div class="review-item" style="width: 100%; border-left: 3px solid var(--accent-cyan);">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-primary">全IPLC专线</span>
+                  <span class="badge" style="background:rgba(0,242,254,0.12);color:var(--accent-cyan);border:1px solid var(--accent-cyan);font-size:0.75rem;padding:2px 8px;border-radius:4px;">🆕 最新评测</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">更新时间: 2026-09-17</span>
+                </div>
+                <h3 class="review-title"><a href="reviews/jiuyun.html">九云机场怎么样？2026 九云深度测评析：套餐价格、节点速度与使用指南</a></h3>
+                <p class="review-summary">九云机场采用全程IPLC专线路由，¥6/月起步，招财/旺财/大旺套餐梯度清晰，覆盖香港/日本/台湾/新加坡/美国五大节点，晚高峰稳定性突出，支持ChatGPT、Netflix、YouTube 4K及TikTok全解锁，适合追求稳定性的中度用户……</p>
+              </div>
+              <div class="review-stats">
+                <div class="stat-box">
+                  <div class="stat-val speed">320Mbps</div>
+                  <div class="stat-desc">最高下行</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-val ping">38ms</div>
+                  <div class="stat-desc">均值延迟</div>
+                </div>
+              </div>
+              <div class="review-actions">
+                <a href="reviews/jiuyun.html" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读评测</a>
+              </div>
+            </div>
+
+            <!-- Card (宝云机场) -->
+            <div class="review-item" style="width: 100%;">
+              <div class="review-info">
+                <div class="review-meta">
+                  <span class="badge badge-primary">海外中转 VLESS</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">更新时间: 2026-09-17</span>
+                </div>
+                <h3 class="review-title"><a href="reviews/baoyun.html">2026宝云机场测评：价格、速度、节点与客户端支持全面解析</a></h3>
+                <p class="review-summary">宝云机场主打海外中转VLESS协议，¥4/月起步，覆盖香港/日本/台湾/新加坡/美国五地节点，福宝/财宝/金宝套餐清晰分级，支持ChatGPT、YouTube 4K及常规流媒体解锁，适合预算有限的日常综合用户……</p>
+              </div>
+              <div class="review-stats">
+                <div class="stat-box">
+                  <div class="stat-val speed">280Mbps</div>
+                  <div class="stat-desc">最高下行</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-val ping">45ms</div>
+                  <div class="stat-desc">均值延迟</div>
+                </div>
+              </div>
+              <div class="review-actions">
+                <a href="reviews/baoyun.html" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读评测</a>
+              </div>
+            </div>
+
             <div class="review-item" style="width: 100%;">
               <div class="review-info">
                 <div class="review-meta">
@@ -467,6 +517,7 @@
           <div class="review-actions">
             <a href="reviews/firefly.html" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">阅读评测</a>
           </div>
+        </div>
         </div>
       </main>
 
